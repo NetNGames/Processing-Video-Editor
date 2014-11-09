@@ -44,6 +44,7 @@ color movColors[][];
 String[] raw;
 String[][] subs;
 int subN = 0;
+int subCount;
 
 void setup() {
   size(640, 360);
@@ -99,6 +100,9 @@ void draw() {
   currentFrame = getFrame();
 
   sound.play();
+  if(mov.time()==0.0){ //If movie reset
+    sound.rewind();    //Rewind audio file
+  }
   displaySubs();
   
   //Bottom progress bar
@@ -188,12 +192,12 @@ void loadSubs(){
   //here is going to be convert to an inner format
   subs = new String[raw.length][3];
 
-  int count = 1;
+  subCount = 1;
   
   //println(raw.length + " lineas a agregar:");
 
   for(int i=0; i < raw.length;i++) {
-    if( int(raw[i]) == count ) {
+    if( int(raw[i]) == subCount ) {
       String[] timeRAW = split(raw[i+1]," ");
 
       String[] startTimeRAW = split(timeRAW[0],":");
@@ -210,12 +214,12 @@ void loadSubs(){
         subtitle = subtitle + raw[i+2+l];
       }
 
-      subs[count-1][0]= Integer.toString(start);
-      subs[count-1][1]= Integer.toString(end);
-      subs[count-1][2]= subtitle;
+      subs[subCount-1][0]= Integer.toString(start);
+      subs[subCount-1][1]= Integer.toString(end);
+      subs[subCount-1][2]= subtitle;
       
-      //println(count+" "+ start + " -->" + end + " dice " + subtitle);
-      count++;
+      //println(subCount+" "+ start + " -->" + end + " dice " + subtitle);
+      subCount++;
     }
   }
 }
@@ -223,7 +227,7 @@ void loadSubs(){
 void displaySubs(){
   float sec = mov.time();
   String time = formatTime(sec);
-  if ( int(sec) == 0){
+  if (int(sec) == 0 ){
     subN = 0; //Starting from beginning
   }
   while( int(sec) < int(subs[subN][0])){ //if jumping backwards
@@ -242,7 +246,8 @@ void displaySubs(){
     fill(#FFFFFF);
     text(subs[subN][2], width/2, height - 20);
     
-    if(int(sec) >= int(subs[subN][1])){
+    if(int(sec) >= int(subs[subN][1]) && //If time period is reached
+        (subN<subCount-2)){            //And bot at end of subtitles
       subN++;
     }
   }
