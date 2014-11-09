@@ -37,8 +37,8 @@ ControlP5 cp5;
 Button pixelateButton;
 boolean isPixelate = false;
 int numPixelsWide, numPixelsHigh;
-int blockSize = 10;
-color movColors[];
+int blockSize = 10; //Should be a number that divides evenly into the height and width
+color movColors[][];
 
 //For subtitles
 String[] raw;
@@ -54,7 +54,7 @@ void setup() {
   mov.loop();
   movFrameRate=(int)mov.frameRate;
   maxFrames = getLength() - 1;
-
+  movColors = new color[width/blockSize][height/blockSize];
 
   //Load audio
   minim = new Minim(this);
@@ -74,17 +74,28 @@ void setup() {
 
 void movieEvent(Movie movie) {
   mov.read();
+  mov.loadPixels();
+
+  for (int i = 0; i < width/blockSize; i++) {
+    for (int j = 0; j < height/blockSize; j++) {
+      movColors[i][j] = mov.get(i*blockSize, j*blockSize);
+    }
+  }
 }
 
 void draw() {    
-  image(mov, 0, 0);
-
-  // Variable speed based on mouse cursor - from Speed example
-  //  float newSpeed = map(mouseX, 0, width, 0.1, 2);
-  //  mov.speed(newSpeed);
-  //
-  //  fill(255);
-  //  text(nfc(newSpeed, 2) + "X", 10, 30); 
+  if (isPixelate) {
+    for (int i = 0; i < width/blockSize; i++) {
+      for (int j = 0; j < height/blockSize; j++) {
+        noStroke();
+        fill(movColors[i][j]);
+        rect(i*blockSize, j*blockSize, blockSize, blockSize);
+      }
+    }
+  } else {
+    image(mov, 0, 0);
+  }
+  
   currentFrame = getFrame();
 
   sound.play();
