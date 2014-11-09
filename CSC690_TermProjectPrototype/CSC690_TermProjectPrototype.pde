@@ -169,7 +169,7 @@ void controlEvent(ControlEvent theEvent) {
 
 
 //----------Subtitiles----------\\
-
+//From http://www.activovision.com/pogg/doku.php?id=examples
 void loadSubs(){
   //Loads the subtitles file
   raw = loadStrings("subs.srt");
@@ -179,7 +179,7 @@ void loadSubs(){
 
   int count = 1;
   
-  println(raw.length + " lineas a agregar:");
+  //println(raw.length + " lineas a agregar:");
 
   for(int i=0; i < raw.length;i++) {
     if( int(raw[i]) == count ) {
@@ -203,7 +203,7 @@ void loadSubs(){
       subs[count-1][1]= Integer.toString(end);
       subs[count-1][2]= subtitle;
       
-      println(count+" "+ start + " -->" + end + " dice " + subtitle);
+      //println(count+" "+ start + " -->" + end + " dice " + subtitle);
       count++;
     }
   }
@@ -212,8 +212,12 @@ void loadSubs(){
 void displaySubs(){
   float sec = mov.time();
   String time = formatTime(sec);
-  if ( int(sec) == 0) subN = 0;
-  
+  if ( int(sec) == 0){
+    subN = 0; //Starting from beginning
+  }
+  while( int(sec) < int(subs[subN][0])){ //if jumping backwards
+     subN--;
+  }
   if ( int(sec) >= int(subs[subN][0])) {
     textSize(15);
     textAlign(CENTER);
@@ -227,8 +231,11 @@ void displaySubs(){
     fill(#FFFFFF);
     text(subs[subN][2], width/2, height - 20);
     
-    if(int(sec) >= int(subs[subN][1])) subN++;
+    if(int(sec) >= int(subs[subN][1])){
+      subN++;
+    }
   }
+  
 }
 String formatTime(float sec) {
   int seconds = (int)sec;
