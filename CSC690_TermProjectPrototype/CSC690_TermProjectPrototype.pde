@@ -77,6 +77,7 @@ void draw() {
   currentFrame = getFrame();
 
   sound.play();
+  println(sound.position());
 
   //Bottom progress bar
   stroke(#FF0000);
@@ -108,14 +109,16 @@ void setFrame(int n) {
   }
     
   mov.jump(where);
-} 
+}
 
 void mousePressed() {
   if ((mouseY > (height-15)) && (mouseY < height)) {
     isJump=true;
     float whereToJump = ((float)mouseX/(float)width)*maxFrames;
+    float audioJump = ((float)mouseX/(float)width)*sound.length();
     //println(whereToJump);
     setFrame(ceil(whereToJump));
+    sound.cue(ceil(audioJump));
     mov.play();
   }
 }
@@ -123,7 +126,9 @@ void mousePressed() {
 void mouseDragged() {
   if(isJump){
     float whereToJump = ((float)mouseX/(float)width)*maxFrames;
+    float audioJump = ((float)mouseX/(float)width)*sound.length();
     setFrame(ceil(whereToJump));
+    sound.cue(ceil(audioJump));
     mov.play();
   }
 }
