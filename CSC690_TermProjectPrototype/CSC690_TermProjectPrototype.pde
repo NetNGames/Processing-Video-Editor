@@ -37,8 +37,8 @@ ControlP5 cp5;
 Button pixelateButton;
 boolean isPixelate = false;
 int numPixelsWide, numPixelsHigh;
-int blockSize = 10;
-color movColors[];
+int blockSize = 10; //Should be a number that divides evenly into the height and width
+color movColors[][];
 
 void setup() {
   size(640, 360);
@@ -48,6 +48,7 @@ void setup() {
   mov = new Movie(this, "AmericaNoAud.mp4");
   mov.loop();
   maxFrames = getLength() - 1;
+  movColors = new color[width/blockSize][height/blockSize];
 
   //Load audio
   minim = new Minim(this);
@@ -63,11 +64,16 @@ void setup() {
 
 void movieEvent(Movie movie) {
   mov.read();
+  mov.loadPixels();
+
+  for (int i = 0; i < width/blockSize; i++) {
+    for (int j = 0; j < height/blockSize; j++) {
+      movColors[i][j] = mov.get(i*blockSize, j*blockSize);
+    }
+  }
 }
 
 void draw() {    
-  image(mov, 0, 0);
-
   // Variable speed based on mouse cursor - from Speed example
   //  float newSpeed = map(mouseX, 0, width, 0.1, 2);
   //  mov.speed(newSpeed);
@@ -76,8 +82,20 @@ void draw() {
   //  text(nfc(newSpeed, 2) + "X", 10, 30); 
   currentFrame = getFrame();
 
+  if (isPixelate) {
+    for (int i = 0; i < width/blockSize; i++) {
+      for (int j = 0; j < height/blockSize; j++) {
+        noStroke();
+        fill(movColors[i][j]);
+        rect(i*blockSize, j*blockSize, blockSize, blockSize);
+      }
+    }
+  } else {
+    image(mov, 0, 0);
+  }
+
   sound.play();
-  println(sound.position());
+  //println(sound.position());
 
   //Bottom progress bar
   stroke(#FF0000);
@@ -95,19 +113,19 @@ int getLength() {
 }  
 void setFrame(int n) {
   mov.play();
-    
+
   // The duration of a single frame:
   float frameDuration = 1.0 / movFrameRate;
-    
+
   // We move to the middle of the frame by adding 0.5:
   float where = (n + 0.5) * frameDuration; 
-    
+
   // Taking into account border effects:
   float diff = mov.duration() - where;
   if (diff < 0) {
     where += diff - 0.25 * frameDuration;
   }
-    
+
   mov.jump(where);
 }
 
@@ -124,7 +142,7 @@ void mousePressed() {
 }
 
 void mouseDragged() {
-  if(isJump){
+  if (isJump) {
     float whereToJump = ((float)mouseX/(float)width)*maxFrames;
     float audioJump = ((float)mouseX/(float)width)*sound.length();
     setFrame(ceil(whereToJump));
