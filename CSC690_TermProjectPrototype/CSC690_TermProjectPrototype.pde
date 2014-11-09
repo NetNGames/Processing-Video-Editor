@@ -67,25 +67,26 @@ void setup() {
   pixelateButton = cp5.addButton("pixelateButton")
     .setPosition(10, 10)
       .setSize(70, 20)
-        .setCaptionLabel("Pixelate");
-        
+        .setCaptionLabel("Pixelate")
+          .setVisible(false);
+
   //Load subtitles
   loadSubs();
 }
 
 void movieEvent(Movie movie) {
   mov.read();
-  mov.loadPixels();
-
-  for (int i = 0; i < width/blockSize; i++) {
-    for (int j = 0; j < height/blockSize; j++) {
-      movColors[i][j] = mov.get(i*blockSize, j*blockSize);
-    }
-  }
 }
 
-void draw() {    
+void draw() {
   if (isPixelate) {
+    mov.loadPixels();
+
+    for (int i = 0; i < width/blockSize; i++) {
+      for (int j = 0; j < height/blockSize; j++) {
+        movColors[i][j] = mov.get(i*blockSize, j*blockSize);
+      }
+    }
     for (int i = 0; i < width/blockSize; i++) {
       for (int j = 0; j < height/blockSize; j++) {
         noStroke();
@@ -96,15 +97,15 @@ void draw() {
   } else {
     image(mov, 0, 0);
   }
-  
+
   currentFrame = getFrame();
 
   sound.play();
-  if(mov.time()==0.0){ //If movie reset
+  if (mov.time()==0.0) { //If movie reset
     sound.rewind();    //Rewind audio file
   }
   displaySubs();
-  
+
   //Bottom progress bar
   stroke(#FF0000);
   strokeWeight(10);
@@ -113,8 +114,6 @@ void draw() {
   rect(0, height-9 //Located on bottom of screen
   , (currentFrame/ maxFrames)*width //Scaled to window width
   , 1);
-  
-  
 }  
 int getFrame() {    
   return ceil(mov.time() * movFrameRate) - 1;
@@ -124,9 +123,9 @@ int getLength() {
 }  
 
 //----------Video Playback----------\\
-
+//From Frames video example
 void setFrame(int n) {
-  mov.play();
+  //mov.play();
 
   // The duration of a single frame:
   float frameDuration = 1.0 / movFrameRate;
@@ -148,11 +147,9 @@ void mousePressed() {
     isJump=true;
     float whereToJump = ((float)mouseX/(float)width)*maxFrames;
     float audioJump = ((float)mouseX/(float)width)*sound.length();
-    
+
     setFrame(ceil(whereToJump));
     sound.cue(ceil(audioJump));
-    //mov.jump(ceil(whereToJump)); //not working, use setFrame
-    mov.play();
   }
 }
 
@@ -162,81 +159,98 @@ void mouseDragged() {
     float audioJump = ((float)mouseX/(float)width)*sound.length();
     setFrame(ceil(whereToJump));
     sound.cue(ceil(audioJump));
-    //mov.jump(ceil(whereToJump));
-    mov.play();
   }
 }
 void mouseReleased() {
   isJump=false;
-  mov.play();
 }
 
 //----------Video Effects----------\\
+void mouseMoved() {
+  if ((mouseX > (0)) && (mouseX < 80) &&
+    (mouseY > (0)) && (mouseY < 30)) {
+    pixelateButton.setVisible(true);
+    pixelateButton.unlock();
+  } else {
+    pixelateButton.setVisible(false);
+    pixelateButton.lock();
+  }
+}
 void controlEvent(ControlEvent theEvent) {
   if (theEvent.controller().name()=="pixelateButton") {
+    if (!pixelateButton.isLock()) {//Will not activate if mouse is not over button
+      if (isPixelate) {
+        isPixelate=false;
+      } else if (!isPixelate) {
+        isPixelate=true;
+      }
+    }
+  }
+}
+void keyPressed() {
+  if ((key == 'p') || (key == 'P')){
     if (isPixelate) {
       isPixelate=false;
-    } else {
+    } else if (!isPixelate) {
       isPixelate=true;
     }
   }
 }
 
-
-//----------Subtitiles----------\\
+//----------Subtitles----------\\
 //From http://www.activovision.com/pogg/doku.php?id=examples
-void loadSubs(){
+void loadSubs() {
   //Loads the subtitles file
   raw = loadStrings("subs.srt");
-  
+
   //here is going to be convert to an inner format
   subs = new String[raw.length][3];
 
   subCount = 1;
-  
+
   //println(raw.length + " lineas a agregar:");
 
-  for(int i=0; i < raw.length;i++) {
-    if( int(raw[i]) == subCount ) {
-      String[] timeRAW = split(raw[i+1]," ");
+  for (int i=0; i < raw.length; i++) {
+    if ( int(raw[i]) == subCount ) {
+      String[] timeRAW = split(raw[i+1], " ");
 
-      String[] startTimeRAW = split(timeRAW[0],":");
-      String[] endTimeRAW = split(timeRAW[2],":");
-      
-      int[] splitStartTimeRAW = int(split(startTimeRAW[2],","));
-      int[] splitEndTimeRAW = int(split(endTimeRAW[2],","));
+      String[] startTimeRAW = split(timeRAW[0], ":");
+      String[] endTimeRAW = split(timeRAW[2], ":");
+
+      int[] splitStartTimeRAW = int(split(startTimeRAW[2], ","));
+      int[] splitEndTimeRAW = int(split(endTimeRAW[2], ","));
 
       int start = int(startTimeRAW[0])*60*60+int(startTimeRAW[1])*60+splitStartTimeRAW[0];
       int end = int(endTimeRAW[0])*60*60+int(endTimeRAW[1])*60+splitEndTimeRAW[0];
 
       String subtitle = "";
-      for(int l=0; !(raw[i+2+l].equals("")); l++) {
+      for (int l=0; ! (raw[i+2+l].equals ("")); l++) {
         subtitle = subtitle + raw[i+2+l];
       }
 
       subs[subCount-1][0]= Integer.toString(start);
       subs[subCount-1][1]= Integer.toString(end);
       subs[subCount-1][2]= subtitle;
-      
+
       //println(subCount+" "+ start + " -->" + end + " dice " + subtitle);
       subCount++;
     }
   }
 }
 
-void displaySubs(){
+void displaySubs() {
   float sec = mov.time();
   String time = formatTime(sec);
-  if (int(sec) == 0 ){
+  if (int(sec) == 0 ) {
     subN = 0; //Starting from beginning
   }
-  while( int(sec) < int(subs[subN][0])){ //if jumping backwards
-     subN--;
+  while ( int (sec) < int(subs[subN][0])) { //if jumping backwards
+    subN--;
   }
   if ( int(sec) >= int(subs[subN][0])) {
     textSize(15);
     textAlign(CENTER);
-    
+
     //Black Outline
     fill(#000000);
     text(subs[subN][2], width/2+1, height - 21);
@@ -245,13 +259,12 @@ void displaySubs(){
     //White text
     fill(#FFFFFF);
     text(subs[subN][2], width/2, height - 20);
-    
-    if(int(sec) >= int(subs[subN][1]) && //If time period is reached
-        (subN<subCount-2)){            //And bot at end of subtitles
+
+    if (int(sec) >= int(subs[subN][1]) && //If time period is reached
+    (subN<subCount-2)) {            //And not at end of subtitles
       subN++;
     }
   }
-  
 }
 String formatTime(float sec) {
   int seconds = (int)sec;
@@ -263,13 +276,14 @@ String formatTime(float sec) {
   minutes = minutes%60;
 
   String time = "";
-  if(minutes<10) {
+  if (minutes<10) {
     time = time+"0";
   }
   time = time+minutes+":";
-  if(seconds<10) {
+  if (seconds<10) {
     time = time+"0";
   }
   time = time+seconds;
   return time;
 }
+
