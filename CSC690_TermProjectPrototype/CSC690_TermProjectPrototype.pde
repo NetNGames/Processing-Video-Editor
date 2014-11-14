@@ -23,6 +23,7 @@ int movFrameRate;
 float currentFrame;
 float maxFrames;
 boolean isJump=false;
+boolean showTimeline=false;
 
 //For Audio
 import ddf.minim.*;
@@ -109,11 +110,11 @@ void draw() {
   //Bottom progress bar
   stroke(#FF0000);
   strokeWeight(10);
-
-  //Progress bar
-  rect(0, height-9 //Located on bottom of screen
-  , (currentFrame/ maxFrames)*width //Scaled to window width
-  , 1);
+  if(showTimeline){
+    rect(0, height-9, //Located on bottom of screen
+        (currentFrame/ maxFrames)*width, //Scaled to window width
+        1);
+  }
 }  
 int getFrame() {    
   return ceil(mov.time() * movFrameRate) - 1;
@@ -174,6 +175,11 @@ void mouseMoved() {
   } else {
     pixelateButton.setVisible(false);
     pixelateButton.lock();
+  }
+  if ((mouseY > (height-30)) && (mouseY < height)) {
+    showTimeline = true;  
+  } else{
+    showTimeline = false;
   }
 }
 void controlEvent(ControlEvent theEvent) {
