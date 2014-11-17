@@ -50,12 +50,12 @@ int subCount;
 //For File Chooser
 import javax.swing.*;
 Button chooseFileButton;
-boolean vidLoaded=false;
+boolean movLoaded=false;
 boolean audLoaded=false;
 boolean srtLoaded=false;
 
 void setup() {
-  size(640, 360);
+  size(800, 480);
   background(0);
 
   //Load buttons
@@ -80,6 +80,33 @@ void movieEvent(Movie movie) {
 }
 
 void draw() {
+  if (movLoaded) {
+    //imageMode(CENTER);
+    image(mov, 
+          //width/2, height/2, //if centered
+          0,0,
+          width, height); //Stretch to width and height
+    
+    //Bottom progress bar
+    if (showTimeline) {
+      currentFrame = getFrame();
+      rectMode(CORNER);
+      stroke(#FF0000);
+      strokeWeight(10);
+      rect(0, height-9, //Located on bottom of screen
+      (currentFrame/ maxFrames)*width, //Scaled to window width
+      1);
+    }
+  }
+  if (audLoaded) {
+    sound.play();
+    if (mov.time()==0.0) { //If movie reset
+      sound.rewind();    //Rewind audio file
+    }
+  }
+  if (srtLoaded) {
+    displaySubs();
+  }
   if (isPixelate) {
     mov.loadPixels();
 
@@ -90,33 +117,12 @@ void draw() {
     }
     for (int i = 0; i < width/blockSize; i++) {
       for (int j = 0; j < height/blockSize; j++) {
+        rectMode(CORNER);
         noStroke();
         fill(movColors[i][j]);
         rect(i*blockSize, j*blockSize, blockSize, blockSize);
       }
     }
-  } else if (vidLoaded) {
-    image(mov, 0, 0);
-    currentFrame = getFrame();
-    //Bottom progress bar
-    stroke(#FF0000);
-    strokeWeight(10);
-    if (showTimeline) {
-      rect(0, height-9, //Located on bottom of screen
-      (currentFrame/ maxFrames)*width, //Scaled to window width
-      1);
-    }
-  }
-
-  if (audLoaded) {
-    sound.play();
-
-    if (mov.time()==0.0) { //If movie reset
-      sound.rewind();    //Rewind audio file
-    }
-  }
-  if (srtLoaded) {
-    displaySubs();
   }
 }  
 
@@ -139,7 +145,7 @@ void loadFile() {
       file.getName().endsWith("avi") ||
       file.getName().endsWith("ogg") ) {
       //Load video
-      vidLoaded=true;
+      movLoaded=true;
       mov = new Movie(this, file.getPath());
       mov.loop();
       movFrameRate=(int)mov.frameRate;
@@ -191,20 +197,27 @@ void setFrame(int n) {
 void mousePressed() {
   if ((mouseY > (height-15)) && (mouseY < height)) {
     isJump=true;
-    float whereToJump = ((float)mouseX/(float)width)*maxFrames;
-    float audioJump = ((float)mouseX/(float)width)*sound.length();
-
-    setFrame(ceil(whereToJump));
-    sound.cue(ceil(audioJump));
+    if(movLoaded){
+      float whereToJump = ((float)mouseX/(float)width)*maxFrames;
+      setFrame(ceil(whereToJump));
+    }
+    if(audLoaded){
+      float audioJump = ((float)mouseX/(float)width)*sound.length();
+      sound.cue(ceil(audioJump));
+    }
   }
 }
 
 void mouseDragged() {
   if (isJump) {
-    float whereToJump = ((float)mouseX/(float)width)*maxFrames;
-    float audioJump = ((float)mouseX/(float)width)*sound.length();
-    setFrame(ceil(whereToJump));
-    sound.cue(ceil(audioJump));
+    if(movLoaded){
+      float whereToJump = ((float)mouseX/(float)width)*maxFrames;
+      setFrame(ceil(whereToJump));
+    }
+    if(audLoaded){
+      float audioJump = ((float)mouseX/(float)width)*sound.length();
+      sound.cue(ceil(audioJump));
+    }
   }
 }
 void mouseReleased() {
@@ -297,9 +310,6 @@ void displaySubs() {
   if (int(sec) == 0 ) {
     subN = 0; //Starting from beginning
   }
-  while ( int (sec) < int(subs[subN][0])) { //if jumping backwards
-    subN--;
-  }
   if ( int(sec) >= int(subs[subN][0])) {
     textSize(15);
     textAlign(CENTER);
@@ -317,6 +327,9 @@ void displaySubs() {
     (subN<subCount-2)) {            //And not at end of subtitles
       subN++;
     }
+  }
+  while ( int (sec) < int(subs[subN][0])) { //if jumping backwards
+    subN--;
   }
 }
 String formatTime(float sec) {
