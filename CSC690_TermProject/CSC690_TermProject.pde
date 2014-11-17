@@ -16,6 +16,13 @@
  
  *************************************************/
 
+int fullWidth = 740;
+int fullHeight = 460;
+int playbackWidth = 640;
+int playbackHeight = 360;
+int widthDiff = fullWidth-playbackWidth;
+int heightDiff = fullHeight-playbackHeight;
+
 //For Video
 import processing.video.*;
 Movie mov;
@@ -98,14 +105,15 @@ void movieEvent(Movie movie) {
 }
 
 void draw() {
+  background(0);
   stroke(#FFFFFF);
-  rect(0, 0, 640, 360);
+  rect(0, 0, playbackWidth, playbackHeight);
 
   if (vidLoaded) {
     //determine aspect ratio and scale accordingly:
 
 
-    image(mov, 0, 0, 640, 360);
+    image(mov, 0, 0, playbackWidth, playbackHeight);
     currentFrame = getFrame();
     //pixelated?
     if (isPixelate) {
@@ -215,14 +223,14 @@ void setFrame(int n) {
 } 
 
 void mousePressed() {
-  if ((mouseY > (height-115)) && (mouseY < height-109) && mouseX < 360) {
+  if ((mouseY > (height-(heightDiff+20))) && (mouseY < height-heightDiff) && mouseX < widthDiff) {
     isJump=true;
     if (vidLoaded) { 
-      float whereToJump = ((float)mouseX/(float)(width-100))*maxFrames;
+      float whereToJump = ((float)mouseX/(float)(width-widthDiff))*maxFrames;
       setFrame(ceil(whereToJump));
     }
     if (audLoaded) { 
-      float audioJump = ((float)mouseX/(float)(width-100))*sound.length();
+      float audioJump = ((float)mouseX/(float)(width-widthDiff))*sound.length();
       sound.cue(ceil(audioJump));
     }
   }
@@ -252,11 +260,11 @@ void mouseMoved() {
     pixelateButton.setVisible(false);
     pixelateButton.lock();
   }
-  if ((mouseY > (height-30)) && (mouseY < height)) {
-    showTimeline = true;
-  } else {
-    showTimeline = false;
-  }
+//  if ((mouseY > (height-30)) && (mouseY < height)) {
+//    showTimeline = true;
+//  } else {
+//    showTimeline = false;
+//  }
 }
 void controlEvent(ControlEvent theEvent) {
   if (theEvent.controller().name()=="pixelateButton") {
@@ -360,12 +368,12 @@ void displaySubs() {
 
     //Black Outline
     fill(#000000);
-    text(subs[subN][2], width/2+1, height - 21);
-    text(subs[subN][2], width/2-1, height - 19);
+    text(subs[subN][2], width/2+1, height - 51);
+    text(subs[subN][2], width/2-1, height - 49);
 
     //White text
     fill(#FFFFFF);
-    text(subs[subN][2], width/2, height - 20);
+    text(subs[subN][2], width/2, height - 50);
 
     if (int(sec) >= int(subs[subN][1]) && //If time period is reached
     (subN<subCount-2)) {            //And not at end of subtitles
