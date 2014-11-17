@@ -9,10 +9,10 @@
  System: JVM 
  
  Description: Processing Video Editor
-   -Includes some video effects (Pixelate from Pixelate example)
-   -Embedded subtitles
-   -Choose File from File Browser
-   -Able to jump to frame with mouse click (from Frames example)               
+ -Includes some video effects (Pixelate from Pixelate example)
+ -Embedded subtitles
+ -Choose File from File Browser
+ -Able to jump to frame with mouse click (from Frames example)               
  
  *************************************************/
 
@@ -33,6 +33,9 @@ AudioPlayer sound;
 //For Buttons
 import controlP5.*;
 ControlP5 cp5;
+Button playButton;
+Button pauseButton;
+Button stopButton;
 
 //For Pixelate effect
 Button pixelateButton;
@@ -55,7 +58,7 @@ boolean audLoaded=false;
 boolean srtLoaded=false;
 
 void setup() {
-  size(640, 360);
+  size(740, 460);
   background(0);
 
   //Load buttons
@@ -64,7 +67,7 @@ void setup() {
   chooseFileButton = cp5.addButton("chooseFile")
     .setPosition(width-90, 10)
       .setSize(70, 20)
-        .setCaptionLabel("Choose File")
+        .setCaptionLabel("Load File")
           .setVisible(true);
 
   //Button to pixelate video
@@ -73,6 +76,21 @@ void setup() {
       .setSize(70, 20)
         .setCaptionLabel("Pixelate")
           .setVisible(false);
+
+  playButton = cp5.addButton("playButton")
+    .setPosition(10, height-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Play");
+
+  pauseButton = cp5.addButton("pauseButton")
+    .setPosition(90, height-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Pause");
+
+  stopButton = cp5.addButton("stopButton")
+    .setPosition(170, height-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Stop");
 }
 
 void movieEvent(Movie movie) {
@@ -80,32 +98,40 @@ void movieEvent(Movie movie) {
 }
 
 void draw() {
-  if (isPixelate) {
-    mov.loadPixels();
+  stroke(#FFFFFF);
+  rect(0, 0, 640, 360);
 
-    for (int i = 0; i < width/blockSize; i++) {
-      for (int j = 0; j < height/blockSize; j++) {
-        movColors[i][j] = mov.get(i*blockSize, j*blockSize);
-      }
-    }
-    for (int i = 0; i < width/blockSize; i++) {
-      for (int j = 0; j < height/blockSize; j++) {
-        noStroke();
-        fill(movColors[i][j]);
-        rect(i*blockSize, j*blockSize, blockSize, blockSize);
-      }
-    }
-  } else if (vidLoaded) {
-    image(mov, 0, 0);
+  if (vidLoaded) {
+    //determine aspect ratio and scale accordingly:
+
+
+    image(mov, 0, 0, 640, 360);
     currentFrame = getFrame();
+    //pixelated?
+    if (isPixelate) {
+      mov.loadPixels();
+
+      for (int i = 0; i < width/blockSize; i++) {
+        for (int j = 0; j < height/blockSize; j++) {
+          movColors[i][j] = mov.get(i*blockSize, j*blockSize);
+        }
+      }
+      for (int i = 0; i < width/blockSize; i++) {
+        for (int j = 0; j < height/blockSize; j++) {
+          noStroke();
+          fill(movColors[i][j]);
+          rect(i*blockSize, j*blockSize, blockSize, blockSize);
+        }
+      }
+    }
     //Bottom progress bar
     stroke(#FF0000);
     strokeWeight(10);
-    if (showTimeline) {
-      rect(0, height-9, //Located on bottom of screen
-      (currentFrame/ maxFrames)*width, //Scaled to window width
-      1);
-    }
+    //if (showTimeline) {
+    rect(0, height-109, //Located on bottom of screen
+    (currentFrame/ maxFrames)*(width-100), //Scaled to window width
+    1);
+    //}
   }
 
   if (audLoaded) {
@@ -189,24 +215,29 @@ void setFrame(int n) {
 } 
 
 void mousePressed() {
-  if ((mouseY > (height-15)) && (mouseY < height)) {
+  if ((mouseY > (height-115)) && (mouseY < height-109) && mouseX < 360) {
     isJump=true;
-    float whereToJump = ((float)mouseX/(float)width)*maxFrames;
-    float audioJump = ((float)mouseX/(float)width)*sound.length();
-
-    setFrame(ceil(whereToJump));
-    sound.cue(ceil(audioJump));
+    if (vidLoaded) { 
+      float whereToJump = ((float)mouseX/(float)(width-100))*maxFrames;
+      setFrame(ceil(whereToJump));
+    }
+    if (audLoaded) { 
+      float audioJump = ((float)mouseX/(float)(width-100))*sound.length();
+      sound.cue(ceil(audioJump));
+    }
   }
 }
 
-void mouseDragged() {
+//Disabled until bugs are fixed
+/*void mouseDragged() {
   if (isJump) {
     float whereToJump = ((float)mouseX/(float)width)*maxFrames;
     float audioJump = ((float)mouseX/(float)width)*sound.length();
     setFrame(ceil(whereToJump));
     sound.cue(ceil(audioJump));
   }
-}
+}*/
+
 void mouseReleased() {
   isJump=false;
 }
@@ -238,6 +269,29 @@ void controlEvent(ControlEvent theEvent) {
     }
   } else if (theEvent.controller().name()=="chooseFile") {
     loadFile();
+  } else if (theEvent.controller().name()=="pauseButton") {
+    if (vidLoaded) { 
+      mov.pause();
+    }
+    if (audLoaded) { 
+      sound.pause();
+    }
+  } else if (theEvent.controller().name()=="playButton") {
+    if (vidLoaded) { 
+      mov.play();
+    }
+    if (audLoaded) { 
+      sound.play();
+    }
+  } else if (theEvent.controller().name()=="stopButton") {
+    if (vidLoaded) {
+      mov.jump(0); 
+      mov.pause();
+    }
+    if (audLoaded) {  
+      sound.rewind();
+      sound.pause();
+    }
   }
 }
 void keyPressed() {
