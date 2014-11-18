@@ -143,7 +143,7 @@ void draw() {
   }
 
   if (audLoaded) {
-    sound.play();
+    //sound.play();
 
     if (mov.time()==0.0) { //If movie reset
       sound.rewind();    //Rewind audio file
@@ -175,7 +175,8 @@ void loadFile() {
       //Load video
       vidLoaded=true;
       mov = new Movie(this, file.getPath());
-      mov.loop();
+      //mov.loop();
+      mov.pause();
       movFrameRate=(int)mov.frameRate;
       maxFrames = getLength() - 1;
       movColors = new color[width/blockSize][height/blockSize];
@@ -223,7 +224,7 @@ void setFrame(int n) {
 } 
 
 void mousePressed() {
-  if ((mouseY > (height-(heightDiff+20))) && (mouseY < height-heightDiff) && mouseX < widthDiff) {
+  if ((mouseY > (fullHeight-(heightDiff+20))) && (mouseY < playbackHeight) && mouseX < playbackWidth) {
     isJump=true;
     if (vidLoaded) { 
       float whereToJump = ((float)mouseX/(float)(width-widthDiff))*maxFrames;
