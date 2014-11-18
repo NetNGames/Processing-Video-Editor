@@ -111,8 +111,6 @@ void draw() {
 
   if (vidLoaded) {
     //determine aspect ratio and scale accordingly:
-
-
     image(mov, 0, 0, playbackWidth, playbackHeight);
     currentFrame = getFrame();
     //pixelated?
@@ -149,12 +147,16 @@ void draw() {
       sound.rewind();    //Rewind audio file
     }
   }
-  if (srtLoaded) {
+  if (srtLoaded && 
+      (vidLoaded||audLoaded)&&//){// &&
+      currentFrame!=(-1.0)) {
+        //println(currentFrame);
     displaySubs();
   }
 }  
 
 //----------File Loading----------\\
+//From https://processing.org/discourse/beta/num_1140107049.html
 void loadFile() {
   try {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -360,8 +362,10 @@ void displaySubs() {
   if (int(sec) == 0 ) {
     subN = 0; //Starting from beginning
   }
-  while ( int (sec) < int(subs[subN][0])) { //if jumping backwards
-    subN--;
+  if(subN>0){
+    while ( int (sec) < int(subs[subN][0])) { //if jumping backwards
+      subN--;
+    }
   }
   if ( int(sec) >= int(subs[subN][0])) {
     textSize(15);
