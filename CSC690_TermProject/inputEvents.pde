@@ -10,6 +10,11 @@ void mousePressed() {
       sound.cue(ceil(audioJump));
     }
   }
+  
+  if(mouseY > 400 && mouseY < 410 && mouseX > 60 && mouseX < 610){
+    println("adding at " + (((float)(mouseX-60)/(float)550)*(float)30));
+    timeline.addClip(((float)(mouseX-60)/(float)550)*(float)30);
+  }
 }
 
 void mouseReleased() {
@@ -32,7 +37,6 @@ void mouseMoved() {
 //    showTimeline = false;
 //  }
 }
-
 void controlEvent(ControlEvent theEvent) {
   if (theEvent.controller().name()=="pixelateButton") {
     if (!pixelateButton.isLock()) {//Will not activate if mouse is not over button

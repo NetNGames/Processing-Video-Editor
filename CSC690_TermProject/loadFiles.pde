@@ -50,7 +50,7 @@ void drawFileList() {
   fill(255);
   text("Video Clips: ", width-190, 50);
   if (vidLoaded) {
-    fill(0, 102, 153, 204);
+    fill(0, 102, 153);
     for (int i = 0; i < movieNames.size(); i++) {
       String name = movieNames.get(i);
       text(name, width-190, (66+(16*i)));
