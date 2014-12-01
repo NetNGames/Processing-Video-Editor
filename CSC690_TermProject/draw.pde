@@ -1,6 +1,7 @@
 void draw() {
   background(0);
   stroke(#FFFFFF);
+  fill(255);
   rect(0, 0, playbackWidth, playbackHeight);
 
   if (vidLoaded) {
@@ -24,27 +25,35 @@ void draw() {
         }
       }
     }
-    //Bottom progress bar
+    
+    //OLD PROGRESS BAR REPLACED BY TIMELINE
+    /*/Bottom progress bar
     stroke(#FF0000);
     strokeWeight(10);
     //if (showTimeline) {
     rect(0, height-109, //Located on bottom of screen
     (currentFrame/ maxFrames)*(width-100), //Scaled to window width
     1);
-    //}
+    //}*/
   }
 
   if (audLoaded) {
     //sound.play();
-
-    if (mov.time()==0.0) { //If movie reset
-      sound.rewind();    //Rewind audio file
+    if (vidLoaded) {
+      if (mov.time()==0.0) { //If movie reset
+        sound.rewind();    //Rewind audio file
+      }
     }
   }
   if (srtLoaded && 
-      (vidLoaded||audLoaded)&&//){// &&
-      currentFrame!=(-1.0)) {
-        //println(currentFrame);
+    (vidLoaded||audLoaded)&&currentFrame!=(-1.0)) {
+    //println(currentFrame);
     displaySubs();
   }
+  
+  drawFileList();
+  
+  timeline.draw();
+  timeline.update();
 } 
+

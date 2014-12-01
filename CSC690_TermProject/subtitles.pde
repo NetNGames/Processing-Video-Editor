@@ -45,7 +45,7 @@ void displaySubs() {
   if (int(sec) == 0 ) {
     subN = 0; //Starting from beginning
   }
-  if(subN>0){
+  if (subN>0) {
     while ( int (sec) < int(subs[subN][0])) { //if jumping backwards
       subN--;
     }
@@ -89,3 +89,4 @@ String formatTime(float sec) {
   time = time+seconds;
   return time;
 }
+

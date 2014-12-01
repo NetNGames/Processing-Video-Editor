@@ -23,9 +23,12 @@ int playbackHeight = 360;
 int widthDiff = fullWidth-playbackWidth;
 int heightDiff = fullHeight-playbackHeight;
 
+import java.util.*;
 //For Video
 import processing.video.*;
 Movie mov;
+Vector<Movie> movies;
+Vector<String> movieNames;
 int movFrameRate;
 float currentFrame;
 float maxFrames;
@@ -36,6 +39,8 @@ boolean showTimeline=false;
 import ddf.minim.*;
 Minim minim;
 AudioPlayer sound;
+Vector<AudioPlayer> sounds;
+Vector<String> soundNames;
 
 //For Buttons
 import controlP5.*;
@@ -43,6 +48,9 @@ ControlP5 cp5;
 Button playButton;
 Button pauseButton;
 Button stopButton;
+
+//For Timeline
+Timeline timeline;
 
 //For Pixelate effect
 Button pixelateButton;
@@ -64,15 +72,19 @@ boolean vidLoaded=false;
 boolean audLoaded=false;
 boolean srtLoaded=false;
 
+//Everything else
+PFont font; 
+
 void setup() {
-  size(740, 460);
+  size(840, 460);
   background(0);
+  font = createFont("Arial",16,true); 
 
   //Load buttons
   cp5 = new ControlP5(this);
   //Button to choose files
   chooseFileButton = cp5.addButton("chooseFile")
-    .setPosition(width-90, 10)
+    .setPosition(width-130, 10)
       .setSize(70, 20)
         .setCaptionLabel("Load File")
           .setVisible(true);
@@ -98,6 +110,12 @@ void setup() {
     .setPosition(170, height-30)
       .setSize(70, 20)
         .setCaptionLabel("Stop");
+        
+  timeline = new Timeline();
+  movies = new Vector<Movie>(0, 1);
+  movieNames = new Vector<String>(0, 1);
+  sounds = new Vector<AudioPlayer>(0, 1);
+  soundNames = new Vector<String>(0, 1);
 }
 
 void movieEvent(Movie movie) {
@@ -106,11 +124,10 @@ void movieEvent(Movie movie) {
 
 //Disabled until bugs are fixed
 /*void mouseDragged() {
-  if (isJump) {
-    float whereToJump = ((float)mouseX/(float)width)*maxFrames;
-    float audioJump = ((float)mouseX/(float)width)*sound.length();
-    setFrame(ceil(whereToJump));
-    sound.cue(ceil(audioJump));
-  }
-}*/
-
+ if (isJump) {
+ float whereToJump = ((float)mouseX/(float)width)*maxFrames;
+ float audioJump = ((float)mouseX/(float)width)*sound.length();
+ setFrame(ceil(whereToJump));
+ sound.cue(ceil(audioJump));
+ }
+ }*/

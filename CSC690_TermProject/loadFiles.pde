@@ -20,6 +20,8 @@ void loadFile() {
       //Load video
       vidLoaded=true;
       mov = new Movie(this, file.getPath());
+      movieNames.addElement(file.getName());
+      movies.addElement(mov);
       //mov.loop();
       mov.pause();
       movFrameRate=(int)mov.frameRate;
@@ -33,6 +35,8 @@ void loadFile() {
       audLoaded=true;
       minim = new Minim(this);
       sound = minim.loadFile(file.getPath());
+      sounds.addElement(sound);
+      soundNames.addElement(file.getName());
     } else if (file.getName().endsWith("srt")) {
       //Load subtitles
       srtLoaded=true;
@@ -40,3 +44,41 @@ void loadFile() {
     }
   }
 }
+
+void drawFileList() {
+  //Movie clip names:
+  fill(255);
+  text("Video Clips: ", width-190, 50);
+  if (vidLoaded) {
+    fill(0, 102, 153, 204);
+    for (int i = 0; i < movieNames.size(); i++) {
+      String name = movieNames.get(i);
+      text(name, width-190, (66+(16*i)));
+    }
+  }
+
+  fill(255);
+  text("Audio Clips: ", width-190, 200);
+  if(audLoaded){
+    fill(0, 102, 153, 204);
+    for (int i = 0; i <soundNames.size(); i++) {
+      String name = soundNames.get(i);
+      text(name, width-190, (216+(16*i)));
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

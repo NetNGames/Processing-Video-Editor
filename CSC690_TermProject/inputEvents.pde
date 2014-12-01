@@ -32,6 +32,7 @@ void mouseMoved() {
 //    showTimeline = false;
 //  }
 }
+
 void controlEvent(ControlEvent theEvent) {
   if (theEvent.controller().name()=="pixelateButton") {
     if (!pixelateButton.isLock()) {//Will not activate if mouse is not over button
