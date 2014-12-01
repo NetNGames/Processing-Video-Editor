@@ -9,12 +9,19 @@
  System: JVM 
  
  Description: Processing Video Editor
-   -Includes some video effects (Pixelate from Pixelate example)
-   -Embedded subtitles
-   -Choose File from File Browser
-   -Able to jump to frame with mouse click (from Frames example)               
+ -Includes some video effects (Pixelate from Pixelate example)
+ -Embedded subtitles
+ -Choose File from File Browser
+ -Able to jump to frame with mouse click (from Frames example)               
  
  *************************************************/
+
+int fullWidth = 740;
+int fullHeight = 460;
+int playbackWidth = 640;
+int playbackHeight = 360;
+int widthDiff = fullWidth-playbackWidth;
+int heightDiff = fullHeight-playbackHeight;
 
 //For Video
 import processing.video.*;
@@ -33,6 +40,9 @@ AudioPlayer sound;
 //For Buttons
 import controlP5.*;
 ControlP5 cp5;
+Button playButton;
+Button pauseButton;
+Button stopButton;
 
 //For Pixelate effect
 Button pixelateButton;
@@ -50,12 +60,12 @@ int subCount;
 //For File Chooser
 import javax.swing.*;
 Button chooseFileButton;
-boolean movLoaded=false;
+boolean vidLoaded=false;
 boolean audLoaded=false;
 boolean srtLoaded=false;
 
 void setup() {
-  size(800, 480);
+  size(740, 460);
   background(0);
 
   //Load buttons
@@ -64,7 +74,7 @@ void setup() {
   chooseFileButton = cp5.addButton("chooseFile")
     .setPosition(width-90, 10)
       .setSize(70, 20)
-        .setCaptionLabel("Choose File")
+        .setCaptionLabel("Load File")
           .setVisible(true);
 
   //Button to pixelate video
@@ -73,6 +83,21 @@ void setup() {
       .setSize(70, 20)
         .setCaptionLabel("Pixelate")
           .setVisible(false);
+
+  playButton = cp5.addButton("playButton")
+    .setPosition(10, height-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Play");
+
+  pauseButton = cp5.addButton("pauseButton")
+    .setPosition(90, height-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Pause");
+
+  stopButton = cp5.addButton("stopButton")
+    .setPosition(170, height-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Stop");
 }
 
 void movieEvent(Movie movie) {
@@ -80,53 +105,58 @@ void movieEvent(Movie movie) {
 }
 
 void draw() {
-  if (movLoaded) {
-    //imageMode(CENTER);
-    image(mov, 
-          //width/2, height/2, //if centered
-          0,0,
-          width, height); //Stretch to width and height
-    
-    //Bottom progress bar
-    if (showTimeline) {
-      currentFrame = getFrame();
-      rectMode(CORNER);
-      stroke(#FF0000);
-      strokeWeight(10);
-      rect(0, height-9, //Located on bottom of screen
-      (currentFrame/ maxFrames)*width, //Scaled to window width
-      1);
+  background(0);
+  stroke(#FFFFFF);
+  rect(0, 0, playbackWidth, playbackHeight);
+
+  if (vidLoaded) {
+    //determine aspect ratio and scale accordingly:
+    image(mov, 0, 0, playbackWidth, playbackHeight);
+    currentFrame = getFrame();
+    //pixelated?
+    if (isPixelate) {
+      mov.loadPixels();
+
+      for (int i = 0; i < width/blockSize; i++) {
+        for (int j = 0; j < height/blockSize; j++) {
+          movColors[i][j] = mov.get(i*blockSize, j*blockSize);
+        }
+      }
+      for (int i = 0; i < width/blockSize; i++) {
+        for (int j = 0; j < height/blockSize; j++) {
+          noStroke();
+          fill(movColors[i][j]);
+          rect(i*blockSize, j*blockSize, blockSize, blockSize);
+        }
+      }
     }
+    //Bottom progress bar
+    stroke(#FF0000);
+    strokeWeight(10);
+    //if (showTimeline) {
+    rect(0, height-109, //Located on bottom of screen
+    (currentFrame/ maxFrames)*(width-100), //Scaled to window width
+    1);
+    //}
   }
+
   if (audLoaded) {
-    sound.play();
+    //sound.play();
+
     if (mov.time()==0.0) { //If movie reset
       sound.rewind();    //Rewind audio file
     }
   }
-  if (srtLoaded) {
+  if (srtLoaded && 
+      (vidLoaded||audLoaded)&&//){// &&
+      currentFrame!=(-1.0)) {
+        //println(currentFrame);
     displaySubs();
-  }
-  if (isPixelate) {
-    mov.loadPixels();
-
-    for (int i = 0; i < width/blockSize; i++) {
-      for (int j = 0; j < height/blockSize; j++) {
-        movColors[i][j] = mov.get(i*blockSize, j*blockSize);
-      }
-    }
-    for (int i = 0; i < width/blockSize; i++) {
-      for (int j = 0; j < height/blockSize; j++) {
-        rectMode(CORNER);
-        noStroke();
-        fill(movColors[i][j]);
-        rect(i*blockSize, j*blockSize, blockSize, blockSize);
-      }
-    }
   }
 }  
 
 //----------File Loading----------\\
+//From https://processing.org/discourse/beta/num_1140107049.html
 void loadFile() {
   try {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -145,9 +175,10 @@ void loadFile() {
       file.getName().endsWith("avi") ||
       file.getName().endsWith("ogg") ) {
       //Load video
-      movLoaded=true;
+      vidLoaded=true;
       mov = new Movie(this, file.getPath());
-      mov.loop();
+      //mov.loop();
+      mov.pause();
       movFrameRate=(int)mov.frameRate;
       maxFrames = getLength() - 1;
       movColors = new color[width/blockSize][height/blockSize];
@@ -190,36 +221,33 @@ void setFrame(int n) {
   if (diff < 0) {
     where += diff - 0.25 * frameDuration;
   }
-
   mov.jump(where);
 } 
 
 void mousePressed() {
-  if ((mouseY > (height-15)) && (mouseY < height)) {
+  if ((mouseY > (fullHeight-(heightDiff+20))) && (mouseY < playbackHeight) && mouseX < playbackWidth) {
     isJump=true;
-    if(movLoaded){
-      float whereToJump = ((float)mouseX/(float)width)*maxFrames;
+    if (vidLoaded) { 
+      float whereToJump = ((float)mouseX/(float)(width-widthDiff))*maxFrames;
       setFrame(ceil(whereToJump));
     }
-    if(audLoaded){
-      float audioJump = ((float)mouseX/(float)width)*sound.length();
+    if (audLoaded) { 
+      float audioJump = ((float)mouseX/(float)(width-widthDiff))*sound.length();
       sound.cue(ceil(audioJump));
     }
   }
 }
 
-void mouseDragged() {
+//Disabled until bugs are fixed
+/*void mouseDragged() {
   if (isJump) {
-    if(movLoaded){
-      float whereToJump = ((float)mouseX/(float)width)*maxFrames;
-      setFrame(ceil(whereToJump));
-    }
-    if(audLoaded){
-      float audioJump = ((float)mouseX/(float)width)*sound.length();
-      sound.cue(ceil(audioJump));
-    }
+    float whereToJump = ((float)mouseX/(float)width)*maxFrames;
+    float audioJump = ((float)mouseX/(float)width)*sound.length();
+    setFrame(ceil(whereToJump));
+    sound.cue(ceil(audioJump));
   }
-}
+}*/
+
 void mouseReleased() {
   isJump=false;
 }
@@ -234,11 +262,11 @@ void mouseMoved() {
     pixelateButton.setVisible(false);
     pixelateButton.lock();
   }
-  if ((mouseY > (height-30)) && (mouseY < height)) {
-    showTimeline = true;
-  } else {
-    showTimeline = false;
-  }
+//  if ((mouseY > (height-30)) && (mouseY < height)) {
+//    showTimeline = true;
+//  } else {
+//    showTimeline = false;
+//  }
 }
 void controlEvent(ControlEvent theEvent) {
   if (theEvent.controller().name()=="pixelateButton") {
@@ -251,6 +279,29 @@ void controlEvent(ControlEvent theEvent) {
     }
   } else if (theEvent.controller().name()=="chooseFile") {
     loadFile();
+  } else if (theEvent.controller().name()=="pauseButton") {
+    if (vidLoaded) { 
+      mov.pause();
+    }
+    if (audLoaded) { 
+      sound.pause();
+    }
+  } else if (theEvent.controller().name()=="playButton") {
+    if (vidLoaded) { 
+      mov.play();
+    }
+    if (audLoaded) { 
+      sound.play();
+    }
+  } else if (theEvent.controller().name()=="stopButton") {
+    if (vidLoaded) {
+      mov.jump(0); 
+      mov.pause();
+    }
+    if (audLoaded) {  
+      sound.rewind();
+      sound.pause();
+    }
   }
 }
 void keyPressed() {
@@ -310,26 +361,28 @@ void displaySubs() {
   if (int(sec) == 0 ) {
     subN = 0; //Starting from beginning
   }
+  if(subN>0){
+    while ( int (sec) < int(subs[subN][0])) { //if jumping backwards
+      subN--;
+    }
+  }
   if ( int(sec) >= int(subs[subN][0])) {
     textSize(15);
     textAlign(CENTER);
 
     //Black Outline
     fill(#000000);
-    text(subs[subN][2], width/2+1, height - 21);
-    text(subs[subN][2], width/2-1, height - 19);
+    text(subs[subN][2], width/2+1, height - 51);
+    text(subs[subN][2], width/2-1, height - 49);
 
     //White text
     fill(#FFFFFF);
-    text(subs[subN][2], width/2, height - 20);
+    text(subs[subN][2], width/2, height - 50);
 
     if (int(sec) >= int(subs[subN][1]) && //If time period is reached
     (subN<subCount-2)) {            //And not at end of subtitles
       subN++;
     }
-  }
-  while ( int (sec) < int(subs[subN][0])) { //if jumping backwards
-    subN--;
   }
 }
 String formatTime(float sec) {
