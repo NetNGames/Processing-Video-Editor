@@ -10,8 +10,8 @@ void mousePressed() {
       sound.cue(ceil(audioJump));
     }
   }
-  
-  if(mouseY > 400 && mouseY < 410 && mouseX > 60 && mouseX < 610){
+
+  if (mouseY > 400 && mouseY < 410 && mouseX > 60 && mouseX < 610) {
     println("adding at " + (((float)(mouseX-60)/(float)550)*(float)30));
     timeline.addClip(((float)(mouseX-60)/(float)550)*(float)30);
   }
@@ -27,17 +27,23 @@ void mouseMoved() {
     (mouseY > (0)) && (mouseY < 30)) {
     pixelateButton.setVisible(true);
     pixelateButton.unlock();
+  } else if ((mouseX > (60)) && (mouseX < 610) &&
+    (mouseY > (370)) && (mouseY < 380)) { 
+//    timeline.unlock();
   } else {
     pixelateButton.setVisible(false);
     pixelateButton.lock();
+//    timeline.lock();
   }
-//  if ((mouseY > (height-30)) && (mouseY < height)) {
-//    showTimeline = true;
-//  } else {
-//    showTimeline = false;
-//  }
+  //  if ((mouseY > (height-30)) && (mouseY < height)) {
+  //    showTimeline = true;
+  //  } else {
+  //    showTimeline = false;
+  //  }
+//  println("mouse: ("+mouseX+", "+mouseY+")");
 }
 void controlEvent(ControlEvent theEvent) {
+  //Video Effects
   if (theEvent.controller().name()=="pixelateButton") {
     if (!pixelateButton.isLock()) {//Will not activate if mouse is not over button
       if (isPixelate) {
@@ -48,6 +54,8 @@ void controlEvent(ControlEvent theEvent) {
     }
   } else if (theEvent.controller().name()=="chooseFile") {
     loadFile();
+
+    //Playback Buttons
   } else if (theEvent.controller().name()=="pauseButton") {
     if (vidLoaded) { 
       mov.pause();
@@ -71,6 +79,49 @@ void controlEvent(ControlEvent theEvent) {
       sound.rewind();
       sound.pause();
     }
+  } else if (theEvent.controller().name()=="prevButton") {
+    if (vidLoaded) {
+      mov.pause();
+      mov=movies.get(0);
+      mov.jump(0); 
+      mov.jump(0); 
+      mov.play();
+    }
+    if (audLoaded) {  
+      sound.rewind();
+      sound.pause();
+      sound=sounds.get(0);
+      sound.rewind();
+      sound.play();
+    }
+  } else if (theEvent.controller().name()=="nextButton") {
+    if (vidLoaded) {
+      mov.pause();
+      mov=movies.get(1);
+      mov.jump(0); 
+      mov.jump(0); 
+      mov.play();
+    }
+    if (audLoaded) {  
+      sound.rewind();
+      sound.pause();
+      sound=sounds.get(1);
+      sound.rewind();
+      sound.play();
+    }
+
+    //Timeline
+  } else if (theEvent.controller().name()=="timeline") {
+//    if (!timeline.isLock()) {//Will not activate if mouse is not over button
+//      if (vidLoaded) {
+//                setFrame(ceil(timeline.videoJump));
+//      }
+//      if (audLoaded) {  
+//        //    sound.cue(ceil(timeline.time));
+//      }
+//    }
+  }else if (theEvent.controller().name()=="clearClipsButton") {
+    timeline.clearClips();
   }
 }
 void keyPressed() {
@@ -82,3 +133,4 @@ void keyPressed() {
     }
   }
 }
+

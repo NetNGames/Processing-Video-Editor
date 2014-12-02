@@ -48,6 +48,8 @@ ControlP5 cp5;
 Button playButton;
 Button pauseButton;
 Button stopButton;
+Button nextButton;
+Button prevButton;
 
 //For Timeline
 Timeline timeline;
@@ -78,7 +80,7 @@ PFont font;
 void setup() {
   size(840, 460);
   background(0);
-  font = createFont("Arial",16,true); 
+  font = createFont("Arial", 16, true); 
 
   //Load buttons
   cp5 = new ControlP5(this);
@@ -96,6 +98,7 @@ void setup() {
         .setCaptionLabel("Pixelate")
           .setVisible(false);
 
+  //Playback
   playButton = cp5.addButton("playButton")
     .setPosition(10, height-30)
       .setSize(70, 20)
@@ -110,7 +113,15 @@ void setup() {
     .setPosition(170, height-30)
       .setSize(70, 20)
         .setCaptionLabel("Stop");
-        
+
+  prevButton = cp5.addButton("prevButton")
+    .setPosition(250, height-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Prev");
+  nextButton = cp5.addButton("nextButton")
+    .setPosition(330, height-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Next");
   timeline = new Timeline();
   movies = new Vector<Movie>(0, 1);
   movieNames = new Vector<String>(0, 1);

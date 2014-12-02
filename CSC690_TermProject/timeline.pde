@@ -1,4 +1,6 @@
 class Timeline {
+  float videoJump, audioJump;
+  Button clearClipsButton;
   Slider timelineSlider;
   Vector<TimelineClip> clips;
 
@@ -9,9 +11,11 @@ class Timeline {
           .setRange(0, 29)
             .setValue(0)
               .setNumberOfTickMarks(31)
-                .setSliderMode(Slider.FLEXIBLE)
-                  ;
-
+                .setSliderMode(Slider.FLEXIBLE);
+    clearClipsButton = cp5.addButton("clearClipsButton")
+    .setPosition(620, height-60)
+      .setSize(70, 20)
+        .setCaptionLabel("Clear");
     cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
     cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
 
@@ -22,19 +26,25 @@ class Timeline {
     if (vidLoaded) {
       cp5.getController("timeline").setValue(floor((currentFrame/ maxFrames)*30));
       float time = floor(cp5.getController("timeline").getValue());
-      println("current time: " + time);
-
+      
+//            println("current time: " + time);
+      
       if (audLoaded) {
         for (int i = 0; i < clips.size (); i++) {
           TimelineClip clip = clips.get(i);
-          println("   clip time: " + clip.getStart());
+          //          println("   clip time: " + clip.getStart());
           if (time == clip.getStart()) {
             if (!sounds.get(0).isPlaying()) {
               sounds.get(0).rewind();
               sounds.get(0).play();
             }
           }
+          
         }
+        //        float whereToJump = ((float)mouseX/(float)width)*maxFrames;
+        //     float audioJump = ((float)mouseX/(float)width)*sound.length();
+        //     setFrame(ceil(whereToJump));
+        //     sound.cue(ceil(audioJump));
       }
     }
   }
@@ -54,5 +64,13 @@ class Timeline {
   void addClip(float x) {
     clips.addElement(new TimelineClip(floor(x)));
   }
+  void clearClips(){
+    clips.clear();
+  }
 }
-
+//void controlEvent(ControlEvent theEvent) {
+//  if (theEvent.controller().name()=="timeline") {
+//    setFrame(ceil(time));
+//    sound.cue(ceil(time));
+//  }
+//}
