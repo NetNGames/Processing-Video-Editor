@@ -16,8 +16,8 @@
  
  *************************************************/
 
-int fullWidth = 740;
-int fullHeight = 460;
+int fullWidth = 840;
+int fullHeight = 490;
 int playbackWidth = 640;
 int playbackHeight = 360;
 int widthDiff = fullWidth-playbackWidth;
@@ -79,7 +79,7 @@ boolean srtLoaded=false;
 PFont font; 
 
 void setup() {
-  size(840, 460);
+  size(fullWidth, fullHeight);
   background(0);
   font = createFont("Arial", 16, true); 
 
@@ -91,50 +91,48 @@ void setup() {
       .setSize(70, 20)
         .setCaptionLabel("Load File")
           .setVisible(true);
-
+  cp5.getTooltip().register("chooseFile","Load Video or Audio clips, SRT, or PVE files");
+  
   //Button to pixelate video
   pixelateButton = cp5.addButton("pixelateButton")
     .setPosition(10, 10)
       .setSize(70, 20)
         .setCaptionLabel("Pixelate")
           .setVisible(false);
+  cp5.getTooltip().register("pixelateButton","Pixelate Video");
 
   //Playback
-  PImage[] playImgs = {loadImage("PlayNormal.png"),loadImage("PlayHot.png"),loadImage("PlayPressed.png")};
   playButton = cp5.addButton("playButton")
     .setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40)
-      .setImages(playImgs)
-        .updateSize(); //.setSize(70, 20)
-        //.setCaptionLabel("Play");
+      .setImages(loadImage("PlayNormal.png"), loadImage("PlayHot.png"), loadImage("PlayPressed.png"))
+        .updateSize();
+  cp5.getTooltip().register("playButton","Play Video or Audio file");
 
-  PImage[] pauseImgs = {loadImage("PauseNormal.png"),loadImage("PauseHot.png"),loadImage("PausePressed.png")};
   pauseButton = cp5.addButton("pauseButton")
     .setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40)
-      .setImages(pauseImgs)
+      .setImages(loadImage("PauseNormal.png"), loadImage("PauseHot.png"), loadImage("PausePressed.png"))
         .updateSize()
-          .setVisible(false);//.setSize(70, 20)
-        //.setCaptionLabel("Pause");
+          .setVisible(false);
+  cp5.getTooltip().register("pauseButton","Pause Video or Audio file");
 
-  PImage[] stopImgs = {loadImage("StopNormal.png"),loadImage("StopHot.png"),loadImage("StopPressed.png")};
   stopButton = cp5.addButton("stopButton")
     .setPosition(playbackWidth/2+(iconWidth*3)/4, height-40)
-      .setImages(stopImgs)
-        .updateSize(); //.setSize(70, 20)
-        //.setCaptionLabel("Stop");
+      .setImages(loadImage("StopNormal.png"), loadImage("StopHot.png"), loadImage("StopPressed.png"))
+        .updateSize(); 
+  cp5.getTooltip().register("stopButton","Stops and resets Video or Audio file");
 
-  PImage[] prevImgs = {loadImage("BackwardNormal.png"),loadImage("BackwardHot.png"),loadImage("BackwardPressed.png")};
   prevButton = cp5.addButton("prevButton")
     .setPosition(playbackWidth/2-iconWidth*2, height-40)
-      .setImages(prevImgs)
-        .updateSize(); //.setSize(70, 20)
-        //.setCaptionLabel("Prev");
-        
-  PImage[] nextImgs = {loadImage("ForwardNormal.png"),loadImage("ForwardHot.png"),loadImage("ForwardPressed.png")};
+      .setImages(loadImage("BackwardNormal.png"), loadImage("BackwardHot.png"), loadImage("BackwardPressed.png"))
+        .updateSize();
+  cp5.getTooltip().register("prevButton","Go to previous Video or Audio file");
+
   nextButton = cp5.addButton("nextButton")
     .setPosition(playbackWidth/2+iconWidth*2, height-40)
-      .setImages(nextImgs)
-        .updateSize(); //.setSize(70, 20)
-        //.setCaptionLabel("Next");
+      .setImages(loadImage("ForwardNormal.png"), loadImage("ForwardHot.png"), loadImage("ForwardPressed.png"))
+        .updateSize();
+  cp5.getTooltip().register("nextButton","Go to next Video or Audio file");
+  
   timeline = new Timeline();
   movies = new Vector<Movie>(0, 1);
   movieNames = new Vector<String>(0, 1);
@@ -144,14 +142,4 @@ void setup() {
 
 void movieEvent(Movie movie) {
   mov.read();
-} 
-
-//Disabled until bugs are fixed
-/*void mouseDragged() {
- if (isJump) {
- float whereToJump = ((float)mouseX/(float)width)*maxFrames;
- float audioJump = ((float)mouseX/(float)width)*sound.length();
- setFrame(ceil(whereToJump));
- sound.cue(ceil(audioJump));
- }
- }*/
+}

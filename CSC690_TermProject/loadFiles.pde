@@ -56,6 +56,7 @@ void loadFile() {
 void drawFileList() {
   //Movie clip names:
   fill(255);
+  textSize(12);
   textAlign(LEFT);
   text("Video Clips: ", width-190, 50);
   if (vidLoaded) {
@@ -67,7 +68,6 @@ void drawFileList() {
   }
 
   fill(255);
-  textAlign(LEFT);
   text("Audio Clips: ", width-190, 200);
   if (audLoaded) {
     fill(0, 102, 153, 204);
@@ -77,4 +77,5 @@ void drawFileList() {
     }
   }
 }
+
 

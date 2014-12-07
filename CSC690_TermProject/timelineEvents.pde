@@ -1,3 +1,0 @@
-void timeline(float pos) {
-  
-}

@@ -125,19 +125,24 @@ void controlEvent(ControlEvent theEvent) {
 
     //Timeline
   } else if (theEvent.controller().name()=="timeline") {
-//    if (!timeline.isLock()) {//Will not activate if mouse is not over button
-      if (vidLoaded&& isJump) {
+    if (isJump) {//Will not activate if mouse is not over button
+    int jump=floor(cp5.getController("timeline").getValue());
+      if (vidLoaded) {
 //                setFrame(ceil(timeline.videoJump));
-        int jump=floor(cp5.getController("timeline").getValue());
-        println(jump);
+        
+        //println(jump);
         cp5.getController("timeline").setValue(jump);
         setFrame(-jump); //Don't know why frame is negative
 //        timeline.update();
       }
-//      if (audLoaded) {  
-//        //    sound.cue(ceil(timeline.time));
-//      }
-//    }
+      if (audLoaded) {  
+        //float audioJump = ((float)mouseX/(float)(width-widthDiff))*sound.length();//original jumper
+            //sound.cue(ceil(timeline.time));
+            int max=floor(cp5.getController("timeline").getMax());
+            float audJump=(((float)jump/(float)max)*(float)sound.length());
+            sound.cue(floor(audJump));
+      }
+    }
   }else if (theEvent.controller().name()=="clearClipsButton") {
     timeline.clearClips();
   }

@@ -1,6 +1,6 @@
 //----------Video Playback----------\\
 //From Frames video example
-int getFrame() {    
+int getFrame() {
   return ceil(mov.time() * movFrameRate) - 1;
 }
 int getLength() {
