@@ -22,6 +22,7 @@ int playbackWidth = 640;
 int playbackHeight = 360;
 int widthDiff = fullWidth-playbackWidth;
 int heightDiff = fullHeight-playbackHeight;
+int iconWidth = 32;
 
 import java.util.*;
 //For Video
@@ -99,29 +100,41 @@ void setup() {
           .setVisible(false);
 
   //Playback
+  PImage[] playImgs = {loadImage("PlayNormal.png"),loadImage("PlayHot.png"),loadImage("PlayPressed.png")};
   playButton = cp5.addButton("playButton")
-    .setPosition(10, height-30)
-      .setSize(70, 20)
-        .setCaptionLabel("Play");
+    .setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40)
+      .setImages(playImgs)
+        .updateSize(); //.setSize(70, 20)
+        //.setCaptionLabel("Play");
 
+  PImage[] pauseImgs = {loadImage("PauseNormal.png"),loadImage("PauseHot.png"),loadImage("PausePressed.png")};
   pauseButton = cp5.addButton("pauseButton")
-    .setPosition(90, height-30)
-      .setSize(70, 20)
-        .setCaptionLabel("Pause");
+    .setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40)
+      .setImages(pauseImgs)
+        .updateSize()
+          .setVisible(false);//.setSize(70, 20)
+        //.setCaptionLabel("Pause");
 
+  PImage[] stopImgs = {loadImage("StopNormal.png"),loadImage("StopHot.png"),loadImage("StopPressed.png")};
   stopButton = cp5.addButton("stopButton")
-    .setPosition(170, height-30)
-      .setSize(70, 20)
-        .setCaptionLabel("Stop");
+    .setPosition(playbackWidth/2+(iconWidth*3)/4, height-40)
+      .setImages(stopImgs)
+        .updateSize(); //.setSize(70, 20)
+        //.setCaptionLabel("Stop");
 
+  PImage[] prevImgs = {loadImage("BackwardNormal.png"),loadImage("BackwardHot.png"),loadImage("BackwardPressed.png")};
   prevButton = cp5.addButton("prevButton")
-    .setPosition(250, height-30)
-      .setSize(70, 20)
-        .setCaptionLabel("Prev");
+    .setPosition(playbackWidth/2-iconWidth*2, height-40)
+      .setImages(prevImgs)
+        .updateSize(); //.setSize(70, 20)
+        //.setCaptionLabel("Prev");
+        
+  PImage[] nextImgs = {loadImage("ForwardNormal.png"),loadImage("ForwardHot.png"),loadImage("ForwardPressed.png")};
   nextButton = cp5.addButton("nextButton")
-    .setPosition(330, height-30)
-      .setSize(70, 20)
-        .setCaptionLabel("Next");
+    .setPosition(playbackWidth/2+iconWidth*2, height-40)
+      .setImages(nextImgs)
+        .updateSize(); //.setSize(70, 20)
+        //.setCaptionLabel("Next");
   timeline = new Timeline();
   movies = new Vector<Movie>(0, 1);
   movieNames = new Vector<String>(0, 1);

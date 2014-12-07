@@ -25,7 +25,11 @@ void draw() {
         }
       }
     }
-    
+    float current = mov.time();
+    float max = mov.duration();
+  String time = formatTime(current)+" / "+formatTime(max);
+
+  text(time,620,playbackHeight+20);
     //OLD PROGRESS BAR REPLACED BY TIMELINE
     /*/Bottom progress bar
     stroke(#FF0000);

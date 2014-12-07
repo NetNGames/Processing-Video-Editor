@@ -56,12 +56,12 @@ void displaySubs() {
 
     //Black Outline
     fill(#000000);
-    text(subs[subN][2], width/2+1, height - 51);
-    text(subs[subN][2], width/2-1, height - 49);
+    text(subs[subN][2], playbackWidth/2+1, playbackHeight - 11);
+    text(subs[subN][2], playbackWidth/2-1, playbackHeight - 9);
 
     //White text
     fill(#FFFFFF);
-    text(subs[subN][2], width/2, height - 50);
+    text(subs[subN][2], playbackWidth/2, playbackHeight - 10);
 
     if (int(sec) >= int(subs[subN][1]) && //If time period is reached
     (subN<subCount-2)) {            //And not at end of subtitles
