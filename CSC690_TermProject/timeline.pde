@@ -3,16 +3,17 @@ class Timeline {
   Button clearClipsButton;
   Slider timelineSlider;
   Vector<TimelineClip> audioClips;
+  Vector<TimelineClip> videoClips;
 
   Timeline() {
     timelineSlider = cp5.addSlider("timeline")
       .setPosition(60, playbackHeight+10)
         .setWidth(550)
-          .setMin(0)
-            .setValue(0)
-              .setVisible(false)
-                .setTriggerEvent(Slider.RELEASE) //Buggy if kept it on PRESSED
-                  .setSliderMode(Slider.FLEXIBLE);
+          .setMin(0.0)
+            .setValue(0.0)
+              //              .setVisible(false)
+              .setTriggerEvent(Slider.RELEASE) //Buggy if kept it on PRESSED
+                .setSliderMode(Slider.FLEXIBLE);
     clearClipsButton = cp5.addButton("clearClipsButton")
       .setPosition(620, 396)
         .setSize(70, 20)
@@ -27,15 +28,16 @@ class Timeline {
 
   void update() {
     if (vidLoaded) {
-      timelineSlider.setVisible(true);
+      //      timelineSlider.setVisible(true);
       cp5.getTooltip().register("timeline", "Click to jump to time");
-      timelineSlider.setMax(abs(maxFrames));
+      timelineSlider.setMax(abs((float)maxFrames));
       if (!isJump) {
-        cp5.getController("timeline").setValue(abs((currentFrame/ maxFrames)*maxFrames));
+        cp5.getController("timeline").setValue(abs(((float)currentFrame/ (float)maxFrames)*(float)maxFrames));
       }
       //      cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
       cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
-      time = floor(cp5.getController("timeline").getValue());
+//      time = floor(cp5.getController("timeline").getValue());
+      time = cp5.getController("timeline").getValue();
       maxTime = floor(cp5.getController("timeline").getMax());
 
       //            println("current time: " + time);
@@ -82,6 +84,9 @@ class Timeline {
   }
   void clearClips() {
     audioClips.clear();
+  }
+  float getMax(){
+    return cp5.getController("timeline").getMax();
   }
 }
 

@@ -43,8 +43,11 @@ void loadFile() {
       
       //Loading SubRip text
     } else if (file.getName().endsWith("srt")) {
+//      if(srtLoaded){ //Only loaded 1 srt at a time
+                       //If one is already loaded, ask to  overwrite
       srtLoaded=true;
-      loadSubs(file);
+//      loadSubs(file);
+      parseSubFile(file);
       
       //Loading Project file
     }else if (file.getName().endsWith("pve")) {

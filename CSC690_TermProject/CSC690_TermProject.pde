@@ -24,7 +24,7 @@ int widthDiff = fullWidth-playbackWidth;
 int heightDiff = fullHeight-playbackHeight;
 int iconWidth = 32;
 
-import java.util.*;
+import java.util.Vector;
 //For Video
 import processing.video.*;
 Movie mov;
@@ -63,10 +63,12 @@ int blockSize = 10; //Should be a number that divides evenly into the height and
 color movColors[][];
 
 //For subtitles
-String[] raw;
-String[][] subs;
-int subN = 0;
-int subCount;
+TimedTextObject subs;
+//Vector subs;
+//String[] raw;
+//String[][] subs;
+//int subN = 0;
+//int subCount;
 
 //For File Chooser
 import javax.swing.*;
@@ -79,6 +81,7 @@ boolean srtLoaded=false;
 PFont font; 
 
 void setup() {
+//  frame.setResizable(true);
   size(fullWidth, fullHeight);
   background(0);
   font = createFont("Arial", 16, true); 
@@ -142,4 +145,6 @@ void setup() {
 
 void movieEvent(Movie movie) {
   mov.read();
+//  println(mov.time());
+//  println(timeline.time);
 }

@@ -1,21 +1,12 @@
 void mousePressed() {
   if ((mouseY > playbackHeight) && (mouseY < playbackHeight+30) && 
-        mouseX > 60 && mouseX < playbackWidth) {
+    mouseX > 60 && mouseX < playbackWidth) {
     isJump=true;
-//    if (vidLoaded) { 
-//      float whereToJump = ((float)(mouseX-60)/(float)(playbackWidth))*maxFrames;
-//      setFrame(ceil(whereToJump));
-//    }
-//    if (audLoaded) { 
-//      float audioJump = ((float)(mouseX-60)/(float)(playbackWidth))*sound.length();
-//      sound.cue(ceil(audioJump));
-//    }
   }
-
   if (mouseY > 400 && mouseY < 410 && mouseX > 60 && mouseX < 610) {
     float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
     println("adding at " + clipPlaced);
-//    println(cp5.getController("timeline").getMax());
+    //    println(cp5.getController("timeline").getMax());
     timeline.addClip(clipPlaced);
   }
 }
@@ -32,18 +23,10 @@ void mouseMoved() {
     pixelateButton.unlock();
   } else if ((mouseX > (60)) && (mouseX < 610) &&
     (mouseY > (370)) && (mouseY < 380)) { 
-//    timeline.unlock();
   } else {
     pixelateButton.setVisible(false);
     pixelateButton.lock();
-//    timeline.lock();
   }
-  //  if ((mouseY > (height-30)) && (mouseY < height)) {
-  //    showTimeline = true;
-  //  } else {
-  //    showTimeline = false;
-  //  }
-//  println("mouse: ("+mouseX+", "+mouseY+")");
 }
 void controlEvent(ControlEvent theEvent) {
   //Video Effects
@@ -125,25 +108,19 @@ void controlEvent(ControlEvent theEvent) {
 
     //Timeline
   } else if (theEvent.controller().name()=="timeline") {
-    if (isJump) {//Will not activate if mouse is not over button
-    int jump=floor(cp5.getController("timeline").getValue());
+    if (isJump) {//Will not activate if mouse is not over slider
+      int jump=floor(cp5.getController("timeline").getValue());
       if (vidLoaded) {
-//                setFrame(ceil(timeline.videoJump));
-        
-        //println(jump);
         cp5.getController("timeline").setValue(jump);
         setFrame(-jump); //Don't know why frame is negative
-//        timeline.update();
       }
       if (audLoaded) {  
-        //float audioJump = ((float)mouseX/(float)(width-widthDiff))*sound.length();//original jumper
-            //sound.cue(ceil(timeline.time));
-            int max=floor(cp5.getController("timeline").getMax());
-            float audJump=(((float)jump/(float)max)*(float)sound.length());
-            sound.cue(floor(audJump));
+        int max=floor(cp5.getController("timeline").getMax());
+        float audJump=(((float)jump/(float)max)*(float)sound.length());
+        sound.cue(floor(audJump));
       }
     }
-  }else if (theEvent.controller().name()=="clearClipsButton") {
+  } else if (theEvent.controller().name()=="clearClipsButton") {
     timeline.clearClips();
   }
 }

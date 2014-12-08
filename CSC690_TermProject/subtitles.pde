@@ -1,72 +1,216 @@
 //----------Subtitles----------\\
-//From http://www.activovision.com/pogg/doku.php?id=examples
-void loadSubs(File file) {
-  //Loads the subtitles file
-  raw = loadStrings(file.getPath());
+//From https://github.com/JDaren/subtitleConverter/
+import java.util.ListIterator;
+ListIterator<Caption> itr;
+Caption current;
+class Caption {
+  public SubTime start;
+  public SubTime end;
+  public String content="";
+}
+class SubTime {
+  SubTime(String value) {
+    int h, m, s, ms;
+    h = Integer.parseInt(value.substring(0, 2));
+    m = Integer.parseInt(value.substring(3, 5));
+    s = Integer.parseInt(value.substring(6, 8));
+    ms = Integer.parseInt(value.substring(9, 12));
 
-  //here is going to be convert to an inner format
-  subs = new String[raw.length][3];
+    mseconds = ms + s*1000 + m*60000 + h*3600000;
+  }
+  protected int mseconds;
 
-  subCount = 1;
+  String getTime() {
+    //we use string builder for efficiency
+    StringBuilder time = new StringBuilder();
+    String aux;
 
-//  println(raw.length + " lines to parse:");
+    // this type of format:  01:02:22,501 (used in .SRT)
+    int h, m, s, ms;
+    h =  mseconds/3600000;
+    aux = String.valueOf(h);
+    if (aux.length()==1) time.append('0');
+    time.append(aux);
+    time.append(':');
+    m = (mseconds/60000)%60;
+    aux = String.valueOf(m);
+    if (aux.length()==1) time.append('0');
+    time.append(aux);
+    time.append(':');
+    s = (mseconds/1000)%60;
+    aux = String.valueOf(s);
+    if (aux.length()==1) time.append('0');
+    time.append(aux);
+    time.append(',');
+    ms = mseconds%1000;
+    aux = String.valueOf(ms);
+    if (aux.length()==1) time.append("00");
+    else if (aux.length()==2) time.append('0');
+    time.append(aux);
 
-  for (int i=0; i < raw.length; i++) {
-    if ( int(raw[i]) == subCount ) {
-      String[] timeRAW = split(raw[i+1], " ");
+    return time.toString();
+  }
+}
+import java.util.Vector;
+import java.io.FileInputStream;
+class TimedTextObject {
+  public String fileName = "";
+  public Vector<Caption> captions;
+  public String warnings;
+  public int offset = 0;
+  public boolean built = false;
+  protected TimedTextObject() {
+    captions = new Vector<Caption>(); 
+    warnings = "List of non fatal errors produced during parsing:\n\n";
+  }
+}
 
-      String[] startTimeRAW = split(timeRAW[0], ":");
-      String[] endTimeRAW = split(timeRAW[2], ":");
+import java.io.InputStreamReader;
 
-      int[] splitStartTimeRAW = int(split(startTimeRAW[2], ","));
-      int[] splitEndTimeRAW = int(split(endTimeRAW[2], ","));
+void parseSubFile(File file) {
+  try {
+    InputStream is = new FileInputStream(file);
+    subs = new TimedTextObject();
+    Caption caption = new Caption();
+    int captionNumber = 1;
+    boolean allGood;
 
-      int start = int(startTimeRAW[0])*60*60+int(startTimeRAW[1])*60+splitStartTimeRAW[0];
-      int end = int(endTimeRAW[0])*60*60+int(endTimeRAW[1])*60+splitEndTimeRAW[0];
+    //first lets load the file
+    InputStreamReader in= new InputStreamReader(is);
+    BufferedReader br = new BufferedReader(in);
 
-      String subtitle = "";
-      for (int j=0; !(raw[i+2+j].equals ("")); j++) {
-        subtitle = subtitle + raw[i+2+j];
+    //the file name is saved
+    subs.fileName = file.getName();
+
+    String line = br.readLine();
+    int lineCounter = 0;
+    try {
+      while (line!=null) {
+        line = line.trim();
+        lineCounter++;
+        //if its a blank line, ignore it, otherwise...
+        if (!line.isEmpty()) {
+          allGood = false;
+          //the first thing should be an increasing number
+          try {
+            int num = Integer.parseInt(line);
+            if (num != captionNumber)
+              throw new Exception();
+            else {
+              captionNumber++;
+              allGood = true;
+            }
+          } 
+          catch (Exception e) {
+            subs.warnings+= captionNumber + " expected at line " + lineCounter;
+            subs.warnings+= "\n skipping to next line\n\n";
+          }
+          if (allGood) {
+            //we go to next line, here the begin and end time should be found
+            try {
+              lineCounter++;
+              line = br.readLine().trim();
+              String start = line.substring(0, 12);
+              String end = line.substring(line.length()-12, line.length());
+              SubTime time = new SubTime(start);
+              caption.start = time;
+              time = new SubTime(end);
+              caption.end = time;
+            } 
+            catch (Exception e) {
+              subs.warnings += "incorrect time format at line "+lineCounter;
+              allGood = false;
+            }
+          }
+          if (allGood) {
+            //we go to next line where the caption text starts
+            lineCounter++;
+            line = br.readLine().trim();
+            String text = "";
+            while (!line.isEmpty ()) {
+              text+=line+"\n";
+              line = br.readLine().trim();
+              lineCounter++;
+            }
+            caption.content = text;
+            //            int key = caption.start.mseconds;
+            //            //in case the key is already there, we increase it by a millisecond, since no duplicates are allowed
+            //            while (subs.captions.containsKey(key)) key++;
+            //            if (key != caption.start.mseconds)
+            //              subs.warnings+= "caption with same start time found...\n\n";
+            //we add the caption.
+            //            subs.captions.put(key, caption);
+            subs.captions.add(caption);
+          }
+          //we go to next blank
+          while (!line.isEmpty ()) {
+            line = br.readLine().trim();
+            lineCounter++;
+          }
+          caption = new Caption();
+        }
+        line = br.readLine();
       }
-
-      subs[subCount-1][0]= Integer.toString(start);
-      subs[subCount-1][1]= Integer.toString(end);
-      subs[subCount-1][2]= subtitle;
-
-//      println(subCount+" "+ start + " -->" + end + " dice " + subtitle);
-      subCount++;
+    }  
+    catch (NullPointerException e) {
+      subs.warnings+= "unexpected end of file, maybe last caption is not complete.\n\n";
+    } 
+    finally {
+      //we close the reader
+      is.close();
     }
+
+    subs.built = true;
+
+    itr = subs.captions.listIterator();
+    current = itr.next();
+    //    return subs;
+  }
+  catch (Exception e) {
+    println(e);
+    print(subs.warnings);
   }
 }
 
 void displaySubs() {
+  //Find current time by milliseconds
   float sec = mov.time();
-//  String time = formatTime(sec);
-  if (int(sec) == 0 ) {
-    subN = 0; //Starting from beginning
+  int seconds = (int)sec;
+  float fraction = sec-seconds;
+  int mill = (int)(fraction *1000);
+  int minutes = seconds/60;
+  seconds = seconds%60;
+  int hours = minutes/60;
+  minutes = minutes%60;
+  int currentMseconds = mill + seconds*1000 + minutes*60000 + hours*3600000;
+//  println("current time: "+currentMseconds);
+  
+  //    println("sub start: "+current.start.mseconds);
+  //    println("sub end: "+current.end.mseconds);
+  while (currentMseconds>=current.end.mseconds && itr.hasNext()) {
+    current = itr.next(); //If skipping forwards
   }
-  if (subN>0) {
-    while ( int (sec) < int(subs[subN][0])) { //if jumping backwards
-      subN--;
-    }
-  }
-  if ( int(sec) >= int(subs[subN][0])) {
+  if (currentMseconds>=current.start.mseconds && !(currentMseconds>=current.end.mseconds)) {
+//    println("start");
     textSize(15);
     textAlign(CENTER);
 
     //Black Outline
     fill(#000000);
-    text(subs[subN][2], playbackWidth/2+1, playbackHeight - 11);
-    text(subs[subN][2], playbackWidth/2-1, playbackHeight - 9);
+    text(current.content, playbackWidth/2+1, playbackHeight - 21);
+    text(current.content, playbackWidth/2-1, playbackHeight - 19);
 
     //White text
     fill(#FFFFFF);
-    text(subs[subN][2], playbackWidth/2, playbackHeight - 10);
-
-    if (int(sec) >= int(subs[subN][1]) && //If time period is reached
-    (subN<subCount-2)) {            //And not at end of subtitles
-      subN++;
-    }
+    text(current.content, playbackWidth/2, playbackHeight - 20);
+  }
+  if ((currentMseconds>=current.end.mseconds) && //If time period is reached
+  (itr.hasNext())) {            //And not at end of subtitles
+//    println("end");
+    current = itr.next();
+  }
+  while (currentMseconds<=current.start.mseconds && itr.hasPrevious ()) {
+    current = itr.previous(); //If skipping backwards
   }
 }
 
@@ -102,8 +246,21 @@ String formatTime(float sec) {
   return time;
 }
 
-void drawSubTimeline(){
+void drawSubTimeline() {
   fill(255);
+  textSize(12);
   text("Subtitles:", 5, 440);
   rect(60, 430, 550, 10);
+  //  println(timeline.getMax());
 }
+void drawSubsOnTimeline(){
+  for (int i = 0; i < subs.captions.size (); i++) {
+    Caption sub = subs.captions.get(i);
+    fill(0, 102, 153);
+    //Draw spots where subtitles were placed
+    int location=(int)(sub.start.mseconds/1000);
+//    println(location);
+    rect(60+(location)*550, 430, 5, 10);
+  }
+}
+
