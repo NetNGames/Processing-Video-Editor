@@ -13,6 +13,12 @@ void mousePressed() {
   //For subtitles
   if (mouseY > 460 && mouseY < 470 && mouseX > 60 && mouseX < 610) {
     float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
+    
+    subCfg.startTimeInput.setText(formatTime(clipPlaced));
+    subCfg.endTimeInput.setText(formatTime(clipPlaced+3));
+    subCfg.subtitleInput.setFocus(true);
+    subCfg.subPopup.setVisible(true);
+    
 //    println("adding at " + clipPlaced);
 //    //    println(cp5.getController("timeline").getMax());
 //    timeline.addClip(clipPlaced);
@@ -21,6 +27,7 @@ void mousePressed() {
 
 void mouseReleased() {
   isJump=false;
+  subCfg.subtitleInput.setFocus(true);
 }
 
 //----------Video Effects----------\\
@@ -46,6 +53,8 @@ void controlEvent(ControlEvent theEvent) {
         isPixelate=true;
       }
     }
+    
+    //File Input
   } else if (theEvent.controller().name()=="chooseFile") {
     loadFile();
 
@@ -116,7 +125,7 @@ void controlEvent(ControlEvent theEvent) {
 
     //Timeline
   } else if (theEvent.controller().name()=="timeline") {
-    if (isJump) {//Will not activate if mouse is not over slider
+    if (isJump) {//Will not activate if mouse is not over button
       int jump=floor(cp5.getController("timeline").getValue());
       if (vidLoaded) {
         cp5.getController("timeline").setValue(jump);
@@ -130,6 +139,27 @@ void controlEvent(ControlEvent theEvent) {
     }
   } else if (theEvent.controller().name()=="clearClipsButton") {
     timeline.clearClips();
+  
+  
+  //Subtitles
+  }else if (theEvent.controller().name()=="popup") {
+    if (!subCfg.subPopup.isVisible()) {
+      subCfg.startTimeInput.setText(formatTime(mov.time()));
+      subCfg.endTimeInput.setText(formatTime(mov.time()+3));
+      subCfg.subtitleInput.setText("");
+      subCfg.subPopup.setVisible(true);
+    } else {
+      subCfg.subPopup.setVisible(false);
+    }
+  } else if (theEvent.controller().name()=="cancelButton") {
+      subCfg.subPopup.setVisible(false);
+    
+  } else if (theEvent.controller().name()=="submitButton") {
+    addSubtitle(subCfg.startTimeInput.getText(),
+                subCfg.endTimeInput.getText(),
+                subCfg.subtitleInput.getText());
+      subCfg.subtitleInput.setText("");
+      subCfg.subPopup.setVisible(false);
   }
 }
 void keyPressed() {

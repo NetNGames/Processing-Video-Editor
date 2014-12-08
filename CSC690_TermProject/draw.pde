@@ -37,10 +37,11 @@ void draw() {
     }
   }
   drawSubTimeline();
-  if (srtLoaded && 
-     (vidLoaded||audLoaded) &&
-     (currentFrame!=(-1.0))) {
+//  if (srtLoaded && 
+//     (vidLoaded||audLoaded) &&
+//     (currentFrame!=(-1.0))) {
     //println(currentFrame);
+    if (vidLoaded&& !subs.captions.isEmpty()){
     displaySubs();
     drawSubsOnTimeline();
   }

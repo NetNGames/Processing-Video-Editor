@@ -11,8 +11,7 @@ class Timeline {
         .setWidth(550)
           .setMin(0.0)
             .setValue(0.0)
-              //              .setVisible(false)
-              .setTriggerEvent(Slider.RELEASE) //Buggy if kept it on PRESSED
+              .setTriggerEvent(Slider.RELEASE) //Buggy if kept it on default PRESSED
                 .setSliderMode(Slider.FLEXIBLE);
     clearClipsButton = cp5.addButton("clearClipsButton")
       .setPosition(620, 426)

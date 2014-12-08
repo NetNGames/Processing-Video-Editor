@@ -13,10 +13,10 @@ static class Caption {
   public SubTime start;
   public SubTime end;
   public String content="";
-  
+
   //To sort by start time
   //From http://stackoverflow.com/a/1814112
-   static Comparator<Caption> COMPARE_BY_START = new Comparator<Caption>() {
+  static Comparator<Caption> COMPARE_BY_START = new Comparator<Caption>() {
     public int compare(Caption one, Caption other) {
       return one.start.mseconds.compareTo(other.start.mseconds);
     }
@@ -33,6 +33,9 @@ class SubTime {
 
     mseconds = ms + s*1000 + m*60000 + h*3600000;
   }
+  //  SubTime(int value) {
+  //    mseconds = value;
+  //  }
   protected Integer mseconds;
 
   String getTime() {
@@ -82,7 +85,7 @@ class TimedTextObject {
 void parseSubFile(File file) {
   try {
     InputStream is = new FileInputStream(file);
-    subs = new TimedTextObject();
+    //    subs = new TimedTextObject();
     Caption caption = new Caption();
     int captionNumber = 1;
     boolean allGood;
@@ -115,6 +118,7 @@ void parseSubFile(File file) {
           } 
           catch (Exception e) {
             subs.warnings+= captionNumber + " expected at line " + lineCounter;
+            subs.warnings+= "\n instead, line= " +line;
             subs.warnings+= "\n skipping to next line\n\n";
           }
           if (allGood) {
@@ -174,16 +178,13 @@ void parseSubFile(File file) {
 
     subs.built = true;
 
-    itr = subs.captions.listIterator();
-    current = itr.next();
+
     //    return subs;
   }
   catch (Exception e) {
     println(e);
     print(subs.warnings);
   }
-  //Will need when adding subtitles
-  Collections.sort(subs.captions, Caption.COMPARE_BY_START);
 }
 
 void displaySubs() {
@@ -197,10 +198,12 @@ void displaySubs() {
   int hours = minutes/60;
   minutes = minutes%60;
   int currentMseconds = mill + seconds*1000 + minutes*60000 + hours*3600000;
-  //  println("current time: "+currentMseconds);
-
-  //    println("sub start: "+current.start.mseconds);
-  //    println("sub end: "+current.end.mseconds);
+  itr = subs.captions.listIterator();
+  current = itr.next();
+  //    println("current time: "+currentMseconds);
+  //
+  //      println("sub start: "+current.start.mseconds);
+  //      println("sub end: "+current.end.mseconds);
   while (currentMseconds>=current.end.mseconds && itr.hasNext ()) {
     current = itr.next(); //If skipping forwards
   }
@@ -265,18 +268,14 @@ void drawSubTimeline() {
   textSize(12);
   text("Subtitles:", 5, 470);
   rect(60, 460, 550, 10);
-  //  println(timeline.getMax());
 }
 void drawSubsOnTimeline() {
   for (int i = 0; i < subs.captions.size (); i++) {
     Caption sub = subs.captions.get(i);
     fill(0, 102, 153);
     //Draw spots where subtitles were placed
-    //    int location=(int)(sub.start.mseconds/1000);
-    //    println(location);
-    //    println((location/timeline.getMax())*550);
-    //    stroke(0);
-    rect(60+((sub.start.mseconds/1000.0)/timeline.getMax())*550+15, 460, 5, 10);
+    int location=(int)(sub.start.mseconds/1000.0);
+    rect(60+(location/(timeline.getMax()-1))*550, 460, 5, 10);
   }
 }
 

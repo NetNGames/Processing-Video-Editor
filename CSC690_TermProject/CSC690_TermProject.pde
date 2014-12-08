@@ -66,6 +66,7 @@ color movColors[][];
 
 //For subtitles
 TimedTextObject subs;
+SubtitleConfig subCfg;
 
 //For File Chooser
 import javax.swing.*;
@@ -134,6 +135,8 @@ void setup() {
   cp5.getTooltip().register("nextButton","Go to next Video or Audio file");
   
   timeline = new Timeline();
+  subs = new TimedTextObject();
+  subCfg= new SubtitleConfig();
   movies = new Vector<Movie>(0, 1);
   currentFrame=0.0;
   movieNames = new Vector<String>(0, 1);
