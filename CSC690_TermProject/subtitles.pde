@@ -1,13 +1,28 @@
 //----------Subtitles----------\\
 //From https://github.com/JDaren/subtitleConverter/
 import java.util.ListIterator;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.util.Comparator;
+import java.util.Collections;
+
 ListIterator<Caption> itr;
 Caption current;
-class Caption {
+
+static class Caption {
   public SubTime start;
   public SubTime end;
   public String content="";
+  
+  //To sort by start time
+  //From http://stackoverflow.com/a/1814112
+   static Comparator<Caption> COMPARE_BY_START = new Comparator<Caption>() {
+    public int compare(Caption one, Caption other) {
+      return one.start.mseconds.compareTo(other.start.mseconds);
+    }
+  };
 }
+
 class SubTime {
   SubTime(String value) {
     int h, m, s, ms;
@@ -18,7 +33,7 @@ class SubTime {
 
     mseconds = ms + s*1000 + m*60000 + h*3600000;
   }
-  protected int mseconds;
+  protected Integer mseconds;
 
   String getTime() {
     //we use string builder for efficiency
@@ -51,8 +66,7 @@ class SubTime {
     return time.toString();
   }
 }
-import java.util.Vector;
-import java.io.FileInputStream;
+
 class TimedTextObject {
   public String fileName = "";
   public Vector<Caption> captions;
@@ -64,8 +78,6 @@ class TimedTextObject {
     warnings = "List of non fatal errors produced during parsing:\n\n";
   }
 }
-
-import java.io.InputStreamReader;
 
 void parseSubFile(File file) {
   try {
@@ -170,6 +182,8 @@ void parseSubFile(File file) {
     println(e);
     print(subs.warnings);
   }
+  //Will need when adding subtitles
+  Collections.sort(subs.captions, Caption.COMPARE_BY_START);
 }
 
 void displaySubs() {
@@ -183,30 +197,30 @@ void displaySubs() {
   int hours = minutes/60;
   minutes = minutes%60;
   int currentMseconds = mill + seconds*1000 + minutes*60000 + hours*3600000;
-//  println("current time: "+currentMseconds);
-  
+  //  println("current time: "+currentMseconds);
+
   //    println("sub start: "+current.start.mseconds);
   //    println("sub end: "+current.end.mseconds);
-  while (currentMseconds>=current.end.mseconds && itr.hasNext()) {
+  while (currentMseconds>=current.end.mseconds && itr.hasNext ()) {
     current = itr.next(); //If skipping forwards
   }
   if (currentMseconds>=current.start.mseconds && !(currentMseconds>=current.end.mseconds)) {
-//    println("start");
+    //    println("start");
     textSize(15);
     textAlign(CENTER);
 
     //Black Outline
     fill(#000000);
-    text(current.content, playbackWidth/2+1, playbackHeight - 21);
-    text(current.content, playbackWidth/2-1, playbackHeight - 19);
+    text(current.content, playbackWidth/2+1, playbackHeight - 31);
+    text(current.content, playbackWidth/2-1, playbackHeight - 29);
 
     //White text
     fill(#FFFFFF);
-    text(current.content, playbackWidth/2, playbackHeight - 20);
+    text(current.content, playbackWidth/2, playbackHeight - 30);
   }
   if ((currentMseconds>=current.end.mseconds) && //If time period is reached
   (itr.hasNext())) {            //And not at end of subtitles
-//    println("end");
+    //    println("end");
     current = itr.next();
   }
   while (currentMseconds<=current.start.mseconds && itr.hasPrevious ()) {
@@ -249,18 +263,20 @@ String formatTime(float sec) {
 void drawSubTimeline() {
   fill(255);
   textSize(12);
-  text("Subtitles:", 5, 440);
-  rect(60, 430, 550, 10);
+  text("Subtitles:", 5, 470);
+  rect(60, 460, 550, 10);
   //  println(timeline.getMax());
 }
-void drawSubsOnTimeline(){
+void drawSubsOnTimeline() {
   for (int i = 0; i < subs.captions.size (); i++) {
     Caption sub = subs.captions.get(i);
     fill(0, 102, 153);
     //Draw spots where subtitles were placed
-    int location=(int)(sub.start.mseconds/1000);
-//    println(location);
-    rect(60+(location)*550, 430, 5, 10);
+    //    int location=(int)(sub.start.mseconds/1000);
+    //    println(location);
+    //    println((location/timeline.getMax())*550);
+    //    stroke(0);
+    rect(60+((sub.start.mseconds/1000.0)/timeline.getMax())*550+15, 460, 5, 10);
   }
 }
 

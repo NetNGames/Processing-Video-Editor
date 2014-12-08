@@ -17,7 +17,7 @@
  *************************************************/
 
 int fullWidth = 840;
-int fullHeight = 490;
+int fullHeight = 520;
 int playbackWidth = 640;
 int playbackHeight = 360;
 int widthDiff = fullWidth-playbackWidth;
@@ -30,6 +30,7 @@ import processing.video.*;
 Movie mov;
 Vector<Movie> movies;
 Vector<String> movieNames;
+ListIterator<Movie> movItr;
 int movFrameRate;
 float currentFrame;
 float maxFrames;
@@ -42,6 +43,7 @@ Minim minim;
 AudioPlayer sound;
 Vector<AudioPlayer> sounds;
 Vector<String> soundNames;
+ListIterator<AudioPlayer> soundItr;
 
 //For Buttons
 import controlP5.*;
@@ -64,11 +66,6 @@ color movColors[][];
 
 //For subtitles
 TimedTextObject subs;
-//Vector subs;
-//String[] raw;
-//String[][] subs;
-//int subN = 0;
-//int subCount;
 
 //For File Chooser
 import javax.swing.*;
@@ -138,6 +135,7 @@ void setup() {
   
   timeline = new Timeline();
   movies = new Vector<Movie>(0, 1);
+  currentFrame=0.0;
   movieNames = new Vector<String>(0, 1);
   sounds = new Vector<AudioPlayer>(0, 1);
   soundNames = new Vector<String>(0, 1);

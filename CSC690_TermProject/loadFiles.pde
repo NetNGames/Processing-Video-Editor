@@ -13,7 +13,7 @@ void loadFile() {
   if (returnVal == JFileChooser.APPROVE_OPTION) {
     File file = fc.getSelectedFile();
 
-      //Loading video
+    //Loading video
     if (file.getName().endsWith("mp4") || //Can play audio from mp4
         file.getName().endsWith("mov") ||
         file.getName().endsWith("avi") || //Unable to play audio from avi
@@ -24,11 +24,12 @@ void loadFile() {
       movies.addElement(mov);
       //mov.loop();
       mov=movies.get(0);//Resets to 1st video loaded
+      mov.jump(1);
       mov.pause();
       movFrameRate=(int)mov.frameRate;
       maxFrames = getLength() - 1;
       movColors = new color[width/blockSize][height/blockSize];
-      
+
       //Loading Audio
     } else if (file.getName().endsWith("mp3") ||
                file.getName().endsWith("wav") ||
@@ -40,23 +41,24 @@ void loadFile() {
       sounds.addElement(sound);
       sound=sounds.get(0); //Resets to 1st sound loaded
       soundNames.addElement(file.getName());
-      
+
       //Loading SubRip text
     } else if (file.getName().endsWith("srt")) {
-//      if(srtLoaded){ //Only loaded 1 srt at a time
-                       //If one is already loaded, ask to  overwrite
+      //      if(srtLoaded){ //Only loaded 1 srt at a time
+      //If one is already loaded, ask to  overwrite
       srtLoaded=true;
-//      loadSubs(file);
+      //      loadSubs(file);
       parseSubFile(file);
-      
+
       //Loading Project file
-    }else if (file.getName().endsWith("pve")) {
+    } else if (file.getName().endsWith("pve")) {
       //loadProj(file);
     }
   }
 }
 
 void drawFileList() {
+  DropdownList vidList, audList, vidEffectList, audClipList;
   //Movie clip names:
   fill(255);
   textSize(12);
@@ -80,5 +82,3 @@ void drawFileList() {
     }
   }
 }
-
-

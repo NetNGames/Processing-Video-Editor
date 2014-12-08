@@ -1,5 +1,5 @@
 class Timeline {
-  float videoJump, audioJump, time, maxTime;
+  float time, maxTime;
   Button clearClipsButton;
   Slider timelineSlider;
   Vector<TimelineClip> audioClips;
@@ -15,7 +15,7 @@ class Timeline {
               .setTriggerEvent(Slider.RELEASE) //Buggy if kept it on PRESSED
                 .setSliderMode(Slider.FLEXIBLE);
     clearClipsButton = cp5.addButton("clearClipsButton")
-      .setPosition(620, 396)
+      .setPosition(620, 426)
         .setSize(70, 20)
           .setCaptionLabel("Clear")
             .setVisible(false);
@@ -58,25 +58,36 @@ class Timeline {
   }
 
   void draw() {
+    if(vidLoaded){
+       fill(255);
+      textSize(12);
+      textAlign(LEFT);
+      text("Video:", 10, 410);
+      //Draw box where video clips can be placed
+      rect(60, 400, 550, 10);
+    }
     if (audLoaded) {
       clearClipsButton.setVisible(true);
       fill(255);
       textSize(12);
       textAlign(LEFT);
-      text("Audio:", 10, 410);
+      text("Audio:", 10, 440);
       //Draw box where audio clips can be placed
-      rect(60, 400, 550, 10);
+      rect(60, 430, 550, 10);
 
       for (int i = 0; i < audioClips.size (); i++) {
         TimelineClip clip = audioClips.get(i);
         fill(0, 102, 153);
         //Draw spots where audio clips were placed
-        rect(60+((clip.getStart()/(cp5.getController("timeline").getMax()-1))*550), 400, 5, 10);
+        println("clip start: "+clip.getStart());
+        println("location: " +((clip.getStart()/(timeline.getMax()-1))*550));
+        
+        rect(60+((clip.getStart()/(timeline.getMax()-1))*550), 430, 5, 10);
       }
     }
-    //Progress line
+    //Red progress line
     stroke(#FF0000);
-    line(60+(time/maxTime)*550, playbackHeight+10, 60+(time/maxTime)*550, fullHeight-40);
+    line(60+(time/maxTime)*550, playbackHeight+10, 60+(time/maxTime)*550, fullHeight-50);
   }
 
   void addClip(float x) {

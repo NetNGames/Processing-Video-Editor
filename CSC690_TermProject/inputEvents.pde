@@ -3,11 +3,19 @@ void mousePressed() {
     mouseX > 60 && mouseX < playbackWidth) {
     isJump=true;
   }
-  if (mouseY > 400 && mouseY < 410 && mouseX > 60 && mouseX < 610) {
+  //For audio clips
+  if (mouseY > 430 && mouseY < 440 && mouseX > 60 && mouseX < 610) {
     float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
     println("adding at " + clipPlaced);
     //    println(cp5.getController("timeline").getMax());
     timeline.addClip(clipPlaced);
+  }
+  //For subtitles
+  if (mouseY > 460 && mouseY < 470 && mouseX > 60 && mouseX < 610) {
+    float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
+//    println("adding at " + clipPlaced);
+//    //    println(cp5.getController("timeline").getMax());
+//    timeline.addClip(clipPlaced);
   }
 }
 

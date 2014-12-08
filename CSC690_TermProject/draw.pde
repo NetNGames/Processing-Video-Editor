@@ -36,15 +36,16 @@ void draw() {
       }
     }
   }
+  drawSubTimeline();
   if (srtLoaded && 
-    (vidLoaded||audLoaded)&&currentFrame!=(-1.0)) {
+     (vidLoaded||audLoaded) &&
+     (currentFrame!=(-1.0))) {
     //println(currentFrame);
     displaySubs();
     drawSubsOnTimeline();
   }
 
   drawFileList();
-  drawSubTimeline();
   timeline.draw();
   timeline.update();
 } 
