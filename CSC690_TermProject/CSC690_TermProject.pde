@@ -37,6 +37,7 @@ float currentFrame;
 float maxFrames;
 boolean isJump=false;
 boolean showTimeline=false;
+int videoPicked = 0;
 
 //For Audio
 import ddf.minim.*;

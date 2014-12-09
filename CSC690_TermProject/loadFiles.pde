@@ -68,6 +68,11 @@ void drawFileList() {
     fill(0, 102, 153);
     for (int i = 0; i < movieNames.size (); i++) {
       String name = movieNames.get(i);
+      if(i == videoPicked){ 
+        fill(255);
+      } else {
+        fill(0, 102, 153, 204);
+      }
       text(name, width-190, (66+(16*i)));
     }
   }

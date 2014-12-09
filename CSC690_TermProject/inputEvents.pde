@@ -29,6 +29,12 @@ void mousePressed() {
     //println((mouseY-200)/16);
     soundPicked = (mouseY-200)/16;
   }
+  
+  if(mouseY > 50 && mouseX > width-190 && mouseY < 50+(16*movies.size())){
+    //println((mouseY-50)/16);
+    videoPicked = (mouseY-50)/16;
+    mov = movies.get(videoPicked);
+  }
 }
 
 void mouseReleased() {
