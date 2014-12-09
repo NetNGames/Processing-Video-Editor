@@ -23,6 +23,7 @@ class Timeline {
     cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
 
     audioClips = new Vector<TimelineClip>(0, 1);
+    videoClips = new Vector<TimelineClip>(0, 1);
   }
 
   void update() {
@@ -66,6 +67,16 @@ class Timeline {
       text("Video:", 10, 410);
       //Draw box where video clips can be placed
       rect(60, 400, 550, 10);
+      
+      for (int i = 0; i < videoClips.size (); i++) {
+        TimelineClip clip = videoClips.get(i);
+        fill(clip.getColor());
+        //Draw spots where audio clips were placed
+        //println("clip start: "+clip.getStart());
+        //println("location: " +((clip.getStart()/(timeline.getMax()-1))*550));
+        
+        rect(60+((clip.getStart()/(timeline.getMax()-1))*550), 400, 5, 10);
+      }
     }
     if (audLoaded) {
       clearClipsButton.setVisible(true);
@@ -91,10 +102,15 @@ class Timeline {
     line(60+(time/maxTime)*550, playbackHeight+10, 60+(time/maxTime)*550, fullHeight-50);
   }
 
-  void addClip(float x) {
+  void addAudioClip(float x) {
     color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
     audioClips.addElement(new TimelineClip(floor(x), soundPicked, c));
   }
+  void addVideoClip(float x) {
+    color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
+    videoClips.addElement(new TimelineClip(floor(x), soundPicked, c));
+  }
+  
   void clearClips() {
     audioClips.clear();
   }

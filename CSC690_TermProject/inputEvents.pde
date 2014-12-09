@@ -8,7 +8,13 @@ void mousePressed() {
     float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
     println("adding at " + clipPlaced);
     //    println(cp5.getController("timeline").getMax());
-    timeline.addClip(clipPlaced);
+    timeline.addAudioClip(clipPlaced);
+  }
+  //For video clips
+  if (mouseY > 400 && mouseY < 410 && mouseX > 60 && mouseX < 610) {
+    //println("video clip pasted");
+    float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
+    timeline.addVideoClip(clipPlaced);
   }
   //For subtitles
   if (mouseY > 460 && mouseY < 470 && mouseX > 60 && mouseX < 610) {
@@ -78,7 +84,9 @@ void controlEvent(ControlEvent theEvent) {
       mov.pause();
     }
     if (audLoaded) { 
-      sound.pause();
+      for(int i = 0; i < sounds.size(); i++){
+        sounds.get(i).pause();
+      }
     }
   } else if (theEvent.controller().name()=="playButton") {
     playButton.setVisible(false);
@@ -97,8 +105,10 @@ void controlEvent(ControlEvent theEvent) {
       mov.pause();
     }
     if (audLoaded) {  
-      sound.rewind();
-      sound.pause();
+      for(int i = 0; i < sounds.size(); i++){
+        sounds.get(i).pause();
+        sounds.get(i).rewind();
+      }
     }
   } else if (theEvent.controller().name()=="prevButton") {
     playButton.setVisible(false);
