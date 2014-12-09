@@ -39,7 +39,7 @@ void loadFile() {
       minim = new Minim(this);
       sound = minim.loadFile(file.getPath());
       sounds.addElement(sound);
-      sound=sounds.get(0); //Resets to 1st sound loaded
+      //sound=sounds.get(0); //Resets to 1st sound loaded
       soundNames.addElement(file.getName());
 
       //Loading SubRip text
@@ -75,10 +75,17 @@ void drawFileList() {
   fill(255);
   text("Audio Clips: ", width-190, 200);
   if (audLoaded) {
-    fill(0, 102, 153, 204);
     for (int i = 0; i <soundNames.size (); i++) {
       String name = soundNames.get(i);
+      if(i == soundPicked){ 
+        fill(255);
+      } else {
+        fill(0, 102, 153, 204);
+      }
       text(name, width-190, (216+(16*i)));
+      stroke(255);
+      fill(((50*i)+100)%250, (10*i)%250, (200*i)%250);
+      rect(width-100, (204+(16*i)), 95, 14);
     }
   }
 }

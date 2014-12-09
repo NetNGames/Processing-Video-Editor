@@ -42,15 +42,17 @@ class Timeline {
       //            println("current time: " + time);
 
       if (audLoaded) {
-        for (int i = 0; i < audioClips.size (); i++) {
+        for (int i = 0; i < audioClips.size(); i++) {
           TimelineClip clip = audioClips.get(i);
-          //          println("   clip time: " + clip.getStart());
           if (time == clip.getStart()) {
-            if (!sounds.get(0).isPlaying()) {
-              sounds.get(0).rewind();
-              sounds.get(0).play();
+            //println("sound should play now");
+            if(sounds.get(clip.getIndex()).isPlaying()) {
+              sounds.get(clip.getIndex()).play();
+            } else {
+              sounds.get(clip.getIndex()).rewind();
+              sounds.get(clip.getIndex()).play();
             }
-          }
+          } 
         }
       }
     }
@@ -76,10 +78,10 @@ class Timeline {
 
       for (int i = 0; i < audioClips.size (); i++) {
         TimelineClip clip = audioClips.get(i);
-        fill(0, 102, 153);
+        fill(clip.getColor());
         //Draw spots where audio clips were placed
-        println("clip start: "+clip.getStart());
-        println("location: " +((clip.getStart()/(timeline.getMax()-1))*550));
+        //println("clip start: "+clip.getStart());
+        //println("location: " +((clip.getStart()/(timeline.getMax()-1))*550));
         
         rect(60+((clip.getStart()/(timeline.getMax()-1))*550), 430, 5, 10);
       }
@@ -90,7 +92,8 @@ class Timeline {
   }
 
   void addClip(float x) {
-    audioClips.addElement(new TimelineClip(floor(x)));
+    color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
+    audioClips.addElement(new TimelineClip(floor(x), soundPicked, c));
   }
   void clearClips() {
     audioClips.clear();

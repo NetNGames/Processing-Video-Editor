@@ -25,6 +25,7 @@ int heightDiff = fullHeight-playbackHeight;
 int iconWidth = 32;
 
 import java.util.Vector;
+
 //For Video
 import processing.video.*;
 Movie mov;
@@ -44,6 +45,7 @@ AudioPlayer sound;
 Vector<AudioPlayer> sounds;
 Vector<String> soundNames;
 ListIterator<AudioPlayer> soundItr;
+int soundPicked = 0;
 
 //For Buttons
 import controlP5.*;

@@ -4,8 +4,10 @@ class TimelineClip {
   color c;
   int index;
   
-  TimelineClip(float s) {
+  TimelineClip(float s, int ind, color col) {
     start = floor(s);
+    index = ind;
+    c = col;
   }
   
   void update(){

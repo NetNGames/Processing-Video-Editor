@@ -23,6 +23,12 @@ void mousePressed() {
 //    //    println(cp5.getController("timeline").getMax());
 //    timeline.addClip(clipPlaced);
   }
+  
+  //Audio file selection
+  if (mouseY > 200 && mouseX > width-190 && mouseY < 200+(16*sounds.size())){
+    //println((mouseY-200)/16);
+    soundPicked = (mouseY-200)/16;
+  }
 }
 
 void mouseReleased() {
@@ -74,9 +80,9 @@ void controlEvent(ControlEvent theEvent) {
     if (vidLoaded) { 
       mov.play();
     }
-    if (audLoaded) { 
+    /*if (audLoaded) { 
       sound.play();
-    }
+    }*/
   } else if (theEvent.controller().name()=="stopButton") {
     playButton.setVisible(true);
     pauseButton.setVisible(false);
