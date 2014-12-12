@@ -1,17 +1,17 @@
 void mousePressed() {
-  if ((mouseY > playbackHeight) && (mouseY < playbackHeight+30) && 
-    mouseX > 60 && mouseX < playbackWidth) {
+  if ((mouseY > height-160) && (mouseY < height-130) && 
+    mouseX > 60 && mouseX < timelineWidth) {
     isJump=true;
   }
   //For audio clips
-  if (mouseY > 430 && mouseY < 440 && mouseX > 60 && mouseX < 610) {
+  if (mouseY > height-90 && mouseY < height-80 && mouseX > 60 && mouseX < timelineWidth) {
     float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
     println("adding at " + clipPlaced);
     //    println(cp5.getController("timeline").getMax());
     timeline.addClip(clipPlaced);
   }
   //For subtitles
-  if (mouseY > 460 && mouseY < 470 && mouseX > 60 && mouseX < 610) {
+  if (mouseY > height-60 && mouseY < height-50 && mouseX > 60 && mouseX < timelineWidth) {
     float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
     
     subCfg.startTimeInput.setText(formatTime(clipPlaced));
@@ -42,13 +42,14 @@ void mouseMoved() {
     (mouseY > (0)) && (mouseY < 30)) {
     pixelateButton.setVisible(true);
     pixelateButton.unlock();
-  } else if ((mouseX > (60)) && (mouseX < 610) &&
-    (mouseY > (370)) && (mouseY < 380)) { 
+//  } else if ((mouseX > (60)) && (mouseX < 610) &&
+//    (mouseY > (370)) && (mouseY < 380)) { 
   } else {
     pixelateButton.setVisible(false);
     pixelateButton.lock();
   }
 }
+
 void controlEvent(ControlEvent theEvent) {
   //Video Effects
   if (theEvent.controller().name()=="pixelateButton") {
@@ -139,7 +140,11 @@ void controlEvent(ControlEvent theEvent) {
       if (vidLoaded) {
         cp5.getController("timeline").setValue(jump);
 //        setFrame(-jump); //Don't know why frame is negative
-        mov.jump(jump);
+        if(jump<=mov.duration()){
+          mov.jump(jump);
+        }else{
+          
+        }
       }
       if (audLoaded) {  
         int max=floor(cp5.getController("timeline").getMax());
@@ -182,3 +187,13 @@ void keyPressed() {
   }
 }
 
+//Enables mouse wheel controls for controlP5 elements
+//From ControlP5mouseWheel
+void addMouseWheelListener() {
+  frame.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+    public void mouseWheelMoved(java.awt.event.MouseWheelEvent e) {
+      cp5.setMouseWheelRotation(e.getWheelRotation());
+    }
+  }
+  );
+}

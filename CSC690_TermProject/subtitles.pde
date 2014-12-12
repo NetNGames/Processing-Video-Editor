@@ -271,8 +271,8 @@ String formatTime(float sec) {
 void drawSubTimeline() {
   fill(255);
   textSize(12);
-  text("Subtitles:", 5, 470);
-  rect(60, 460, 550, 10);
+  text("Subtitles:", 5, height-50);
+  rect(60, height-60, timelineWidth, 10);
 }
 void drawSubsOnTimeline() {
   for (int i = 0; i < subs.captions.size (); i++) {
@@ -280,7 +280,7 @@ void drawSubsOnTimeline() {
     fill(0, 102, 153);
     //Draw spots where subtitles were placed
     int location=(int)(sub.start.mseconds/1000.0);
-    rect(60+(location/(timeline.getMax()-1))*550, 460, 5, 10);
+    rect(60+(location/(timeline.getMax()-1))*timelineWidth, height-60, 5, 10);
   }
 }
 

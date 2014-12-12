@@ -83,7 +83,7 @@ boolean srtLoaded=false;
 PFont font; 
 
 void setup() {
-//  frame.setResizable(true);
+  frame.setResizable(true);
   size(fullWidth, fullHeight);
   background(0);
   font = createFont("Arial", 16, true); 
@@ -109,32 +109,32 @@ void setup() {
   //Playback
   playButton = cp5.addButton("playButton")
     .setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40)
-      .setImages(loadImage("PlayNormal.png"), loadImage("PlayHot.png"), loadImage("PlayPressed.png"))
+      .setImages(loadImage(sketchPath +"/data/playback/PlayNormal.png"), loadImage(sketchPath +"/data/playback/PlayHot.png"), loadImage(sketchPath +"/data/playback/PlayPressed.png"))
         .updateSize();
   cp5.getTooltip().register("playButton","Play Video or Audio file");
 
   pauseButton = cp5.addButton("pauseButton")
     .setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40)
-      .setImages(loadImage("PauseNormal.png"), loadImage("PauseHot.png"), loadImage("PausePressed.png"))
+      .setImages(loadImage(sketchPath +"/data/playback/PauseNormal.png"), loadImage(sketchPath +"/data/playback/PauseHot.png"), loadImage(sketchPath +"/data/playback/PausePressed.png"))
         .updateSize()
           .setVisible(false);
   cp5.getTooltip().register("pauseButton","Pause Video or Audio file");
 
   stopButton = cp5.addButton("stopButton")
     .setPosition(playbackWidth/2+(iconWidth*3)/4, height-40)
-      .setImages(loadImage("StopNormal.png"), loadImage("StopHot.png"), loadImage("StopPressed.png"))
+      .setImages(loadImage(sketchPath +"/data/playback/StopNormal.png"), loadImage(sketchPath +"/data/playback/StopHot.png"), loadImage(sketchPath +"/data/playback/StopPressed.png"))
         .updateSize(); 
   cp5.getTooltip().register("stopButton","Stops and resets Video or Audio file");
 
   prevButton = cp5.addButton("prevButton")
     .setPosition(playbackWidth/2-iconWidth*2, height-40)
-      .setImages(loadImage("BackwardNormal.png"), loadImage("BackwardHot.png"), loadImage("BackwardPressed.png"))
+      .setImages(loadImage(sketchPath +"/data/playback/BackwardNormal.png"), loadImage(sketchPath +"/data/playback/BackwardHot.png"), loadImage(sketchPath +"/data/playback/BackwardPressed.png"))
         .updateSize();
   cp5.getTooltip().register("prevButton","Go to previous Video or Audio file");
 
   nextButton = cp5.addButton("nextButton")
     .setPosition(playbackWidth/2+iconWidth*2, height-40)
-      .setImages(loadImage("ForwardNormal.png"), loadImage("ForwardHot.png"), loadImage("ForwardPressed.png"))
+      .setImages(loadImage(sketchPath +"/data/playback/ForwardNormal.png"), loadImage(sketchPath +"/data/playback/ForwardHot.png"), loadImage(sketchPath +"/data/playback/ForwardPressed.png"))
         .updateSize();
   cp5.getTooltip().register("nextButton","Go to next Video or Audio file");
   
@@ -146,6 +146,7 @@ void setup() {
   movieNames = new Vector<String>(0, 1);
   sounds = new Vector<AudioPlayer>(0, 1);
   soundNames = new Vector<String>(0, 1);
+  addMouseWheelListener();
 }
 
 void movieEvent(Movie movie) {
