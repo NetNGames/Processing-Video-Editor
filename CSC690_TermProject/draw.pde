@@ -2,13 +2,23 @@ void draw() {
   background(0);
   updateLocations();
   stroke(#FFFFFF);
-  fill(255);
-  rect(0, 0, playbackWidth, playbackHeight);
-  image(loadImage("empty-project.png"), 0, 0, playbackWidth, playbackHeight);
+  if (!vidLoaded&&!audLoaded) {
+    //    imageMode(CORNER);
+    //  image(empty, 0, 0, playbackWidth, playbackHeight);
+
+    fill(255);
+    rect(0, 0, playbackWidth, playbackHeight);
+    resizeImg();
+    imageMode(CENTER);
+    image(empty, playbackWidth/2, playbackHeight/2, thumbWidth, thumbHeight);
+  }
   if (vidLoaded) {
     //determine aspect ratio and scale accordingly:
-    image(mov, 0, 0, playbackWidth, playbackHeight);
-    currentFrame = getFrame();
+    resizeMovie();
+    imageMode(CENTER);
+    image(mov, playbackWidth/2, playbackHeight/2, thumbWidth, thumbHeight);
+    //    image(mov, 0, 0, playbackWidth, playbackHeight);
+    //    currentFrame = getFrame();
     //pixelated?
     if (isPixelate) {
       pixelate();
@@ -53,9 +63,11 @@ void draw() {
   timeline.draw();
 } 
 void updateLocations() {
-  playbackWidth=3*width/4;
+  //  playbackWidth=3*width/4;
+  playbackWidth=width-200;
   timelineWidth=playbackWidth-90;
-  playbackHeight=7*height/10;
+  //  playbackHeight=7*height/10;
+  playbackHeight=height-160;
   chooseFileButton.setPosition(width-130, 10);
   pauseButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40);
   playButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40);

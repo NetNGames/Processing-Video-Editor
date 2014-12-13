@@ -20,10 +20,9 @@ int fullWidth = 840;
 int fullHeight = 520;
 int playbackWidth = 640;
 int playbackHeight = 360;
-int widthDiff = fullWidth-playbackWidth;
-int heightDiff = fullHeight-playbackHeight;
 int iconWidth = 32;
-
+float thumbHeight;
+float thumbWidth;
 import java.util.Vector;
 
 //For Video
@@ -39,6 +38,7 @@ float maxFrames;
 float maxDuration;
 boolean isJump=false;
 boolean showTimeline=false;
+boolean fullscreenMode=false;
 
 //For Audio
 import ddf.minim.*;
@@ -81,13 +81,13 @@ boolean srtLoaded=false;
 
 //Everything else
 PFont font; 
-
+PImage empty;
 void setup() {
   frame.setResizable(true);
   size(fullWidth, fullHeight);
   background(0);
   font = createFont("Arial", 16, true); 
-
+  empty=loadImage("empty-project.png");
   //Load buttons
   cp5 = new ControlP5(this);
   //Button to choose files
