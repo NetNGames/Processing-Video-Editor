@@ -27,8 +27,14 @@ class Timeline {
   }
 
   void update() {
-    timelineSlider.setWidth(timelineWidth)
-      .setPosition(60, height-150);
+    timelineSlider.setWidth(timelineWidth);
+    if (!fullscreenMode) {
+      timelineSlider.setPosition(60, height-150);
+      clearClipsButton.setVisible(true)
+    } else {
+      timelineSlider.setPosition(0, height-10);
+      clearClipsButton.setVisible(false)
+    }
     clearClipsButton.setPosition(width-220, height-104);
     cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
     if (vidLoaded) {
@@ -37,17 +43,17 @@ class Timeline {
 
       //      timelineSlider.setMax(abs((float)maxFrames));
       cp5.getController("timeline").setMax(maxDuration);
-      if (!isJump) {
+//      if (!isJump) {
         //        cp5.getController("timeline").setValue(abs(((float)currentFrame/ (float)maxFrames)*(float)maxFrames));
         //        println("set value: "+(mov.time()/maxDuration)*550);
         if (currentSelected==0 && movies.size()==1) {
           cp5.getController("timeline").setValue((mov.time()/mov.duration())*maxDuration);
-        }else if (currentSelected==0 && movies.size()==2) {
+        } else if (currentSelected==0 && movies.size()==2) {
           cp5.getController("timeline").setValue((mov.time()/mov.duration())*maxDuration/10);
-        }else if (currentSelected==1&& movies.size()==2) {
+        } else if (currentSelected==1&& movies.size()==2) {
           cp5.getController("timeline").setValue(mov.time()/mov.duration()*maxDuration+movies.get(0).duration());
         }
-      }
+//      }
       //      cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
       cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
       //      time = floor(cp5.getController("timeline").getValue());
@@ -83,6 +89,13 @@ class Timeline {
       text("Video:", 10, height-110);
       //Draw box where video clips can be placed
       rect(60, height-120, timelineWidth, 10);
+      
+//          fill(255);
+    float current = mov.time();
+    //    float max = mov.duration();
+    String time = formatTime(current)+" / "+formatTime(maxDuration);
+    textSize(12);
+    text(time, width-220, height-140);
     }
     if (audLoaded) {
       clearClipsButton.setVisible(true);

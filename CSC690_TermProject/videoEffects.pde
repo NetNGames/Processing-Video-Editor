@@ -1,3 +1,9 @@
+//For Pixelate effect
+Button pixelateButton;
+boolean isPixelate = false;
+int numPixelsWide, numPixelsHigh;
+int blockSize = 10; //Should be a number that divides evenly into the height and width
+color movColors[][];
 void pixelate() {
   mov.loadPixels();
 
@@ -13,5 +19,19 @@ void pixelate() {
       rect(i*blockSize, j*blockSize, blockSize, blockSize);
     }
   }
+}
+
+boolean isGreyscale = false;
+void greyscale(){
+  filter(GRAY);
+}
+
+boolean isInverted = false;
+void invert(){
+  filter(INVERT);
+}
+boolean isPosterize = false;
+void posterize(){
+  filter(POSTERIZE, 4);
 }
 

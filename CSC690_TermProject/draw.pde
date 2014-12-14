@@ -23,23 +23,20 @@ void draw() {
     if (isPixelate) {
       pixelate();
     }
-    float current = mov.time();
-    //    float max = mov.duration();
-    String time = formatTime(current)+" / "+formatTime(maxDuration);
-    textSize(12);
-    text(time, width-220, height-140);
-    //OLD PROGRESS BAR REPLACED BY TIMELINE
-    /*/Bottom progress bar
-     stroke(#FF0000);
-     strokeWeight(10);
-     //if (showTimeline) {
-     rect(0, height-109, //Located on bottom of screen
-     (currentFrame/ maxFrames)*(width-100), //Scaled to window width
-     1);
-     //}*/
-    //  println("current time: "+mov.time());
+    if (isGreyscale) {
+      greyscale();
+    }
+    if (isInverted) {
+      invert();
+    }
+    if (isPosterize) {
+      posterize();
+    }
   }
-
+//background(0);
+fill(0);
+    rect(playbackWidth, 0, width, height);
+    rect(0, playbackHeight, width, height);
   if (audLoaded) {
     //sound.play();
     if (vidLoaded) {
@@ -48,32 +45,46 @@ void draw() {
       }
     }
   }
+  
+  timeline.update();
+  if (!fullscreenMode) {
+    drawFileList();
   drawSubTimeline();
-  //  if (srtLoaded && 
-  //     (vidLoaded||audLoaded) &&
-  //     (currentFrame!=(-1.0))) {
-  //println(currentFrame);
+    timeline.draw();
+  }
   if (vidLoaded&& !subs.captions.isEmpty()) {
     displaySubs();
+    if (!fullscreenMode) {
     drawSubsOnTimeline();
+    }
   }
-  //  println("max duration: "+maxDuration);
-  drawFileList();
-  timeline.update();
-  timeline.draw();
 } 
 void updateLocations() {
-  //  playbackWidth=3*width/4;
-  playbackWidth=width-200;
-  timelineWidth=playbackWidth-90;
-  //  playbackHeight=7*height/10;
-  playbackHeight=height-160;
-  chooseFileButton.setPosition(width-130, 10);
-  pauseButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40);
-  playButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40);
-  stopButton.setPosition(playbackWidth/2+(iconWidth*3)/4, height-40);
-  prevButton.setPosition(playbackWidth/2-iconWidth*2, height-40);
-  nextButton.setPosition(playbackWidth/2+iconWidth*2, height-40);
-  subCfg.popup.setPosition(width-220, height-64);
+  if (!fullscreenMode) {
+    //  playbackWidth=3*width/4;
+    playbackWidth=width-200;
+    timelineWidth=playbackWidth-90;
+    //  playbackHeight=7*height/10;
+    playbackHeight=height-160;
+    chooseFileButton.setPosition(width-130, 10).setVisible(true);
+    pauseButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40);
+    playButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40).setVisible(true);
+    stopButton.setPosition(playbackWidth/2+(iconWidth*3)/4, height-40).setVisible(true);
+    prevButton.setPosition(playbackWidth/2-iconWidth*2, height-40).setVisible(true);
+    nextButton.setPosition(playbackWidth/2+iconWidth*2, height-40).setVisible(true);
+    subCfg.popup.setPosition(width-220, height-64).setVisible(true);
+  } else {
+    playbackWidth=width;
+    timelineWidth=width;
+    playbackHeight=height;
+    chooseFileButton.setVisible(false);
+    pauseButton.setVisible(false);
+    playButton.setVisible(false);
+    stopButton.setVisible(false);
+    prevButton.setVisible(false);
+    nextButton.setVisible(false);
+    subCfg.popup.setVisible(false);
+    
+  }
 }
 

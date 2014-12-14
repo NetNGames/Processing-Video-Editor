@@ -190,9 +190,9 @@ void parseSubFile(File file) {
 void displaySubs() {
   //Find current time by milliseconds
   float sec=0.0;
-  if (currentSelected==0){
+  if (currentSelected==0) {
     sec = mov.time();
-  }else if (currentSelected==1){
+  } else if (currentSelected==1) {
     sec = mov.time()+movies.get(0).duration();
   }
   int seconds = (int)sec;
@@ -216,15 +216,25 @@ void displaySubs() {
     //    println("start");
     textSize(15);
     textAlign(CENTER);
+    if (!fullscreenMode) {
+      //Black Outline
+      fill(#000000);
+      text(current.content, playbackWidth/2+1, playbackHeight - 31);
+      text(current.content, playbackWidth/2-1, playbackHeight - 29);
 
-    //Black Outline
-    fill(#000000);
-    text(current.content, playbackWidth/2+1, playbackHeight - 31);
-    text(current.content, playbackWidth/2-1, playbackHeight - 29);
+      //White text
+      fill(#FFFFFF);
+      text(current.content, playbackWidth/2, playbackHeight - 30);
+    } else {
+      //Black Outline
+      fill(#000000);
+      text(current.content, playbackWidth/2+1, playbackHeight - 51);
+      text(current.content, playbackWidth/2-1, playbackHeight - 49);
 
-    //White text
-    fill(#FFFFFF);
-    text(current.content, playbackWidth/2, playbackHeight - 30);
+      //White text
+      fill(#FFFFFF);
+      text(current.content, playbackWidth/2, playbackHeight - 50);
+    }
   }
   if ((currentMseconds>=current.end.mseconds) && //If time period is reached
   (itr.hasNext())) {            //And not at end of subtitles

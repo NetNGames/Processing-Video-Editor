@@ -28,8 +28,8 @@ void resizeMovie() {
 
   float movRatio = (float)mov.width/(float)mov.height; 
   float playbackRatio =(float)playbackWidth/(float)playbackHeight;
-  println("movie ratio: "+movRatio);
-  println("playbackRatio: "+playbackRatio);
+//  println("movie ratio: "+movRatio);
+//  println("playbackRatio: "+playbackRatio);
   //  if (fullscreenMode) { //If in fullscreen
   if (playbackRatio > movRatio) { //If playback width is larger than movie height
     thumbWidth = (int)(playbackHeight * movRatio);
@@ -41,18 +41,6 @@ void resizeMovie() {
     thumbWidth = (int)playbackWidth;
     thumbHeight = (int)playbackHeight;
   }
-  //  } else { //not in fullscreen
-  //    if (thumbRatio > imgRatio) { //If thumbnail width is larger than img height
-  //      thumbHeight = windowHeight-(border/2); 
-  //      thumbWidth = (windowHeight-(border/2)) * imgRatio;
-  //    } else if (thumbRatio < imgRatio) {  //If thumbnail width is smaller than img height
-  //      thumbHeight = (windowWidth-(border/2)) * (1/imgRatio); 
-  //      thumbWidth = windowWidth-(border/2);
-  //    } else {//If thumbnail ratio was equal to img's
-  //      thumbHeight = windowWidth-(border/2); 
-  //      thumbWidth = windowWidth-(border/2);
-  //    }
-  //  }
 }
 void resizeImg() {
   float imgRatio = (float)empty.width/(float)empty.height; 

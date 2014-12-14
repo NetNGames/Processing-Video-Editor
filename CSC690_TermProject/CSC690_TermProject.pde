@@ -61,12 +61,7 @@ Button prevButton;
 //For Timeline
 Timeline timeline;
 
-//For Pixelate effect
-Button pixelateButton;
-boolean isPixelate = false;
-int numPixelsWide, numPixelsHigh;
-int blockSize = 10; //Should be a number that divides evenly into the height and width
-color movColors[][];
+
 
 //For subtitles
 TimedTextObject subs;
