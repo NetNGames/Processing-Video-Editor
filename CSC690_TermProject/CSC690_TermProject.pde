@@ -31,6 +31,7 @@ Movie mov;
 Vector<Movie> movies;
 Vector<String> movieNames;
 ListIterator<Movie> movItr;
+int videoPicked = 0;
 int currentSelected=0;
 int movFrameRate;
 float currentFrame;
@@ -44,6 +45,7 @@ boolean fullscreenMode=false;
 import ddf.minim.*;
 Minim minim;
 AudioPlayer sound;
+AudioMetaData meta;
 Vector<AudioPlayer> sounds;
 Vector<String> soundNames;
 ListIterator<AudioPlayer> soundItr;
@@ -76,18 +78,25 @@ void setup() {
   cp5 = new ControlP5(this);
   //Button to choose files
   chooseFileButton = cp5.addButton("chooseFile")
-    .setPosition(width-130, 10)
+    .setPosition(width-180, 10)
       .setSize(70, 20)
         .setCaptionLabel("Load File")
           .setVisible(true);
-  cp5.getTooltip().register("chooseFile","Load Video or Audio clips, SRT, or PVE files");
+  cp5.getTooltip().register("chooseFile","Load Video/Audio clips, SRT, or PVE files.");
+  
+  clearFileButton= cp5.addButton("clearFiles")
+    .setPosition(width-90, 10)
+      .setSize(70, 20)
+        .setCaptionLabel("Clear Files")
+          .setVisible(true);
+  cp5.getTooltip().register("clearFile","Clear all loaded files.");
   
   //Dropdown Lists
   vidList = cp5.addDropdownList("vidList")
           .setPosition(width-190, 70)
           .setColorActive(255)
           .setBarHeight(15)
-          .setCaptionLabel("Video List")
+          .setCaptionLabel("No video files loaded")
           ;
   vidList.captionLabel().style().marginTop = 3;
   vidList.captionLabel().style().marginLeft = 3;        

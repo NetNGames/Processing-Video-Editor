@@ -1,5 +1,6 @@
 //Handles clips on various timelines
 class TimelineClip {
+  File fileInfo;
   float start;
   color c;
   int index;

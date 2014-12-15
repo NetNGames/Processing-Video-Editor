@@ -192,12 +192,8 @@ void parseSubFile(File file) {
 
 void displaySubs() {
   //Find current time by milliseconds
-  float sec=0.0;
-  if (currentSelected==0) {
-    sec = mov.time();
-  } else if (currentSelected==1) {
-    sec = mov.time()+movies.get(0).duration();
-  }
+//  float sec=mov.time();
+  float sec=cp5.getController("timeline").getValue();
   int seconds = (int)sec;
   float fraction = sec-seconds;
   int mill = (int)(fraction *1000);
@@ -244,7 +240,7 @@ void displaySubs() {
     //    println("end");
     current = itr.next();
   }
-  while (currentMseconds<=current.start.mseconds && itr.hasPrevious ()) {
+  while (currentMseconds<=current.start.mseconds+leftOffset && itr.hasPrevious ()) {
     current = itr.previous(); //If skipping backwards
   }
 }
@@ -294,7 +290,7 @@ void drawSubsOnTimeline() {
     //Draw spots where subtitles were placed
     int location=(int)(sub.start.mseconds/1000.0);
     noStroke();
-    rect(60+(location/(timeline.getMax()-1))*timelineWidth, height-60, 1, 10);
+    rect(60+((location)/(timeline.getMax()-1))*timelineWidth, height-60, 1, 10);
   }
 }
 

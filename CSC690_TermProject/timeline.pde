@@ -15,6 +15,8 @@ class Timeline {
         .setValue(0.0)
           .setTriggerEvent(Slider.RELEASE) //Buggy if kept it on default PRESSED
             .setSliderMode(Slider.FLEXIBLE);
+    cp5.getTooltip().register("timeline", "Click to jump to time");
+
     clearClipsButton = cp5.addButton("clearClipsButton")
       //      .setPosition(620, 426)
       .setSize(70, 20)
@@ -22,59 +24,49 @@ class Timeline {
           .setVisible(false);
     cp5.getTooltip().register("clearClipsButton", "Clear Audio clips currently on timeline");
     //    cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
-
+    cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
 
     audioClips = new Vector<TimelineClip>(0, 1);
+    videoClips = new Vector<TimelineClip>(0, 1);
   }
 
   void update() {
     timelineSlider.setWidth(timelineWidth);
     //Timeline display
-    if (!fullscreenMode) {
-      timelineSlider.setPosition(60, height-150);
-//      clearClipsButton.setVisible(true);
-    } else {
-      timelineSlider.setPosition(0, height-10);
-//      clearClipsButton.setVisible(false);
-    }
+
     clearClipsButton.setPosition(width-220, height-95);
-    cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
+//    cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
     if (vidLoaded) {
       //      timelineSlider.setVisible(true);
-      cp5.getTooltip().register("timeline", "Click to jump to time");
+
 
       //      timelineSlider.setMax(abs((float)maxFrames));
       cp5.getController("timeline").setMax(maxDuration);
-//      if (!isJump) {
-        //        cp5.getController("timeline").setValue(abs(((float)currentFrame/ (float)maxFrames)*(float)maxFrames));
-        //        println("set value: "+(mov.time()/maxDuration)*550);
-        
- leftOffset=0;
-        for(int i=0;i<currentSelected;i++){
-          leftOffset+=movies.get(i).duration();
-        }
-//        if (currentSelected==0 && movies.size()==1) {
-//  println("currentSelected: "+currentSelected);
-//  println("leftOffset: "+leftOffset);
-          cp5.getController("timeline").setValue(((leftOffset+mov.time())/maxDuration)*maxDuration);
-//          println( formatTime(cp5.getController("timeline").getValue()));
-//        } else if (currentSelected==0 && movies.size()==2) {
-//          cp5.getController("timeline").setValue((mov.time()/mov.duration())*maxDuration/10);
-//        } else if (currentSelected==1&& movies.size()==2) {
-//          cp5.getController("timeline").setValue(mov.time()/mov.duration()*maxDuration+movies.get(0).duration());
-//        }
-//      }
+      //      if (!isJump) {
+      //        cp5.getController("timeline").setValue(abs(((float)currentFrame/ (float)maxFrames)*(float)maxFrames));
+      //        println("set value: "+(mov.time()/maxDuration)*550);
+
+      leftOffset=0;
+      for (int i=0; i<currentSelected; i++) {
+        leftOffset+=movies.get(i).duration();
+      }
+
+      //        if (currentSelected==0 && movies.size()==1) {
+      //  println("currentSelected: "+currentSelected);
+      //  println("leftOffset: "+leftOffset);
+      cp5.getController("timeline").setValue(((leftOffset+mov.time())/maxDuration)*maxDuration);
+      //          println( formatTime(cp5.getController("timeline").getValue()));
+
       //      cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
-      cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
+      
       //      time = floor(cp5.getController("timeline").getValue());
-      time = cp5.getController("timeline").getValue();
-      //      maxTime = floor(cp5.getController("timeline").getMax());
-      maxTime = cp5.getController("timeline").getMax();
-//            println("time: "+time);
-//            println("maxTime: "+maxTime);
-//                  println("current time: " + time);
+
+      //            println("time: "+time);
+      //            println("maxTime: "+maxTime);
+      //                  println("current time: " + time);
 
       if (audLoaded) {
+
         for (int i = 0; i < audioClips.size (); i++) {
           TimelineClip clip = audioClips.get(i);
           if (time == clip.getStart()) {
@@ -88,7 +80,12 @@ class Timeline {
           }
         }
       }
+    } else if (!vidLoaded && audLoaded) {
+      cp5.getController("timeline").setMax(sound.length()/1000.0);
+      cp5.getController("timeline").setValue(sound.position()/1000.0);
     }
+    time = cp5.getController("timeline").getValue();
+    maxTime = cp5.getController("timeline").getMax();
   }
 
   void draw() {
@@ -99,13 +96,14 @@ class Timeline {
       text("Video:", 10, height-110);
       //Draw box where video clips can be placed
       rect(60, height-120, timelineWidth, 10);
-      
-//          fill(255);
-    float current = mov.time();
-    //    float max = mov.duration();
-    String time = formatTime(current)+" / "+formatTime(maxDuration);
-    textSize(12);
-    text(time, width-220, height-140);
+
+      //          fill(255);
+      float current = mov.time()+leftOffset;
+      //    float max = mov.duration();
+
+      String time = formatTime(current)+" / "+formatTime(maxDuration);
+      textSize(12);
+      text(time, width-220, height-140);
     }
     if (audLoaded) {
       clearClipsButton.setVisible(true);
@@ -125,10 +123,17 @@ class Timeline {
 
         rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-90, 5, 10);
       }
+      if (!vidLoaded) {
+        float current = sound.position()/1000.0;
+        String time = formatTime(current)+" / "+formatTime(timeline.getMax());
+        textSize(12);
+        text(time, width-220, height-140);
+      }
     }
     //Red progress line
     stroke(#FF0000);
-    line(60+(time/maxTime)*timelineWidth, height-150, 60+(time/maxTime)*timelineWidth, height-50);
+      line(60+(time/maxTime)*timelineWidth, height-150, 60+(time/maxTime)*timelineWidth, height-50);
+
   }
 
   void addClip(float x) {

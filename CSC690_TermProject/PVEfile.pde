@@ -6,30 +6,25 @@ void loadProj(File file) {
     BufferedReader br = new BufferedReader(new FileReader(file));
 
     while ( (line = br.readLine ()) != null) {
-//      println(line);
       if (line.endsWith("mp4") || //Can play audio from mp4
-      line.endsWith("mov") ||
-        line.endsWith("avi") || //Unable to play audio from avi
-      line.endsWith("ogg")) {
-        loadVid(new File(line));
+          line.endsWith("mov") ||
+          line.endsWith("avi") || //Unable to play audio from avi
+          line.endsWith("ogg")) {
+          loadVid(new File(line));
 
         //Loading Audio
       } else if (line.endsWith("mp3") ||
         line.endsWith("wav") ||
         line.endsWith("wma") ||
         line.endsWith("flac")) {
-//          String temp= line.substring(0, line.length()-1);
+        //          String temp= line.substring(0, line.length()-1);
         loadAud(new File(line));
 
         //Loading SubRip text
       } else if (line.endsWith("srt")) {
-        //      if(srtLoaded){ //Only loaded 1 srt at a time
-        //If one is already loaded, ask to  overwrite
         srtLoaded=true;
-        //      loadSubs(file);
         parseSubFile(new File(line));
       }
-      
     }
   }
   catch (Exception e) {
