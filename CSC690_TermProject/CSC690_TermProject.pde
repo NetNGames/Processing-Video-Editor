@@ -60,19 +60,8 @@ Button prevButton;
 
 //For Timeline
 Timeline timeline;
-
-
-
-//For subtitles
-TimedTextObject subs;
-SubtitleConfig subCfg;
-
-//For File Chooser
-import javax.swing.*;
-Button chooseFileButton;
-boolean vidLoaded=false;
-boolean audLoaded=false;
-boolean srtLoaded=false;
+DropdownList vidList;
+ListBox audList, vidEffectList, audClipList;
 
 //Everything else
 PFont font; 
@@ -93,6 +82,25 @@ void setup() {
           .setVisible(true);
   cp5.getTooltip().register("chooseFile","Load Video or Audio clips, SRT, or PVE files");
   
+  //Dropdown Lists
+  vidList = cp5.addDropdownList("vidList")
+          .setPosition(width-190, 70)
+          .setColorActive(255)
+          .setBarHeight(15)
+          .setCaptionLabel("Video List")
+          ;
+  vidList.captionLabel().style().marginTop = 3;
+  vidList.captionLabel().style().marginLeft = 3;        
+  
+  audList = cp5.addListBox("audList")
+          .setPosition(width-190, 220)
+          .setColorActive(255)
+          .setBarHeight(15)
+          .setCaptionLabel("Audio List")
+          ;
+  audList.captionLabel().style().marginTop = 3;
+  audList.captionLabel().style().marginLeft = 3; 
+  
   //Button to pixelate video
   pixelateButton = cp5.addButton("pixelateButton")
     .setPosition(10, 10)
@@ -106,7 +114,7 @@ void setup() {
     .setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40)
       .setImages(loadImage(sketchPath +"/data/playback/PlayNormal.png"), loadImage(sketchPath +"/data/playback/PlayHot.png"), loadImage(sketchPath +"/data/playback/PlayPressed.png"))
         .updateSize();
-  cp5.getTooltip().register("playButton","Play Video or Audio file");
+  cp5.getTooltip().register("playButton","Play Video or Audio file").setPositionOffset(7,0);
 
   pauseButton = cp5.addButton("pauseButton")
     .setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40)

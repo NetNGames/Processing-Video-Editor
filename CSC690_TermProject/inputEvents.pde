@@ -25,10 +25,10 @@ void mousePressed() {
   }
 
   //Audio file selection
-  if (mouseY > 200 && mouseX > width-190 && mouseY < 200+(16*sounds.size())) {
-    //println((mouseY-200)/16);
-    soundPicked = (mouseY-200)/16;
-  }
+  //  if (mouseY > 200 && mouseX > width-190 && mouseY < 200+(16*sounds.size())) {
+  //    //println((mouseY-200)/16);
+  //    soundPicked = (mouseY-200)/16;
+  //  }
 }
 
 void mouseReleased() {
@@ -51,6 +51,21 @@ void mouseMoved() {
 }
 
 void controlEvent(ControlEvent theEvent) {
+  if (theEvent.controller().name()=="audList") {
+    currentSelected = (int)cp5.getController("audList").getValue();
+    println("audlist: "+(int)cp5.getController("audList").getValue());
+  } else if (theEvent.controller().name() == "vidList") {
+    currentSelected = (int)cp5.getController("vidList").getValue();
+    println("vidlist: "+(int)cp5.getController("vidList").getValue());
+    if (vidLoaded) {
+      mov.pause();
+      mov=movies.get(currentSelected);
+      mov.jump(0); 
+      mov.jump(0); 
+      mov.play();
+    }
+  }
+
   //Video Effects
   if (theEvent.controller().name()=="pixelateButton") {
     if (!pixelateButton.isLock()) {//Will not activate if mouse is not over button
@@ -98,59 +113,88 @@ void controlEvent(ControlEvent theEvent) {
   } else if (theEvent.controller().name()=="prevButton") {
     playButton.setVisible(false);
     pauseButton.setVisible(true);
-    currentSelected=0;
+    if (currentSelected>0) {
+      currentSelected--;
+    }
     if (vidLoaded) {
       mov.pause();
-      mov=movies.get(0);
-      mov.jump(0); 
+      mov=movies.get(currentSelected);
       mov.jump(0); 
       mov.play();
     }
     if (audLoaded) {  
       sound.rewind();
       sound.pause();
-      sound=sounds.get(0);
+      sound=sounds.get(currentSelected);
       sound.rewind();
       sound.play();
     }
   } else if (theEvent.controller().name()=="nextButton") {
     playButton.setVisible(false);
     pauseButton.setVisible(true);
-    currentSelected=1;
+    currentSelected++;
     if (vidLoaded) {
       mov.pause();
-      mov=movies.get(1);
-      mov.jump(0); 
+      mov=movies.get(currentSelected);
       mov.jump(0); 
       mov.play();
     }
     if (audLoaded) {  
       sound.rewind();
       sound.pause();
-      sound=sounds.get(1);
+      sound=sounds.get(currentSelected);
       sound.rewind();
       sound.play();
     }
 
     //Timeline
   } else if (theEvent.controller().name()=="timeline") {
-//    if (isJump) {//Will not activate if mouse is not over button
-      //      int jump=floor(cp5.getController("timeline").getValue());
-      float jump=cp5.getController("timeline").getValue();
-      if (vidLoaded) {
-        cp5.getController("timeline").setValue(jump);
-        //        setFrame(-jump); //Don't know why frame is negative
-        if (jump<=mov.duration()) {
-          mov.jump(jump);
-        } else {
+    //    if (isJump) {//Will not activate if mouse is not over button
+    //      int jump=floor(cp5.getController("timeline").getValue());
+    float jump=cp5.getController("timeline").getValue();
+    println("jumping: "+jump);
+    if (vidLoaded) {
+      cp5.getController("timeline").setValue(jump);
+      if (jump<leftOffset){ //If skipping backwards
+        currentSelected--;
+        if (vidLoaded) {
+          mov.pause();
+          mov=movies.get(currentSelected);
+          mov.jump(jump); 
+          mov.play();
         }
-      }
-      if (audLoaded) {  
-        int max=floor(cp5.getController("timeline").getMax());
-        float audJump=(((float)jump/(float)max)*(float)sound.length());
-        sound.cue(floor(audJump));
-      }
-//    }
+        if (audLoaded) {  
+          sound.rewind();
+          sound.pause();
+          sound=sounds.get(currentSelected);
+          sound.rewind();
+        }
+      }else if (jump>mov.duration()+leftOffset){//If skipping forwards
+        
+        currentSelected++;
+        if (vidLoaded) {
+          mov.pause();
+          mov=movies.get(currentSelected);
+          mov.jump(jump-movies.get(currentSelected-1).duration()); 
+          mov.play();
+        }
+        if (audLoaded) {  
+          sound.rewind();
+          sound.pause();
+          sound=sounds.get(currentSelected);
+          sound.rewind();
+        }
+      }else if(jump<=mov.duration()+leftOffset) {//If skipping within same movie
+//        println("jumping to same movie: "+jump);
+        mov.jump(jump-leftOffset);
+      } 
+    }
+    if (audLoaded) {  
+      int max=floor(cp5.getController("timeline").getMax());
+      float audJump=(((float)jump/(float)max)*(float)sound.length());
+      sound.cue(floor(audJump));
+    }
+    //    }
   } else if (theEvent.controller().name()=="clearClipsButton") {
     timeline.clearClips();
 

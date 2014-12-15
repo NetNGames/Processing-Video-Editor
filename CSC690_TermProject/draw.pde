@@ -67,8 +67,15 @@ void updateLocations() {
     //  playbackHeight=7*height/10;
     playbackHeight=height-160;
     chooseFileButton.setPosition(width-130, 10).setVisible(true);
-    pauseButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40);
-    playButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40).setVisible(true);
+    vidList.setPosition(width-190, 70).setVisible(true);
+    audList.setPosition(width-190, 220).setVisible(true);
+    //Playback Buttons
+    if(!playButton.isVisible()){
+      pauseButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40).setVisible(true);
+    }
+    if(!pauseButton.isVisible()){
+      playButton.setPosition(playbackWidth/2-(iconWidth*3)/4+4, height-40).setVisible(true);
+    }
     stopButton.setPosition(playbackWidth/2+(iconWidth*3)/4, height-40).setVisible(true);
     prevButton.setPosition(playbackWidth/2-iconWidth*2, height-40).setVisible(true);
     nextButton.setPosition(playbackWidth/2+iconWidth*2, height-40).setVisible(true);
@@ -78,6 +85,8 @@ void updateLocations() {
     timelineWidth=width;
     playbackHeight=height;
     chooseFileButton.setVisible(false);
+    vidList.setVisible(false);
+    audList.setVisible(false);
     pauseButton.setVisible(false);
     playButton.setVisible(false);
     stopButton.setVisible(false);

@@ -1,4 +1,5 @@
 int timelineWidth;
+float leftOffset;
 class Timeline {
   float time, maxTime;
   Button clearClipsButton;
@@ -28,14 +29,15 @@ class Timeline {
 
   void update() {
     timelineSlider.setWidth(timelineWidth);
+    //Timeline display
     if (!fullscreenMode) {
       timelineSlider.setPosition(60, height-150);
-      clearClipsButton.setVisible(true)
+//      clearClipsButton.setVisible(true);
     } else {
       timelineSlider.setPosition(0, height-10);
-      clearClipsButton.setVisible(false)
+//      clearClipsButton.setVisible(false);
     }
-    clearClipsButton.setPosition(width-220, height-104);
+    clearClipsButton.setPosition(width-220, height-95);
     cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
     if (vidLoaded) {
       //      timelineSlider.setVisible(true);
@@ -46,13 +48,21 @@ class Timeline {
 //      if (!isJump) {
         //        cp5.getController("timeline").setValue(abs(((float)currentFrame/ (float)maxFrames)*(float)maxFrames));
         //        println("set value: "+(mov.time()/maxDuration)*550);
-        if (currentSelected==0 && movies.size()==1) {
-          cp5.getController("timeline").setValue((mov.time()/mov.duration())*maxDuration);
-        } else if (currentSelected==0 && movies.size()==2) {
-          cp5.getController("timeline").setValue((mov.time()/mov.duration())*maxDuration/10);
-        } else if (currentSelected==1&& movies.size()==2) {
-          cp5.getController("timeline").setValue(mov.time()/mov.duration()*maxDuration+movies.get(0).duration());
+        
+ leftOffset=0;
+        for(int i=0;i<currentSelected;i++){
+          leftOffset+=movies.get(i).duration();
         }
+//        if (currentSelected==0 && movies.size()==1) {
+//  println("currentSelected: "+currentSelected);
+//  println("leftOffset: "+leftOffset);
+          cp5.getController("timeline").setValue(((leftOffset+mov.time())/maxDuration)*maxDuration);
+//          println( formatTime(cp5.getController("timeline").getValue()));
+//        } else if (currentSelected==0 && movies.size()==2) {
+//          cp5.getController("timeline").setValue((mov.time()/mov.duration())*maxDuration/10);
+//        } else if (currentSelected==1&& movies.size()==2) {
+//          cp5.getController("timeline").setValue(mov.time()/mov.duration()*maxDuration+movies.get(0).duration());
+//        }
 //      }
       //      cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
       cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
@@ -60,9 +70,9 @@ class Timeline {
       time = cp5.getController("timeline").getValue();
       //      maxTime = floor(cp5.getController("timeline").getMax());
       maxTime = cp5.getController("timeline").getMax();
-      //      println("time: "+time);
-      //      println("maxTime: "+maxTime);
-      //            println("current time: " + time);
+//            println("time: "+time);
+//            println("maxTime: "+maxTime);
+//                  println("current time: " + time);
 
       if (audLoaded) {
         for (int i = 0; i < audioClips.size (); i++) {

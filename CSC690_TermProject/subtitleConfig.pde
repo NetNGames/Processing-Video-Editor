@@ -8,6 +8,7 @@ class SubtitleConfig {
       .setPosition(620, 456)
         .setSize(70, 20)
           .setCaptionLabel("Add Subtitles");
+          cp5.getTooltip().register("popup","Click to add subtitle at current time");
 
     subPopup = cp5.addGroup("subPopup")
       .setPosition(width/2-100, 100)

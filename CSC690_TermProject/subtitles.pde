@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.util.Comparator;
 import java.util.Collections;
 
+//For subtitles
+TimedTextObject subs;
+SubtitleConfig subCfg;
 ListIterator<Caption> itr;
 Caption current;
 
@@ -290,7 +293,8 @@ void drawSubsOnTimeline() {
     fill(0, 102, 153);
     //Draw spots where subtitles were placed
     int location=(int)(sub.start.mseconds/1000.0);
-    rect(60+(location/(timeline.getMax()-1))*timelineWidth, height-60, 5, 10);
+    noStroke();
+    rect(60+(location/(timeline.getMax()-1))*timelineWidth, height-60, 1, 10);
   }
 }
 
