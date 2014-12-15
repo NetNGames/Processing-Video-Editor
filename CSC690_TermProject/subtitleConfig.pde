@@ -8,6 +8,7 @@ class SubtitleConfig {
       .setPosition(620, 456)
         .setSize(70, 20)
           .setCaptionLabel("Add Subtitles");
+          cp5.getTooltip().register("popup","Click to add subtitle at current time");
 
     subPopup = cp5.addGroup("subPopup")
       .setPosition(width/2-100, 100)
@@ -75,3 +76,44 @@ void addSubtitle(String sTime, String eTime, String text) {
   Collections.sort(subs.captions, Caption.COMPARE_BY_START);
 }
 
+void saveSubs(){
+  //http://stackoverflow.com/a/23384302
+   JFileChooser fc = new JFileChooser();
+  fc.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+
+    fc.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+
+    final int fd = fc.showDialog(null, "Select folder to save.");
+//
+    if (fd == JFileChooser.APPROVE_OPTION) {
+      println("Saving subs:");
+  Caption subtemp;
+  subItr=subs.captions.listIterator();
+  while (subItr.hasNext ()) {
+    subtemp = subItr.next();
+    println(subItr.nextIndex()+"\n"
+            +subtemp.start.getTime()+" --> "
+            +subtemp.end.getTime()+"\n"
+            +subtemp.content+"\n");
+  }
+    
+  //http://stackoverflow.com/a/356706
+//  JFileChooser jFileChooser = new JFileChooser();
+//jFileChooser.setSelectedFile(new File("fileToSave.txt"));
+//jFileChooser.showSaveDialog(parent);
+
+
+//
+//        /*you can write the code in here */
+//    println(fd);
+////        String setBackUpFolderName = setBackUpFolderName(iivo);
+////        try {
+////            saveDataToFileExcel(setBackUpFolderName, iivo);
+////        } catch (Exception ex) {
+////            Logger.getLogger(ExcelTest.class.getName()).log(Level.SEVERE, null, ex);
+////        }
+//
+    } else {
+         this.dispose();
+    }
+}

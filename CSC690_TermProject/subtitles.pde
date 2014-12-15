@@ -6,7 +6,13 @@ import java.io.FileInputStream;
 import java.util.Comparator;
 import java.util.Collections;
 
+//For subtitles
+TimedTextObject subs;
+SubtitleConfig subCfg;
 ListIterator<Caption> itr;
+Vector<String> subNames;
+ListIterator<String> subNameItr;
+ListIterator<Caption> subItr;
 Caption current;
 
 static class Caption {
@@ -189,7 +195,8 @@ void parseSubFile(File file) {
 
 void displaySubs() {
   //Find current time by milliseconds
-  float sec = mov.time();
+//  float sec=mov.time();
+  float sec=cp5.getController("timeline").getValue();
   int seconds = (int)sec;
   float fraction = sec-seconds;
   int mill = (int)(fraction *1000);
@@ -211,22 +218,32 @@ void displaySubs() {
     //    println("start");
     textSize(15);
     textAlign(CENTER);
+    if (!fullscreenMode) {
+      //Black Outline
+      fill(#000000);
+      text(current.content, playbackWidth/2+1, playbackHeight - 31);
+      text(current.content, playbackWidth/2-1, playbackHeight - 29);
 
-    //Black Outline
-    fill(#000000);
-    text(current.content, playbackWidth/2+1, playbackHeight - 31);
-    text(current.content, playbackWidth/2-1, playbackHeight - 29);
+      //White text
+      fill(#FFFFFF);
+      text(current.content, playbackWidth/2, playbackHeight - 30);
+    } else {
+      //Black Outline
+      fill(#000000);
+      text(current.content, playbackWidth/2+1, playbackHeight - 51);
+      text(current.content, playbackWidth/2-1, playbackHeight - 49);
 
-    //White text
-    fill(#FFFFFF);
-    text(current.content, playbackWidth/2, playbackHeight - 30);
+      //White text
+      fill(#FFFFFF);
+      text(current.content, playbackWidth/2, playbackHeight - 50);
+    }
   }
   if ((currentMseconds>=current.end.mseconds) && //If time period is reached
   (itr.hasNext())) {            //And not at end of subtitles
     //    println("end");
     current = itr.next();
   }
-  while (currentMseconds<=current.start.mseconds && itr.hasPrevious ()) {
+  while (currentMseconds<=current.start.mseconds+leftOffset && itr.hasPrevious ()) {
     current = itr.previous(); //If skipping backwards
   }
 }
@@ -266,8 +283,8 @@ String formatTime(float sec) {
 void drawSubTimeline() {
   fill(255);
   textSize(12);
-  text("Subtitles:", 5, 470);
-  rect(60, 460, 550, 10);
+  text("Subtitles:", 5, height-50);
+  rect(60, height-60, timelineWidth, 10);
 }
 void drawSubsOnTimeline() {
   for (int i = 0; i < subs.captions.size (); i++) {
@@ -275,7 +292,8 @@ void drawSubsOnTimeline() {
     fill(0, 102, 153);
     //Draw spots where subtitles were placed
     int location=(int)(sub.start.mseconds/1000.0);
-    rect(60+(location/(timeline.getMax()-1))*550, 460, 5, 10);
+    noStroke();
+    rect(60+((location)/(timeline.getMax()-1))*timelineWidth, height-60, 1, 10);
   }
 }
 
