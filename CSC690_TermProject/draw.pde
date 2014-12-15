@@ -37,7 +37,7 @@ void draw() {
       }
     }
   }
-  //background(0);
+  //Makes sure video effects don't effect control panel
   fill(0);
   rect(playbackWidth, 0, width, height);
   rect(0, playbackHeight, width, height);
@@ -77,6 +77,7 @@ void draw() {
     drawSubTimeline();
     timeline.draw();
   }
+  //Subs display only if audio or video is loaded
   if ((vidLoaded || audLoaded) && !subs.captions.isEmpty()) {
     displaySubs();
     if (!fullscreenMode) {
@@ -93,8 +94,10 @@ void updateLocations() {
     //  playbackHeight=7*height/10;
     playbackHeight=height-160;
     cp5.getController("timeline").setPosition(60, height-150);    
-    cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
+    cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-timelineWidth-55).setPaddingY(-9);
     chooseFileButton.setPosition(width-180, 10).setVisible(true);
+    saveButton.setPosition(width-180, playbackHeight-30).setVisible(true);
+    saveSRTButton.setPosition(width-90, playbackHeight-30).setVisible(true);
     clearFileButton.setPosition(width-90, 10).setVisible(true);
     vidList.setPosition(width-190, 70).setVisible(true);
     audList.setPosition(width-190, 220).setVisible(true);
@@ -115,8 +118,10 @@ void updateLocations() {
     playbackHeight=height;
     cp5.getController("timeline").setPosition(0, height-10);
     chooseFileButton.setVisible(false);
-    clearFileButton.setPosition(width-90, 10).setVisible(false);
-    //    vidList.setVisible(false);
+    clearFileButton.setVisible(false);
+    saveButton.setVisible(false);
+    saveSRTButton.setVisible(false);
+    vidList.setVisible(false);
     audList.setVisible(false);
     pauseButton.setVisible(false);
     playButton.setVisible(false);

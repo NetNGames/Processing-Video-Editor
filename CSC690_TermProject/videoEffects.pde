@@ -7,7 +7,7 @@ color movColors[][];
 //color movColors[];
 void pixelate() {
 //  blockSize = 10;
-blockSize = (playbackWidth/mov.width)*10;
+blockSize = (int)(((float)playbackWidth/(float)mov.width)*10.0);
   movColors = new color[playbackWidth/blockSize][playbackHeight/blockSize];
   mov.loadPixels();
   for (int i = 0; i < playbackWidth/blockSize; i++) {
@@ -23,6 +23,7 @@ blockSize = (playbackWidth/mov.width)*10;
     }
   }
 
+//Old Pixelate using 1D array
 //  numPixelsWide = playbackWidth / blockSize;
 //  numPixelsHigh = playbackHeight / blockSize;
 //  movColors = new color[numPixelsWide * numPixelsHigh];

@@ -31,6 +31,7 @@ Movie mov;
 Vector<Movie> movies;
 Vector<String> movieNames;
 ListIterator<Movie> movItr;
+ListIterator<String> movNamesItr;
 int videoPicked = 0;
 int currentSelected=0;
 int movFrameRate;
@@ -49,16 +50,15 @@ AudioMetaData meta;
 Vector<AudioPlayer> sounds;
 Vector<String> soundNames;
 ListIterator<AudioPlayer> soundItr;
+ListIterator<String> soundNamesItr;
 int soundPicked = 0;
 
 //For Buttons
 import controlP5.*;
 ControlP5 cp5;
-Button playButton;
-Button pauseButton;
-Button stopButton;
-Button nextButton;
-Button prevButton;
+//Playback
+Button playButton, pauseButton, stopButton, nextButton, prevButton;
+Button saveButton, saveSRTButton;
 
 //For Timeline
 Timeline timeline;
@@ -90,6 +90,20 @@ void setup() {
         .setCaptionLabel("Clear Files")
           .setVisible(true);
   cp5.getTooltip().register("clearFile","Clear all loaded files.");
+  
+  saveButton= cp5.addButton("saveButton")
+    .setPosition(width-180, playbackHeight-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Save Project")
+          .setVisible(true);
+  cp5.getTooltip().register("saveButton","Save Current Project");
+  
+  saveSRTButton= cp5.addButton("saveSRTButton")
+    .setPosition(width-90, playbackHeight-30)
+      .setSize(70, 20)
+        .setCaptionLabel("Save Subtitles")
+          .setVisible(true);
+  cp5.getTooltip().register("saveSRTButton","Save Current Subtitles");
   
   //Dropdown Lists
   vidList = cp5.addDropdownList("vidList")
@@ -154,6 +168,7 @@ void setup() {
   subs = new TimedTextObject();
   subCfg= new SubtitleConfig();
   movies = new Vector<Movie>(0, 1);
+  movItr=movies.listIterator();
   currentFrame=0.0;
   movieNames = new Vector<String>(0, 1);
   sounds = new Vector<AudioPlayer>(0, 1);

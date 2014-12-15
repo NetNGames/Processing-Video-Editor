@@ -1,7 +1,7 @@
 //----------File Loading----------\\
 //From https://processing.org/discourse/beta/num_1140107049.html
 import javax.swing.*;
-Button chooseFileButton;
+Button chooseFileButton, clearFileButton;
 boolean vidLoaded=false;
 boolean audLoaded=false;
 boolean srtLoaded=false;
@@ -20,9 +20,9 @@ void loadFile() {
 
     //Loading video
     if (file.getName().endsWith("mp4") || //Can play audio from mp4
-    file.getName().endsWith("mov") ||
-      file.getName().endsWith("avi") || //Unable to play audio from avi
-    file.getName().endsWith("ogg")) {
+        file.getName().endsWith("mov") ||
+        file.getName().endsWith("avi") || //Unable to play audio from avi
+        file.getName().endsWith("ogg")) {
       loadVid(file);
 
       //Loading Audio
@@ -34,10 +34,7 @@ void loadFile() {
 
       //Loading SubRip text
     } else if (file.getName().endsWith("srt")) {
-      //      if(srtLoaded){ //Only loaded 1 srt at a time
-      //If one is already loaded, ask to  overwrite
       srtLoaded=true;
-      //      loadSubs(file);
       parseSubFile(file);
 
       //Loading Project file
@@ -50,7 +47,6 @@ void loadVid(File file) {
   vidLoaded=true;
   mov = new Movie(this, file.getPath());
   vidList.addItem(file.getName(), movies.size());
-  vidList.setIndex(movies.size());
   movieNames.addElement(file.getName());
   movies.addElement(mov);
   mov.play();
@@ -58,10 +54,11 @@ void loadVid(File file) {
   mov.jump(0);
   mov.pause();
   //mov.loop();
-  mov=movies.get(0);//Resets to 1st video loaded
+  mov=movies.get(currentSelected);//Resets to what vid was playing
   mov.jump(0);
   mov.pause();
   movFrameRate=(int)mov.frameRate;
+  vidList.setIndex(currentSelected);
   //      maxFrames = getLength() - 1;
 }
 void loadAud(File file) {
@@ -69,7 +66,7 @@ void loadAud(File file) {
   minim = new Minim(this);
   sound = minim.loadFile(file.getPath());
   audList.addItem(file.getName(), sounds.size());
-  audList.setValue(sounds.size());
+  audList.setValue(soundPicked);
   sounds.addElement(sound);
   //sound=sounds.get(0); //Resets to 1st sound loaded
   soundNames.addElement(file.getName());
@@ -91,7 +88,7 @@ void drawFileList() {
   //  }
 
   fill(255);
-  text("Audio Clips: ", width-190, 200);
+  text("Audio Clips:             Color:", width-190, 200);
   for(int i = 0; i < sounds.size(); i++){
     fill((50*soundPicked+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
     rect(width-70, 204, 50, 14);

@@ -10,6 +10,9 @@ import java.util.Collections;
 TimedTextObject subs;
 SubtitleConfig subCfg;
 ListIterator<Caption> itr;
+Vector<String> subNames;
+ListIterator<String> subNameItr;
+ListIterator<Caption> subItr;
 Caption current;
 
 static class Caption {

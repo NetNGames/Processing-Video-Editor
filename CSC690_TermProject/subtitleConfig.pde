@@ -77,20 +77,32 @@ void addSubtitle(String sTime, String eTime, String text) {
 }
 
 void saveSubs(){
+  //http://stackoverflow.com/a/23384302
+   JFileChooser fc = new JFileChooser();
+  fc.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+
+    fc.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+
+    final int fd = fc.showDialog(null, "Select folder to save.");
+//
+    if (fd == JFileChooser.APPROVE_OPTION) {
+      println("Saving subs:");
+  Caption subtemp;
+  subItr=subs.captions.listIterator();
+  while (subItr.hasNext ()) {
+    subtemp = subItr.next();
+    println(subItr.previousIndex()+"\n"
+            +subtemp.start.getTime()+"\n"
+            +subtemp.end.getTime()+"\n"
+            +subtemp.content);
+  }
+    
   //http://stackoverflow.com/a/356706
 //  JFileChooser jFileChooser = new JFileChooser();
 //jFileChooser.setSelectedFile(new File("fileToSave.txt"));
 //jFileChooser.showSaveDialog(parent);
 
-//http://stackoverflow.com/a/23384302
-//   JFileChooser fc = new JFileChooser();
-//  fc.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-//
-//    fc.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
-//
-//    final int fd = fc.showDialog(null, "Select folder to save.");
-//
-//    if (fd == JFileChooser.APPROVE_OPTION) {
+
 //
 //        /*you can write the code in here */
 //    println(fd);
@@ -101,7 +113,7 @@ void saveSubs(){
 ////            Logger.getLogger(ExcelTest.class.getName()).log(Level.SEVERE, null, ex);
 ////        }
 //
-//    } else {
-//        // this.dispose();
-//    }
+    } else {
+         this.dispose();
+    }
 }

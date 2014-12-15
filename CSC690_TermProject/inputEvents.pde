@@ -1,18 +1,24 @@
 void mousePressed() {
-  if ((mouseY > height-160) && (mouseY < height-130) && 
-    mouseX > 60 && mouseX < timelineWidth) {
-    isJump=true;
-  }
+//  if ((mouseY > height-160) && (mouseY < height-130) && 
+//    mouseX > 60 && mouseX < timelineWidth) {
+//    isJump=true;
+//  }
   //For audio clips
-  if (mouseY > height-90 && mouseY < height-80 && mouseX > 60 && mouseX < timelineWidth) {
-    float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
+  if (mouseY > height-90 && mouseY < height-80 && mouseX > 60 && mouseX < 60+timelineWidth) {
+    float clipPlaced=(((float)(mouseX-60)/(float)timelineWidth)*(float)cp5.getController("timeline").getMax());
     println("adding at " + clipPlaced);
     //    println(cp5.getController("timeline").getMax());
-    timeline.addClip(clipPlaced);
+    timeline.addAudioClip(clipPlaced);
+  }
+  //For video clips
+  if (mouseY > height-120 && mouseY < height-110 && mouseX > 60 && mouseX < 60+timelineWidth) {
+    //println("video clip pasted");
+    float clipPlaced=(((float)(mouseX-60)/(float)timelineWidth)*(float)cp5.getController("timeline").getMax());
+    timeline.addVideoClip(clipPlaced);
   }
   //For subtitles
   if (mouseY > height-60 && mouseY < height-50 && mouseX > 60 && mouseX < timelineWidth) {
-    float clipPlaced=(((float)(mouseX-60)/(float)550)*(float)cp5.getController("timeline").getMax());
+    float clipPlaced=(((float)(mouseX-60)/(float)timelineWidth)*(float)cp5.getController("timeline").getMax());
 
     subCfg.startTimeInput.setText(formatTime(clipPlaced));
     subCfg.endTimeInput.setText(formatTime(clipPlaced+3));
@@ -59,6 +65,7 @@ void controlEvent(ControlEvent theEvent) {
       mov.pause();
       mov=movies.get(currentSelected);
       mov.jump(0); 
+      mov.pause();
 //      mov.play();
     }
   }
@@ -75,7 +82,11 @@ void controlEvent(ControlEvent theEvent) {
     //File Input
   } else if (theEvent.controller().name()=="chooseFile") {
     loadFile();
-  } else if (theEvent.controller().name()=="clearFiles") {
+  } else if (theEvent.controller().name()=="saveButton") {
+    displayLists();
+  } else if (theEvent.controller().name()=="saveSRTButton") {
+    saveSubs();
+  }else if (theEvent.controller().name()=="clearFiles") {
     movies.clear();
     movieNames.clear();
     sounds.clear();
@@ -96,7 +107,10 @@ void controlEvent(ControlEvent theEvent) {
       mov.pause();
     }
     if (audLoaded) { 
-      sound.pause();
+//      sound.pause();
+       for(int i = 0; i < sounds.size(); i++){
+        sounds.get(i).pause(); //Pauses all sounds
+      }
     }
   } else if (theEvent.controller().name()=="playButton") {
     playButton.setVisible(false);
@@ -104,7 +118,7 @@ void controlEvent(ControlEvent theEvent) {
     if (vidLoaded) { 
       mov.play();
     }
-    if (audLoaded) { 
+    if (audLoaded && !vidLoaded) { 
      sound.play();
      }
   } else if (theEvent.controller().name()=="stopButton") {
@@ -115,8 +129,12 @@ void controlEvent(ControlEvent theEvent) {
       mov.pause();
     }
     if (audLoaded) {  
-      sound.rewind();
-      sound.pause();
+//      sound.rewind();
+//      sound.pause();
+      for(int i = 0; i < sounds.size(); i++){
+        sounds.get(i).pause();
+        sounds.get(i).rewind();
+      }
     }
   } else if (theEvent.controller().name()=="prevButton") {
     playButton.setVisible(false);
@@ -144,6 +162,10 @@ void controlEvent(ControlEvent theEvent) {
     if (vidLoaded) {
       mov.pause();
       mov=movies.get(currentSelected);
+//    if (movItr.hasNext()) {
+//                  mov = movItr.next();
+//                  currentSelected=movNamesItr.previousIndex();
+//              }
       mov.jump(0); 
       mov.play();
     }
@@ -174,7 +196,8 @@ void controlEvent(ControlEvent theEvent) {
         if (audLoaded) {  
           sound.rewind();
           sound.pause();
-          sound=sounds.get(currentSelected);
+//          sound=sounds.get(currentSelected);
+          sound=sounds.get(soundPicked);
           sound.rewind();
         }
       } else if (jump>mov.duration()+leftOffset) {//If skipping forwards
@@ -189,7 +212,8 @@ void controlEvent(ControlEvent theEvent) {
         if (audLoaded) {  
           sound.rewind();
           sound.pause();
-          sound=sounds.get(currentSelected);
+//          sound=sounds.get(currentSelected);
+          sound=sounds.get(soundPicked);
           sound.rewind();
         }
       } else if (jump<=mov.duration()+leftOffset) {//If skipping within same movie
@@ -215,36 +239,23 @@ void controlEvent(ControlEvent theEvent) {
       subCfg.endTimeInput.setText(formatTime(mov.time()+3));
       }else if(!vidLoaded && audLoaded){
         subCfg.startTimeInput.setText(formatTime(sound.position()/1000.0));
-        subCfg.endTimeInput.setText(formatTime(sound.position()/1000.0+1));
+        subCfg.endTimeInput.setText(formatTime(sound.position()/1000.0+1.5));
       }
       subCfg.subtitleInput.setText("");
       subCfg.subPopup.setVisible(true);
     } else {
+      subCfg.subtitleInput.setText("");
       subCfg.subPopup.setVisible(false);
     }
   } else if (theEvent.controller().name()=="cancelButton") {
+    subCfg.subtitleInput.setText("");
     subCfg.subPopup.setVisible(false);
   } else if (theEvent.controller().name()=="submitButton") {
     addSubtitle(subCfg.startTimeInput.getText(), 
-    subCfg.endTimeInput.getText(), 
-    subCfg.subtitleInput.getText());
+                subCfg.endTimeInput.getText(), 
+                subCfg.subtitleInput.getText());
     subCfg.subtitleInput.setText("");
     subCfg.subPopup.setVisible(false);
-    
-    //Display lists
-//  }else if(theEvent.isGroup() && theEvent.name().equals("audList")){
-//    currentSelected = (int)theEvent.group().value();
-//    println("audlist: "+(int)theEvent.group().value());
-//  } else if (theEvent.isGroup() && theEvent.name().equals("vidList")) {
-////    currentSelected = (int)cp5.getController("vidList").getValue();
-//    println("vidlist: "+(int)theEvent.group().value());
-//    if (vidLoaded) {
-//      mov.pause();
-//      mov=movies.get(currentSelected);
-//      mov.jump(0); 
-//      mov.jump(0); 
-//      mov.play();
-//    }
   }
 }
 void keyPressed() {
@@ -283,8 +294,13 @@ void keyPressed() {
       isPosterize=true;
     }
   }
+  if(!subCfg.subPopup.isVisible()){
   if ((key == 's') || (key == 'S')) {
     saveSubs();
+  }
+  if ((key == 'd') || (key == 'D')) {
+    displayLists();
+  }
   }
 }
 

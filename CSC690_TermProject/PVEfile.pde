@@ -7,10 +7,10 @@ void loadProj(File file) {
 
     while ( (line = br.readLine ()) != null) {
       if (line.endsWith("mp4") || //Can play audio from mp4
-          line.endsWith("mov") ||
-          line.endsWith("avi") || //Unable to play audio from avi
-          line.endsWith("ogg")) {
-          loadVid(new File(line));
+      line.endsWith("mov") ||
+        line.endsWith("avi") || //Unable to play audio from avi
+      line.endsWith("ogg")) {
+        loadVid(new File(line));
 
         //Loading Audio
       } else if (line.endsWith("mp3") ||
@@ -52,5 +52,34 @@ void saveProj(String outputName) {
    output.close(); // Finishes the file
    }
    }*/
+}
+void displayLists() {
+  //  movItr=movies.listIterator();
+  //  while (movItr.hasNext()) {
+  //                mov = movItr.next();
+  //            }
+     JFileChooser fc = new JFileChooser();
+  fc.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+
+    fc.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+
+    final int fd = fc.showDialog(null, "Select folder to save.");
+     if (fd == JFileChooser.APPROVE_OPTION) {
+      println("Saving subs:");
+  String temp;
+  movNamesItr=movieNames.listIterator();
+  while (movNamesItr.hasNext ()) {
+    temp = movNamesItr.next();
+    println(movNamesItr.previousIndex()+" "+temp);
+  }
+  soundNamesItr=soundNames.listIterator();
+  while (soundNamesItr.hasNext ()) {
+    temp = soundNamesItr.next();
+    println(soundNamesItr.previousIndex()+" "+temp);
+  }
+  println();
+     } else {
+         this.dispose();
+    }
 }
 

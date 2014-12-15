@@ -14,7 +14,9 @@ class Timeline {
       .setMin(0.0)
         .setValue(0.0)
           .setTriggerEvent(Slider.RELEASE) //Buggy if kept it on default PRESSED
-            .setSliderMode(Slider.FLEXIBLE);
+            .setSliderMode(Slider.FLEXIBLE)
+            .setCaptionLabel("Main Timeline");
+    cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
     cp5.getTooltip().register("timeline", "Click to jump to time");
 
     clearClipsButton = cp5.addButton("clearClipsButton")
@@ -24,7 +26,7 @@ class Timeline {
           .setVisible(false);
     cp5.getTooltip().register("clearClipsButton", "Clear Audio clips currently on timeline");
     //    cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
-    cp5.getController("timeline").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-9);
+    
 
     audioClips = new Vector<TimelineClip>(0, 1);
     videoClips = new Vector<TimelineClip>(0, 1);
@@ -97,12 +99,18 @@ class Timeline {
       //Draw box where video clips can be placed
       rect(60, height-120, timelineWidth, 10);
 
+      for (int i = 0; i < videoClips.size (); i++) {
+        TimelineClip clip = videoClips.get(i);
+        fill(clip.getColor());
+        rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-120, 5, 10);
+      }
       //          fill(255);
       float current = mov.time()+leftOffset;
       //    float max = mov.duration();
 
       String time = formatTime(current)+" / "+formatTime(maxDuration);
       textSize(12);
+      fill(255);
       text(time, width-220, height-140);
     }
     if (audLoaded) {
@@ -127,21 +135,27 @@ class Timeline {
         float current = sound.position()/1000.0;
         String time = formatTime(current)+" / "+formatTime(timeline.getMax());
         textSize(12);
+        fill(255);
         text(time, width-220, height-140);
       }
     }
     //Red progress line
     stroke(#FF0000);
-      line(60+(time/maxTime)*timelineWidth, height-150, 60+(time/maxTime)*timelineWidth, height-50);
+    line(60+(time/maxTime)*timelineWidth, height-150, 60+(time/maxTime)*timelineWidth, height-50);
 
   }
 
-  void addClip(float x) {
+  void addAudioClip(float x) {
     color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
     audioClips.addElement(new TimelineClip(floor(x), soundPicked, c));
   }
+  void addVideoClip(float x) {
+    color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
+    videoClips.addElement(new TimelineClip(floor(x), soundPicked, c));
+  }
   void clearClips() {
     audioClips.clear();
+    videoClips.clear();
   }
   float getMax() {
     return cp5.getController("timeline").getMax();
