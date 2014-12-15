@@ -30,6 +30,7 @@ void mousePressed() {
 //    timeline.addClip(clipPlaced);
   }
   
+  /*
   //Audio file selection
   if (mouseY > 200 && mouseX > width-190 && mouseY < 200+(16*sounds.size())){
     //println((mouseY-200)/16);
@@ -41,6 +42,7 @@ void mousePressed() {
     videoPicked = (mouseY-50)/16;
     mov = movies.get(videoPicked);
   }
+  */
 }
 
 void mouseReleased() {
@@ -63,6 +65,14 @@ void mouseMoved() {
 }
 void controlEvent(ControlEvent theEvent) {
   //Video Effects
+  if (theEvent.isGroup()) {
+    if(theEvent.getGroup().getName() == "audList") {
+      soundPicked = (int)theEvent.getGroup().getValue();
+    } else if (theEvent.getGroup().getName() == "vidList") {
+      videoPicked = (int)theEvent.getGroup().getValue();
+    }
+  }
+  
   if (theEvent.controller().name()=="pixelateButton") {
     if (!pixelateButton.isLock()) {//Will not activate if mouse is not over button
       if (isPixelate) {
@@ -183,7 +193,10 @@ void controlEvent(ControlEvent theEvent) {
       subCfg.subtitleInput.setText("");
       subCfg.subPopup.setVisible(false);
   }
+  
 }
+
+
 void keyPressed() {
   if ((key == 'p') || (key == 'P')) {
     if (isPixelate) {

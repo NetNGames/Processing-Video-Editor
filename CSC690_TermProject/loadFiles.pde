@@ -20,6 +20,8 @@ void loadFile() {
         file.getName().endsWith("ogg")) {
       vidLoaded=true;
       mov = new Movie(this, file.getPath());
+      vidList.addItem(file.getName(), movies.size());
+      vidList.setIndex(movies.size());
       movieNames.addElement(file.getName());
       movies.addElement(mov);
       //mov.loop();
@@ -38,6 +40,8 @@ void loadFile() {
       audLoaded=true;
       minim = new Minim(this);
       sound = minim.loadFile(file.getPath());
+      audList.addItem(file.getName(), sounds.size());
+      audList.setIndex(sounds.size());
       sounds.addElement(sound);
       //sound=sounds.get(0); //Resets to 1st sound loaded
       soundNames.addElement(file.getName());
@@ -57,14 +61,13 @@ void loadFile() {
   }
 }
 
-void drawFileList() {
-  DropdownList vidList, audList, vidEffectList, audClipList;
+void drawFileList() {  
   //Movie clip names:
   fill(255);
   textSize(12);
   textAlign(LEFT);
   text("Video Clips: ", width-190, 50);
-  if (vidLoaded) {
+  /*if (vidLoaded) {
     fill(0, 102, 153);
     for (int i = 0; i < movieNames.size (); i++) {
       String name = movieNames.get(i);
@@ -75,11 +78,15 @@ void drawFileList() {
       }
       text(name, width-190, (66+(16*i)));
     }
-  }
+  }*/
 
   fill(255);
-  text("Audio Clips: ", width-190, 200);
-  if (audLoaded) {
+  text("Audio Clips:             Color:", width-190, 200);
+  for(int i = 0; i < sounds.size(); i++){
+    fill((50*soundPicked+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
+    rect(width-70, 204, 50, 14);
+  }
+  /*if (audLoaded) {
     for (int i = 0; i <soundNames.size (); i++) {
       String name = soundNames.get(i);
       if(i == soundPicked){ 
@@ -92,5 +99,5 @@ void drawFileList() {
       fill(((50*i)+100)%250, (10*i)%250, (200*i)%250);
       rect(width-100, (204+(16*i)), 95, 14);
     }
-  }
+  }*/
 }

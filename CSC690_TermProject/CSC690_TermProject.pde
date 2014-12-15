@@ -26,6 +26,7 @@ int iconWidth = 32;
 
 import java.util.Vector;
 
+DropdownList vidList, audList, vidEffectList, audClipList;
 //For Video
 import processing.video.*;
 Movie mov;
@@ -89,6 +90,24 @@ void setup() {
 
   //Load buttons
   cp5 = new ControlP5(this);
+  
+  //Dropdown Lists
+  vidList = cp5.addDropdownList("vidList")
+          .setPosition(width-190, 70)
+          .setColorActive(255)
+          .setBarHeight(15)
+          ;
+  vidList.captionLabel().style().marginTop = 3;
+  vidList.captionLabel().style().marginLeft = 3;        
+  
+  audList = cp5.addDropdownList("audList")
+          .setPosition(width-190, 220)
+          .setColorActive(255)
+          .setBarHeight(15)
+          ;
+  audList.captionLabel().style().marginTop = 3;
+  audList.captionLabel().style().marginLeft = 3; 
+  
   //Button to choose files
   chooseFileButton = cp5.addButton("chooseFile")
     .setPosition(width-130, 10)
