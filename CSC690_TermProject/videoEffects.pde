@@ -1,5 +1,5 @@
 //For Pixelate effect
-Button pixelateButton;
+Button fullscreenButton;
 boolean isPixelate = false;
 int numPixelsWide, numPixelsHigh;
 int blockSize; //Should be a number that divides evenly into the height and width

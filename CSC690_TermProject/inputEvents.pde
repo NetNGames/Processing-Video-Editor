@@ -1,8 +1,8 @@
 void mousePressed() {
-//  if ((mouseY > height-160) && (mouseY < height-130) && 
-//    mouseX > 60 && mouseX < timelineWidth) {
-//    isJump=true;
-//  }
+  //  if ((mouseY > height-160) && (mouseY < height-130) && 
+  //    mouseX > 60 && mouseX < timelineWidth) {
+  //    isJump=true;
+  //  }
   //For audio clips
   if (mouseY > height-90 && mouseY < height-80 && mouseX > 60 && mouseX < 60+timelineWidth) {
     float clipPlaced=(((float)(mouseX-60)/(float)timelineWidth)*(float)cp5.getController("timeline").getMax());
@@ -39,46 +39,77 @@ void mousePressed() {
 
 void mouseReleased() {
   //  isJump=false;
-    subCfg.subtitleInput.setFocus(true);
+  subCfg.subtitleInput.setFocus(true);
 }
 
 //----------Video Effects----------\\
 void mouseMoved() {
   if ((mouseX > (0)) && (mouseX < 80) &&
     (mouseY > (0)) && (mouseY < 30)) {
-    pixelateButton.setVisible(true);
-    pixelateButton.unlock();
+    fullscreenButton.setVisible(true);
+    fullscreenButton.unlock();
     //  } else if ((mouseX > (60)) && (mouseX < 610) &&
     //    (mouseY > (370)) && (mouseY < 380)) {
   } else {
-    pixelateButton.setVisible(false);
-    pixelateButton.lock();
+    fullscreenButton.setVisible(false);
+    fullscreenButton.lock();
   }
 }
 
 void controlEvent(ControlEvent theEvent) {
   if (theEvent.isGroup()) {
-    if(theEvent.getGroup().getName() == "audList") {
+    //Select audio to place on timeline
+    if (theEvent.getGroup().getName() == "audList") {
       soundPicked = (int)theEvent.getGroup().getValue();
+
+      //Select video to play
     } else if (theEvent.getGroup().getName() == "vidList") {
       currentSelected = (int)theEvent.getGroup().getValue();
       mov.pause();
       mov=movies.get(currentSelected);
       mov.jump(0); 
       mov.pause();
-//      mov.play();
+      //      mov.play();
+
+      //Video Effects
+    } else if (theEvent.getGroup().getName() == "vidEffectList") {
+      int effect = (int)theEvent.getGroup().getValue();
+      if (effect==0) {//Invert 
+        if (isInverted) {
+          isInverted=false;
+        } else if (!isInverted) {
+          isInverted=true;
+        }
+      } else if (effect==1) {//"Greyscale") {
+         if (isGreyscale) {
+          isGreyscale=false;
+        } else if (!isGreyscale) {
+          isGreyscale=true;
+        }
+      } else if (effect==2) {//"Posterize"
+       if (isPosterize) {
+          isPosterize=false;
+        } else if (!isPosterize) {
+          isPosterize=true;
+        }
+      } else if (effect==3) {//Pixelate
+        if (isPixelate) {
+          isPixelate=false;
+        } else if (!isPixelate) {
+          isPixelate=true;
+        }
+      }
     }
   }
-  //Video Effects
-  if (theEvent.controller().name()=="pixelateButton") {
-    if (!pixelateButton.isLock()) {//Will not activate if mouse is not over button
+  if (theEvent.controller().name()=="fullscreenButton") {
+    if (!fullscreenButton.isLock()) {//Will not activate if mouse is not over button
       if (fullscreenMode) {
-        fullscreenMode=false;
         fullscreenMode=false;
       } else if (!fullscreenMode) {
         fullscreenMode=true;
       }
     }
+
 
     //File Input
   } else if (theEvent.controller().name()=="chooseFile") {
@@ -87,7 +118,8 @@ void controlEvent(ControlEvent theEvent) {
     displayLists();
   } else if (theEvent.controller().name()=="saveSRTButton") {
     saveSubs();
-  }else if (theEvent.controller().name()=="clearFiles") {
+  } else if (theEvent.controller().name()=="clearFiles") {
+    maxDuration=0;
     movies.clear();
     movieNames.clear();
     sounds.clear();
@@ -99,8 +131,7 @@ void controlEvent(ControlEvent theEvent) {
     vidLoaded=false;
     audLoaded=false;
     srtLoaded=false;
-    maxDuration=0;
-    
+
     //Playback Buttons
   } else if (theEvent.controller().name()=="pauseButton") {
     playButton.setVisible(true);
@@ -109,8 +140,8 @@ void controlEvent(ControlEvent theEvent) {
       mov.pause();
     }
     if (audLoaded) { 
-//      sound.pause();
-       for(int i = 0; i < sounds.size(); i++){
+      //      sound.pause();
+      for (int i = 0; i < sounds.size (); i++) {
         sounds.get(i).pause(); //Pauses all sounds
       }
     }
@@ -121,8 +152,8 @@ void controlEvent(ControlEvent theEvent) {
       mov.play();
     }
     if (audLoaded && !vidLoaded) { 
-     sound.play();
-     }
+      sound.play();
+    }
   } else if (theEvent.controller().name()=="stopButton") {
     playButton.setVisible(true);
     pauseButton.setVisible(false);
@@ -131,9 +162,9 @@ void controlEvent(ControlEvent theEvent) {
       mov.pause();
     }
     if (audLoaded) {  
-//      sound.rewind();
-//      sound.pause();
-      for(int i = 0; i < sounds.size(); i++){
+      //      sound.rewind();
+      //      sound.pause();
+      for (int i = 0; i < sounds.size (); i++) {
         sounds.get(i).pause();
         sounds.get(i).rewind();
       }
@@ -150,13 +181,13 @@ void controlEvent(ControlEvent theEvent) {
       mov.jump(0); 
       mov.play();
     }
-//    if (audLoaded) {  
-//      sound.rewind();
-//      sound.pause();
-//      sound=sounds.get(currentSelected);
-//      sound.rewind();
-//      sound.play();
-//    }
+    //    if (audLoaded) {  
+    //      sound.rewind();
+    //      sound.pause();
+    //      sound=sounds.get(currentSelected);
+    //      sound.rewind();
+    //      sound.play();
+    //    }
   } else if (theEvent.controller().name()=="nextButton") {
     playButton.setVisible(false);
     pauseButton.setVisible(true);
@@ -164,27 +195,27 @@ void controlEvent(ControlEvent theEvent) {
     if (vidLoaded) {
       mov.pause();
       mov=movies.get(currentSelected);
-//    if (movItr.hasNext()) {
-//                  mov = movItr.next();
-//                  currentSelected=movNamesItr.previousIndex();
-//              }
+      //    if (movItr.hasNext()) {
+      //                  mov = movItr.next();
+      //                  currentSelected=movNamesItr.previousIndex();
+      //              }
       mov.jump(0); 
       mov.play();
     }
-//    if (audLoaded) {  
-//      sound.rewind();
-//      sound.pause();
-//      sound=sounds.get(currentSelected);
-//      sound.rewind();
-//      sound.play();
-//    }
+    //    if (audLoaded) {  
+    //      sound.rewind();
+    //      sound.pause();
+    //      sound=sounds.get(currentSelected);
+    //      sound.rewind();
+    //      sound.play();
+    //    }
 
     //Timeline
   } else if (theEvent.controller().name()=="timeline") {
     //    if (isJump) {//Will not activate if mouse is not over button
     //      int jump=floor(cp5.getController("timeline").getValue());
     float jump=cp5.getController("timeline").getValue();
-//    println("jumping: "+jump);
+    //    println("jumping: "+jump);
     if (vidLoaded) {
       cp5.getController("timeline").setValue(jump);
       if (jump<leftOffset) { //If skipping backwards
@@ -198,7 +229,7 @@ void controlEvent(ControlEvent theEvent) {
         if (audLoaded) {  
           sound.rewind();
           sound.pause();
-//          sound=sounds.get(currentSelected);
+          //          sound=sounds.get(currentSelected);
           sound=sounds.get(soundPicked);
           sound.rewind();
         }
@@ -214,7 +245,7 @@ void controlEvent(ControlEvent theEvent) {
         if (audLoaded) {  
           sound.rewind();
           sound.pause();
-//          sound=sounds.get(currentSelected);
+          //          sound=sounds.get(currentSelected);
           sound=sounds.get(soundPicked);
           sound.rewind();
         }
@@ -236,10 +267,10 @@ void controlEvent(ControlEvent theEvent) {
     //Subtitles
   } else if (theEvent.controller().name()=="popup") {
     if (!subCfg.subPopup.isVisible()) {
-      if(vidLoaded){
-      subCfg.startTimeInput.setText(formatTime(mov.time()));
-      subCfg.endTimeInput.setText(formatTime(mov.time()+3));
-      }else if(!vidLoaded && audLoaded){
+      if (vidLoaded) {
+        subCfg.startTimeInput.setText(formatTime(mov.time()));
+        subCfg.endTimeInput.setText(formatTime(mov.time()+3));
+      } else if (!vidLoaded && audLoaded) {
         subCfg.startTimeInput.setText(formatTime(sound.position()/1000.0));
         subCfg.endTimeInput.setText(formatTime(sound.position()/1000.0+1.5));
       }
@@ -254,55 +285,57 @@ void controlEvent(ControlEvent theEvent) {
     subCfg.subPopup.setVisible(false);
   } else if (theEvent.controller().name()=="submitButton") {
     addSubtitle(subCfg.startTimeInput.getText(), 
-                subCfg.endTimeInput.getText(), 
-                subCfg.subtitleInput.getText());
+    subCfg.endTimeInput.getText(), 
+    subCfg.subtitleInput.getText());
     subCfg.subtitleInput.setText("");
     subCfg.subPopup.setVisible(false);
   }
 }
 void keyPressed() {
-  if ((key == 'p') || (key == 'P')) {
-    if (isPixelate) {
-      isPixelate=false;
-    } else if (!isPixelate) {
-      isPixelate=true;
+  if (!subCfg.subPopup.isVisible()) { //Do not activate when typing subtitles
+    if ((key == 'p') || (key == 'P')) {
+      if (isPixelate) {
+        isPixelate=false;
+      } else if (!isPixelate) {
+        isPixelate=true;
+      }
     }
-  }
-  if ((key == 'g') || (key == 'G')) {
-    if (isGreyscale) {
-      isGreyscale=false;
-    } else if (!isGreyscale) {
-      isGreyscale=true;
+    if ((key == 'g') || (key == 'G')) {
+      if (isGreyscale) {
+        isGreyscale=false;
+      } else if (!isGreyscale) {
+        isGreyscale=true;
+      }
     }
-  }
-  if ((key == 'i') || (key == 'I')) {
-    if (isInverted) {
-      isInverted=false;
-    } else if (!isInverted) {
-      isInverted=true;
+    if ((key == 'i') || (key == 'I')) {
+      if (isInverted) {
+        isInverted=false;
+      } else if (!isInverted) {
+        isInverted=true;
+      }
     }
-  }
-  if ((key == 'f') || (key == 'F')) {
-    if (fullscreenMode) {
-      fullscreenMode=false;
-    } else if (!isInverted) {
-      fullscreenMode=true;
+
+    if ((key == 'b') || (key == 'B')) {
+      if (isPosterize) {
+        isPosterize=false;
+      } else if (!isPosterize) {
+        isPosterize=true;
+      }
     }
-  }
-  if ((key == 'b') || (key == 'B')) {
-    if (isPosterize) {
-      isPosterize=false;
-    } else if (!isPosterize) {
-      isPosterize=true;
+
+    if ((key == 'f') || (key == 'F')) {
+      if (fullscreenMode) {
+        fullscreenMode=false;
+      } else if (!isInverted) {
+        fullscreenMode=true;
+      }
     }
-  }
-  if(!subCfg.subPopup.isVisible()){
-  if ((key == 's') || (key == 'S')) {
-    saveSubs();
-  }
-  if ((key == 'd') || (key == 'D')) {
-    displayLists();
-  }
+    if ((key == 's') || (key == 'S')) {
+      saveSubs();
+    }
+    if ((key == 'd') || (key == 'D')) {
+      displayLists();
+    }
   }
 }
 

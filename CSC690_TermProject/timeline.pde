@@ -61,8 +61,8 @@ class Timeline {
 
       //      cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
       
-//            time = floor(cp5.getController("timeline").getValue());
-time = cp5.getController("timeline").getValue();
+            time = floor(cp5.getController("timeline").getValue());
+//time = cp5.getController("timeline").getValue();
       //            println("time: "+time);
       //            println("maxTime: "+maxTime);
       //                  println("current time: " + time);
@@ -74,8 +74,10 @@ time = cp5.getController("timeline").getValue();
           if (time== clip.getStart()) {
             println("sound should play now");
             if (sounds.get(clip.getIndex()).isPlaying()) {
+              println("Continue playing");
               sounds.get(clip.getIndex()).play();
             } else {
+              println("Start playing");
               sounds.get(clip.getIndex()).rewind();
               sounds.get(clip.getIndex()).play();
             }
@@ -103,7 +105,8 @@ time = cp5.getController("timeline").getValue();
       for (int i = 0; i < videoClips.size (); i++) {
         TimelineClip clip = videoClips.get(i);
         fill(clip.getColor());
-        rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-120, 5, 10);
+        AudioPlayer temp=sounds.get(clip.getIndex());
+        rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-120, temp.length()/1000.0*timelineWidth, 10);
       }
       //          fill(255);
       float current = mov.time()+leftOffset;
