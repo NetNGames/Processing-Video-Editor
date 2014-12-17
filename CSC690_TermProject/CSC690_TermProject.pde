@@ -13,7 +13,7 @@
     -For video: avi, mp4, mov, and ogg files supported
     -For audio: mp3, wav, and flac files
     -For subtitles: SubRipText (srt) files
-  +Clear all loaded files with Clear Files button
+  +Clear all loaded files and settings with Reset Project button
   +Video to play can be selected using DropdownList
   +Audio clips can be selected using ListBox
     +Clips can be placed on timeline to play when timeline is ran
@@ -105,12 +105,12 @@ void setup() {
           .setVisible(true);
   cp5.getTooltip().register("chooseFile", "Load Video/Audio clips, SRT, or PVE files.");
 
-  clearFileButton= cp5.addButton("clearFiles")
+  resetButton= cp5.addButton("resetButton")
     .setPosition(width-90, 10)
       .setSize(70, 20)
-        .setCaptionLabel("Clear Files")
+        .setCaptionLabel("Reset Project")
           .setVisible(true);
-  cp5.getTooltip().register("clearFile", "Clear all loaded files.");
+  cp5.getTooltip().register("resetButton", "Clear and resets project.");
 
   saveButton= cp5.addButton("saveButton")
     .setPosition(width-180, playbackHeight-30)

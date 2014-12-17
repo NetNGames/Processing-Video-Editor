@@ -1,6 +1,11 @@
-//For Pixelate effect
+//Implements video effects
 Button fullscreenButton;
+boolean isInverted = false;
+boolean isGreyscale = false;
+boolean isPosterize = false;
 boolean isPixelate = false;
+
+//For Pixelate effect
 int numPixelsWide, numPixelsHigh;
 int blockSize; //Should be a number that divides evenly into the height and width
 color movColors[][];
@@ -46,16 +51,14 @@ blockSize = (int)(((float)playbackWidth/(float)mov.width)*10.0);
 //  } 
 }
 
-boolean isGreyscale = false;
 void greyscale(){
   filter(GRAY);
 }
 
-boolean isInverted = false;
 void invert(){
   filter(INVERT);
 }
-boolean isPosterize = false;
+
 void posterize(){
   filter(POSTERIZE, 4);
 }

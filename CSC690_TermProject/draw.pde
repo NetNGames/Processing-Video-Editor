@@ -106,7 +106,7 @@ void updateLocations() {
     chooseFileButton.setPosition(width-180, 10).setVisible(true);
     saveButton.setPosition(width-180, playbackHeight-30).setVisible(true);
     saveSRTButton.setPosition(width-90, playbackHeight-30).setVisible(true);
-    clearFileButton.setPosition(width-90, 10).setVisible(true);
+    resetButton.setPosition(width-90, 10).setVisible(true);
     vidList.setPosition(width-190, 70).setVisible(true);
     vidEffectList.setPosition(width-190, 150).setVisible(true);
     audList.setPosition(width-190, 220).setVisible(true);
@@ -127,7 +127,7 @@ void updateLocations() {
     playbackHeight=height;
     cp5.getController("timeline").setPosition(0, height-10);
     chooseFileButton.setVisible(false);
-    clearFileButton.setVisible(false);
+    resetButton.setVisible(false);
     saveButton.setVisible(false);
     saveSRTButton.setVisible(false);
     vidList.setVisible(false);

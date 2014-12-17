@@ -81,13 +81,13 @@ void controlEvent(ControlEvent theEvent) {
           isInverted=true;
         }
       } else if (effect==1) {//"Greyscale") {
-         if (isGreyscale) {
+        if (isGreyscale) {
           isGreyscale=false;
         } else if (!isGreyscale) {
           isGreyscale=true;
         }
       } else if (effect==2) {//"Posterize"
-       if (isPosterize) {
+        if (isPosterize) {
           isPosterize=false;
         } else if (!isPosterize) {
           isPosterize=true;
@@ -118,7 +118,7 @@ void controlEvent(ControlEvent theEvent) {
     displayLists();
   } else if (theEvent.controller().name()=="saveSRTButton") {
     saveSubs();
-  } else if (theEvent.controller().name()=="clearFiles") {
+  } else if (theEvent.controller().name()=="resetButton") {
     maxDuration=0;
     movies.clear();
     movieNames.clear();
@@ -131,6 +131,10 @@ void controlEvent(ControlEvent theEvent) {
     vidLoaded=false;
     audLoaded=false;
     srtLoaded=false;
+    isInverted = false;
+    isGreyscale = false;
+    isPosterize = false;
+    isPixelate = false;
 
     //Playback Buttons
   } else if (theEvent.controller().name()=="pauseButton") {
@@ -153,7 +157,7 @@ void controlEvent(ControlEvent theEvent) {
     }
     if (audLoaded && !vidLoaded) { 
       sound.play();
-//        sounds.get(soundPicked).play();
+      //        sounds.get(soundPicked).play();
     }
   } else if (theEvent.controller().name()=="stopButton") {
     playButton.setVisible(true);
@@ -316,7 +320,7 @@ void keyPressed() {
       }
     }
 
-    if ((key == 'b') || (key == 'B')) {
+    if ((key == 'o') || (key == 'O')) {
       if (isPosterize) {
         isPosterize=false;
       } else if (!isPosterize) {
