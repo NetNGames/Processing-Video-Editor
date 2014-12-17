@@ -1,6 +1,7 @@
 //Handles clips on various timelines
 class TimelineClip {
-  File fileInfo;
+  String fileName;
+  String filePath;
   float start;
   color c;
   int index;
