@@ -48,6 +48,7 @@ void draw() {
         sound.rewind();    //Rewind audio file
       }
     } else if (!vidLoaded) {
+      //Draw meta data
       meta = sound.getMetaData();
       int y = ys;
       fill(255);
@@ -68,6 +69,13 @@ void draw() {
       text("Orchestra: " + meta.orchestra(), 10, y+=yi);
       text("Publisher: " + meta.publisher(), 10, y+=yi);
       text("Encoded: " + meta.encoded(), 10, y+=yi);
+      y+=yi+50;
+      
+      //Draw waveform
+      fill(255);
+      for (int i = 0; i < width-200; i++){
+        line(i, y + sound.right.get(i)*50, i+1, y + sound.right.get(i+1)*50);
+      }
     }
   }
 
