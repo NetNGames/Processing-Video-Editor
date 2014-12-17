@@ -48,6 +48,7 @@ void draw() {
         sound.rewind();    //Rewind audio file
       }
     } else if (!vidLoaded) {
+      sound=sounds.get(soundPicked);
       meta = sound.getMetaData();
       int y = ys;
       fill(255);
@@ -68,6 +69,13 @@ void draw() {
       text("Orchestra: " + meta.orchestra(), 10, y+=yi);
       text("Publisher: " + meta.publisher(), 10, y+=yi);
       text("Encoded: " + meta.encoded(), 10, y+=yi);
+      y+=yi+50;
+      //Draw waveform
+      color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
+      fill(c);
+      for (int i = 0; i < width-200; i++){
+        line(i, y + sound.right.get(i)*50, i+1, y + sound.right.get(i+1)*50);
+      }
     }
   }
 

@@ -153,6 +153,7 @@ void controlEvent(ControlEvent theEvent) {
     }
     if (audLoaded && !vidLoaded) { 
       sound.play();
+//        sounds.get(soundPicked).play();
     }
   } else if (theEvent.controller().name()=="stopButton") {
     playButton.setVisible(true);
