@@ -160,5 +160,13 @@ class Timeline {
   float getMax() {
     return cp5.getController("timeline").getMax();
   }
+  
+  void toggleTitle(Boolean bool) {
+    if(!bool) {
+      timelineSlider.setCaptionLabel("Main Timeline");
+    } else {
+      timelineSlider.setCaptionLabel("");
+    }
+  }
 }
 

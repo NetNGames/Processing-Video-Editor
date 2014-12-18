@@ -283,8 +283,10 @@ void keyPressed() {
   if ((key == 'f') || (key == 'F')) {
     if (fullscreenMode) {
       fullscreenMode=false;
+      timeline.toggleTitle(fullscreenMode);
     } else if (!isInverted) {
       fullscreenMode=true;
+      timeline.toggleTitle(fullscreenMode);
     }
   }
   if ((key == 'b') || (key == 'B')) {
