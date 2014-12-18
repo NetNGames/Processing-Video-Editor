@@ -19,10 +19,10 @@ void draw() {
     resizeMovie();
     imageMode(CENTER);
     image(mov, playbackWidth/2, playbackHeight/2, thumbWidth, thumbHeight);
+    //imageMode(CORNER);
     //    image(mov, 0, 0, playbackWidth, playbackHeight);
     //    currentFrame = getFrame();
-    //pixelated?
-    if (!subCfg.subPopup.isVisible()) {
+    
       if (isPixelate) {
         pixelate();
       }
@@ -35,7 +35,7 @@ void draw() {
       if (isPosterize) {
         posterize();
       }
-    }
+    
   }
   //Makes sure video effects don't effect control panel
   fill(0);
@@ -72,8 +72,8 @@ void draw() {
       y+=yi+50;
       //Draw waveform
       color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
-      fill(c);
-      for (int i = 0; i < width-200; i++){
+      stroke(c);
+      for (int i = 0; i < width-200-1; i++){
         line(i, y + sound.right.get(i)*50, i+1, y + sound.right.get(i+1)*50);
       }
     }
@@ -106,7 +106,7 @@ void updateLocations() {
     chooseFileButton.setPosition(width-180, 10).setVisible(true);
     saveButton.setPosition(width-180, playbackHeight-30).setVisible(true);
     saveSRTButton.setPosition(width-90, playbackHeight-30).setVisible(true);
-    resetButton.setPosition(width-90, 10).setVisible(true);
+    clearProjectButton.setPosition(width-90, 10).setVisible(true);
     vidList.setPosition(width-190, 70).setVisible(true);
     vidEffectList.setPosition(width-190, 150).setVisible(true);
     audList.setPosition(width-190, 220).setVisible(true);
@@ -127,7 +127,7 @@ void updateLocations() {
     playbackHeight=height;
     cp5.getController("timeline").setPosition(0, height-10);
     chooseFileButton.setVisible(false);
-    resetButton.setVisible(false);
+    clearProjectButton.setVisible(false);
     saveButton.setVisible(false);
     saveSRTButton.setVisible(false);
     vidList.setVisible(false);

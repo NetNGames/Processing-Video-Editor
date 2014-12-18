@@ -8,7 +8,7 @@ class SubtitleConfig {
       .setPosition(620, 456)
         .setSize(70, 20)
           .setCaptionLabel("Add Subtitles");
-          cp5.getTooltip().register("popup","Click to add subtitle at current time");
+    cp5.getTooltip().register("popup", "Click to add subtitle at current time");
 
     subPopup = cp5.addGroup("subPopup")
       .setPosition(width/2-100, 100)
@@ -71,49 +71,37 @@ void addSubtitle(String sTime, String eTime, String text) {
   newSub.end=time;
   newSub.content=text;
   subs.captions.add(newSub);
-  
+
   //Sort Subtitle Vector
   Collections.sort(subs.captions, Caption.COMPARE_BY_START);
 }
 
-void saveSubs(){
-  //http://stackoverflow.com/a/23384302
-   JFileChooser fc = new JFileChooser();
-  fc.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+void saveSubs() {
+  //Using http://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html
+  JFileChooser fc = new JFileChooser();
+  PrintWriter output;
 
-    fc.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
-
-    final int fd = fc.showDialog(null, "Select folder to save.");
-//
-    if (fd == JFileChooser.APPROVE_OPTION) {
-      println("Saving subs:");
-  Caption subtemp;
-  subItr=subs.captions.listIterator();
-  while (subItr.hasNext ()) {
-    subtemp = subItr.next();
-    println(subItr.nextIndex()+"\n"
-            +subtemp.start.getTime()+" --> "
-            +subtemp.end.getTime()+"\n"
-            +subtemp.content+"\n");
-  }
-    
-  //http://stackoverflow.com/a/356706
-//  JFileChooser jFileChooser = new JFileChooser();
-//jFileChooser.setSelectedFile(new File("fileToSave.txt"));
-//jFileChooser.showSaveDialog(parent);
-
-
-//
-//        /*you can write the code in here */
-//    println(fd);
-////        String setBackUpFolderName = setBackUpFolderName(iivo);
-////        try {
-////            saveDataToFileExcel(setBackUpFolderName, iivo);
-////        } catch (Exception ex) {
-////            Logger.getLogger(ExcelTest.class.getName()).log(Level.SEVERE, null, ex);
-////        }
-//
-    } else {
-         this.dispose();
+  int returnVal = fc.showSaveDialog(this);
+  if (returnVal == JFileChooser.APPROVE_OPTION) {
+    File file = fc.getSelectedFile();
+    String subOut="";
+    output = createWriter(file.getAbsolutePath()+".srt");
+    //      println("Saving subs:");
+    Caption subtemp;
+    subItr=subs.captions.listIterator();
+    while (subItr.hasNext ()) {
+      subtemp = subItr.next();
+      subOut+=subItr.nextIndex()+"\n"
+        +subtemp.start.getTime()+" --> "
+        +subtemp.end.getTime()+"\n"
+        +subtemp.content+"\n\n";
     }
+    output.print(subOut);
+
+    output.flush(); // Writes the remaining data to the file
+    output.close(); // Finishes the file
+  } else {
+    this.dispose();
+  }
 }
+

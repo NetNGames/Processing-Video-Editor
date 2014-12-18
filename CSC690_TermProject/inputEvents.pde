@@ -98,6 +98,11 @@ void controlEvent(ControlEvent theEvent) {
         } else if (!isPixelate) {
           isPixelate=true;
         }
+      } else if (effect==4) {//Reset
+        isInverted = false;
+        isGreyscale = false;
+        isPosterize = false;
+        isPixelate = false;
       }
     }
   }
@@ -118,7 +123,7 @@ void controlEvent(ControlEvent theEvent) {
     displayLists();
   } else if (theEvent.controller().name()=="saveSRTButton") {
     saveSubs();
-  } else if (theEvent.controller().name()=="resetButton") {
+  } else if (theEvent.controller().name()=="clearProjectButton") {
     maxDuration=0;
     movies.clear();
     movieNames.clear();

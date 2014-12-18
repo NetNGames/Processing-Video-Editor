@@ -1,7 +1,7 @@
 //----------File Loading----------\\
 //From https://processing.org/discourse/beta/num_1140107049.html
 import javax.swing.*;
-Button chooseFileButton, resetButton;
+Button chooseFileButton, clearProjectButton;
 boolean vidLoaded=false;
 boolean audLoaded=false;
 boolean srtLoaded=false;

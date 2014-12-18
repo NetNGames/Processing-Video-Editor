@@ -105,12 +105,12 @@ void setup() {
           .setVisible(true);
   cp5.getTooltip().register("chooseFile", "Load Video/Audio clips, SRT, or PVE files.");
 
-  resetButton= cp5.addButton("resetButton")
+  clearProjectButton= cp5.addButton("clearProjectButton")
     .setPosition(width-90, 10)
       .setSize(70, 20)
-        .setCaptionLabel("Reset Project")
+        .setCaptionLabel("Clear Project")
           .setVisible(true);
-  cp5.getTooltip().register("resetButton", "Clear and resets project.");
+  cp5.getTooltip().register("clearProjectButton", "Clear and resets project.");
 
   saveButton= cp5.addButton("saveButton")
     .setPosition(width-180, playbackHeight-30)
@@ -123,7 +123,7 @@ void setup() {
     .setPosition(width-90, playbackHeight-30)
       .setSize(70, 20)
         .setCaptionLabel("Save Subtitles")
-          .setVisible(true);
+          .setVisible(false);
   cp5.getTooltip().register("saveSRTButton", "Save Current Subtitles");
 
   //Dropdown Lists
@@ -148,6 +148,7 @@ void setup() {
   ListBoxItem lbi1 = vidEffectList.addItem("Greyscale",1);
   ListBoxItem lbi2 = vidEffectList.addItem("Posterize", 2);
   ListBoxItem lbi3 = vidEffectList.addItem("Pixelate", 3);
+  ListBoxItem lbi4 = vidEffectList.addItem("Reset", 4);
   vidEffectList.captionLabel().style().marginTop = 3;
   vidEffectList.captionLabel().style().marginLeft = 3;   
   vidEffectList.setHeight(45).close() ;
