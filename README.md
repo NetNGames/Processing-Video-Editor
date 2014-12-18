@@ -2,12 +2,14 @@ Processing-Video-Editor
 =======================
 
 CSC690 Term Project
- By: Elbert Dang and Jacob Gronert
- Last Update: 12/16/2014
+
+By: Elbert Dang and Jacob Gronert
+
+Last Update: 12/16/2014
  
- Usage: Run CSC690_TermProject.pde using Processing 2.x with Minim, and ControlP5 libraries
+Usage: Run CSC690_TermProject.pde using Processing 2.x with Minim, and ControlP5 libraries
  
- System: JVM 
+System: Java Virtual Machine
  
 Using Processing Video Editor:
 * Load video, audio, or srt subtitle files with Load Files button
@@ -19,7 +21,7 @@ Using Processing Video Editor:
 * Audio clips can be selected using ListBox
  * Clips can be placed on timeline to play when timeline is ran
  * If no video file loaded, main window will display audio metadata
-*Press play to start timeline. 
+* Press play to start timeline. 
  * Current time will be displayed on right of timeline and by red bar.
  * If video loaded, selected video will play in main window]
  * If audio placed on timeline, it will start playing once timeline reaches it.
@@ -29,7 +31,7 @@ Using Processing Video Editor:
  * 'G' for Greyscale
  * 'O' for Posterize
  * 'P' Pixelate
-  * Note that Pixelate will do so based on video's original width/height and may display incorrectly on scaled/stretched playback windows.
+   * Note that Pixelate will do so based on video's original width/height and may display incorrectly on scaled/stretched playback windows.
 * Once video and/or audio files are loaded, you may start adding subtitles 
  * Add to current timeline time by pressing the Add Subtitle button
  * Add to custom time by typing into start/end time text fields or by clicked subtitle timeline
