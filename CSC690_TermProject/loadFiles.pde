@@ -34,9 +34,8 @@ void loadFile() {
 
       //Loading SubRip text
     } else if (file.getName().endsWith("srt")) {
-      srtLoaded=true;
-      parseSubFile(file);
-
+      loadSub(file);
+      
       //Loading Project file
     } else if (file.getName().endsWith("pve")) {
       loadProj(file);
@@ -47,7 +46,7 @@ void loadVid(File file) {
   vidLoaded=true;
   mov = new Movie(this, file.getPath());
   vidList.addItem(file.getName(), movies.size());
-  movieNames.addElement(file.getName());
+  movieNames.addElement(file.getAbsolutePath());
   movies.addElement(mov);
   mov.play();
   maxDuration+=mov.duration();
@@ -69,7 +68,12 @@ void loadAud(File file) {
   audList.setValue(soundPicked);
   sounds.addElement(sound);
   //sound=sounds.get(0); //Resets to 1st sound loaded
-  soundNames.addElement(file.getName());
+  soundNames.addElement(file.getAbsolutePath());
+}
+void loadSub(File file) {
+  srtLoaded=true;
+  subNames.addElement(file.getAbsolutePath());
+  parseSubFile(file);
 }
 
 void drawFileList() {

@@ -108,7 +108,7 @@ void updateLocations() {
     saveSRTButton.setPosition(width-90, playbackHeight-30).setVisible(true);
     clearProjectButton.setPosition(width-90, 10).setVisible(true);
     vidList.setPosition(width-190, 70).setVisible(true);
-    vidEffectList.setPosition(width-190, 150).setVisible(true);
+    vidEffectList.setPosition(width-190, 140).setVisible(true);
     audList.setPosition(width-190, 220).setVisible(true);
     //Playback Buttons
     if (!playButton.isVisible()) {

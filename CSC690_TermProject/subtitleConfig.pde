@@ -76,7 +76,7 @@ void addSubtitle(String sTime, String eTime, String text) {
   Collections.sort(subs.captions, Caption.COMPARE_BY_START);
 }
 
-void saveSubs() {
+void saveSubFile() {
   //Using http://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html
   JFileChooser fc = new JFileChooser();
   PrintWriter output;
@@ -85,23 +85,30 @@ void saveSubs() {
   if (returnVal == JFileChooser.APPROVE_OPTION) {
     File file = fc.getSelectedFile();
     String subOut="";
-    output = createWriter(file.getAbsolutePath()+".srt");
-    //      println("Saving subs:");
+    String outputName=file.getAbsolutePath();
+    if(!file.getName().endsWith(".srt")){//So there are no double ".srt" at end of file
+      outputName+=".srt";
+    }
+    output = createWriter(outputName);
+    println("Saving subtitles to "+outputName);
     Caption subtemp;
     subItr=subs.captions.listIterator();
     while (subItr.hasNext ()) {
       subtemp = subItr.next();
-      subOut+=subItr.nextIndex()+"\n"
+      subOut+=subItr.nextIndex()+"\r\n" //Better support for more text editors that just \n
         +subtemp.start.getTime()+" --> "
-        +subtemp.end.getTime()+"\n"
-        +subtemp.content+"\n\n";
+        +subtemp.end.getTime()+"\r\n"
+        +subtemp.content+"\r\n\r\n";
     }
     output.print(subOut);
 
     output.flush(); // Writes the remaining data to the file
     output.close(); // Finishes the file
+    println("Save Complete!");
+    subNames.clear(); //Overrides all subfile names with new one
+    subNames.addElement(outputName);
   } else {
-    this.dispose();
+    println("Save Cancelled");
   }
 }
 

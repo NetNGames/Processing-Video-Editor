@@ -120,9 +120,9 @@ void controlEvent(ControlEvent theEvent) {
   } else if (theEvent.controller().name()=="chooseFile") {
     loadFile();
   } else if (theEvent.controller().name()=="saveButton") {
-    displayLists();
+    savePVEFile();
   } else if (theEvent.controller().name()=="saveSRTButton") {
-    saveSubs();
+    saveSubFile();
   } else if (theEvent.controller().name()=="clearProjectButton") {
     maxDuration=0;
     movies.clear();
@@ -339,12 +339,6 @@ void keyPressed() {
       } else if (!isInverted) {
         fullscreenMode=true;
       }
-    }
-    if ((key == 's') || (key == 'S')) {
-      saveSubs();
-    }
-    if ((key == 'd') || (key == 'D')) {
-      displayLists();
     }
   }
 }

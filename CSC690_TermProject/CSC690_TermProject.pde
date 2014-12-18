@@ -6,7 +6,7 @@
  
  Usage: Run CSC690_TermProject.pde using Processing 2.x with Minim, and ControlP5 libraries
  
- System: JVM 
+ System: Java Virtual Machine
  
  Description: Processing Video Editor
   +Load video, audio, or srt subtitle files with Load Files button
@@ -35,6 +35,7 @@
     -Add to custom time by typing into start/end time text fields or by clicked subtitle timeline
     -Currently loaded subtitles will display on timeline.
  
+ Website: http://mirix5.github.io/processingvideoeditor/
  *************************************************/
 
 int fullWidth = 840;
@@ -210,6 +211,7 @@ void setup() {
   movieNames = new Vector<String>(0, 1);
   sounds = new Vector<AudioPlayer>(0, 1);
   soundNames = new Vector<String>(0, 1);
+  subNames = new Vector<String>(0, 1);
   addMouseWheelListener();
 }
 

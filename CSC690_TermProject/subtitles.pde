@@ -11,7 +11,7 @@ TimedTextObject subs;
 SubtitleConfig subCfg;
 ListIterator<Caption> itr;
 Vector<String> subNames;
-ListIterator<String> subNameItr;
+ListIterator<String> subNamesItr;
 ListIterator<Caption> subItr;
 Caption current;
 
