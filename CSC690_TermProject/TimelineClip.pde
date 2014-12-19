@@ -1,13 +1,15 @@
 //Handles clips on various timelines
 class TimelineClip {
-  String fileName;
-  String filePath;
   float start;
   color c;
   int index;
   
   TimelineClip(float s, int ind, color col) {
-    start = floor(s);
+//    start = floor(s);
+    start = s;
+//    println("s="+s);
+//    println("floor s="+floor(s));
+//    println("round s by 2="+round(s,2));
     index = ind;
     c = col;
   }

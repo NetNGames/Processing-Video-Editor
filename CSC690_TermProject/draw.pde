@@ -13,6 +13,14 @@ void draw() {
     resizeImg();
     imageMode(CENTER);
     image(empty, playbackWidth/2, playbackHeight/2, thumbWidth, thumbHeight);
+    textAlign(CENTER);
+    fill(0);
+    textSize(32);
+    text("Processing Video Editor", playbackWidth/2, 40);
+    fill(255);
+    text("(PVE)", playbackWidth/2-40, thumbHeight/2);
+    fill(0);
+    text("By: Elbert Dang and Jacob Gronert", playbackWidth/2, playbackHeight -20);
   }
   if (vidLoaded) {
     //determine aspect ratio and scale accordingly:
@@ -22,20 +30,19 @@ void draw() {
     //imageMode(CORNER);
     //    image(mov, 0, 0, playbackWidth, playbackHeight);
     //    currentFrame = getFrame();
-    
-      if (isPixelate) {
-        pixelate();
-      }
-      if (isGreyscale) {
-        greyscale();
-      }
-      if (isInverted) {
-        invert();
-      }
-      if (isPosterize) {
-        posterize();
-      }
-    
+
+    if (isPixelate) {
+      pixelate();
+    }
+    if (isGreyscale) {
+      greyscale();
+    }
+    if (isInverted) {
+      invert();
+    }
+    if (isPosterize) {
+      posterize();
+    }
   }
   //Makes sure video effects don't effect control panel
   fill(0);
@@ -73,7 +80,7 @@ void draw() {
       //Draw waveform
       color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
       stroke(c);
-      for (int i = 0; i < width-200-1; i++){
+      for (int i = 0; i < width-200-1; i++) {
         line(i, y + sound.right.get(i)*50, i+1, y + sound.right.get(i+1)*50);
       }
     }

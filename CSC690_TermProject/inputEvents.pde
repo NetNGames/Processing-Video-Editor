@@ -39,7 +39,9 @@ void mousePressed() {
 
 void mouseReleased() {
   //  isJump=false;
-  subCfg.subtitleInput.setFocus(true);
+  if (mouseY > height-60 && mouseY < height-50 && mouseX > 60 && mouseX < timelineWidth) {
+    subCfg.subtitleInput.setFocus(true);
+  }
 }
 
 //----------Video Effects----------\\
@@ -160,8 +162,16 @@ void controlEvent(ControlEvent theEvent) {
     if (vidLoaded) { 
       mov.play();
     }
-    if (audLoaded && !vidLoaded) { 
-      sound.play();
+    if (audLoaded) { 
+      if (!vidLoaded) {
+        sound.play();
+      } else {
+        for (int i = 0; i < sounds.size (); i++) {
+          if (sounds.get(i).position()>0) { //If sound was not rewound
+            sounds.get(i).play(); //Continues playing sound if it was playing and not reset
+          }
+        }
+      }
       //        sounds.get(soundPicked).play();
     }
   } else if (theEvent.controller().name()=="stopButton") {
@@ -285,6 +295,7 @@ void controlEvent(ControlEvent theEvent) {
         subCfg.endTimeInput.setText(formatTime(sound.position()/1000.0+1.5));
       }
       subCfg.subtitleInput.setText("");
+      subCfg.subtitleInput.setFocus(true);
       subCfg.subPopup.setVisible(true);
     } else {
       subCfg.subtitleInput.setText("");
@@ -336,8 +347,15 @@ void keyPressed() {
     if ((key == 'f') || (key == 'F')) {
       if (fullscreenMode) {
         fullscreenMode=false;
-      } else if (!isInverted) {
+      } else if (!fullscreenMode) {
         fullscreenMode=true;
+      }
+    }
+    if ((key == 't') || (key == 'T')) {
+      if (printTime) {
+        printTime=false;
+      } else if (!printTime) {
+        printTime=true;
       }
     }
   }

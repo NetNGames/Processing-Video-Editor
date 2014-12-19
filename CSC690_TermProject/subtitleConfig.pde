@@ -14,7 +14,7 @@ class SubtitleConfig {
       .setPosition(width/2-100, 100)
         .setWidth(175)
           .activateEvent(true)
-            .setBackgroundColor(color(50, 50))
+            .setBackgroundColor(color(100))
               .setBackgroundHeight(125)
                 .setLabel("Enter Subtitle Info:")
                   .disableCollapse()

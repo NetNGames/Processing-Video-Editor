@@ -1,5 +1,6 @@
 int timelineWidth;
 float leftOffset;
+boolean printTime=false;
 class Timeline {
   float time, maxTime;
   Button clearClipsButton;
@@ -61,7 +62,7 @@ class Timeline {
 
       //      cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
       
-            time = floor(cp5.getController("timeline").getValue());
+//            time = floor(cp5.getController("timeline").getValue());
 //time = cp5.getController("timeline").getValue();
       //            println("time: "+time);
       //            println("maxTime: "+maxTime);
@@ -71,7 +72,7 @@ class Timeline {
 
         for (int i = 0; i < audioClips.size (); i++) {
           TimelineClip clip = audioClips.get(i);
-          if (time== clip.getStart()) {
+          if (time>=clip.getStart() && time<=clip.getStart()+0.02){ //Gives some leeway
             println("sound should play now");
             if (sounds.get(clip.getIndex()).isPlaying()) {
               println("Continue playing");
@@ -89,7 +90,11 @@ class Timeline {
       cp5.getController("timeline").setValue(sound.position()/1000.0);
     }
     time = cp5.getController("timeline").getValue();
-//    println(time);
+    if(printTime){
+    println("time="+time);
+    println("floor time="+floor(time));
+    println("round time by 2="+round(time,2));
+    }
     maxTime = cp5.getController("timeline").getMax();
   }
 
@@ -105,8 +110,8 @@ class Timeline {
       for (int i = 0; i < videoClips.size (); i++) {
         TimelineClip clip = videoClips.get(i);
         fill(clip.getColor());
-        AudioPlayer temp=sounds.get(clip.getIndex());
-        rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-120, temp.length()/1000.0*timelineWidth, 10);
+        
+        rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-120, 5, 10);
       }
       //          fill(255);
       float current = mov.time()+leftOffset;
@@ -136,8 +141,8 @@ class Timeline {
         //Draw spots where audio clips were placed
         //println("clip start: "+clip.getStart());
         //println("location: " +((clip.getStart()/(timeline.getMax()-1))*550));
-
-        rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-90, 5, 10);
+        AudioPlayer temp=sounds.get(clip.getIndex());
+        rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-90, (((temp.length()/1000.0)/(timeline.getMax()-1))*timelineWidth), 10);
       }
       if (!vidLoaded) {
         float current = sound.position()/1000.0;
@@ -155,7 +160,8 @@ class Timeline {
 
   void addAudioClip(float x) {
     color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
-    audioClips.addElement(new TimelineClip(floor(x), soundPicked, c));
+//    audioClips.addElement(new TimelineClip(floor(x), soundPicked, c));
+    audioClips.addElement(new TimelineClip(x, soundPicked, c));
   }
   void addVideoClip(float x) {
     color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
