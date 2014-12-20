@@ -27,15 +27,15 @@ void loadFile() {
 
       //Loading Audio
     } else if (file.getName().endsWith("mp3") ||
-      file.getName().endsWith("wav") ||
-      file.getName().endsWith("wma") ||
-      file.getName().endsWith("flac")) {
+               file.getName().endsWith("wav") ||
+               file.getName().endsWith("wma") ||
+               file.getName().endsWith("flac")) {
       loadAud(file);
 
       //Loading SubRip text
     } else if (file.getName().endsWith("srt")) {
       loadSub(file);
-      
+
       //Loading Project file
     } else if (file.getName().endsWith("pve")) {
       loadProj(file);
@@ -45,7 +45,7 @@ void loadFile() {
 void loadVid(File file) {
   mov = new Movie(this, file.getPath());
   vidList.addItem(file.getName(), movies.size());
-  movieNames.addElement(file.getAbsolutePath());
+  movieNames.addElement(file.getPath());
   movies.addElement(mov);
   mov.play();
   maxDuration+=mov.duration();
@@ -68,11 +68,11 @@ void loadAud(File file) {
   audList.setValue(soundPicked);
   sounds.addElement(sound);
   //sound=sounds.get(0); //Resets to 1st sound loaded
-  soundNames.addElement(file.getAbsolutePath());
+  soundNames.addElement(file.getPath());
   audLoaded=true;
 }
 void loadSub(File file) {
-  subNames.addElement(file.getAbsolutePath());
+  subNames.addElement(file.getPath());
   parseSubFile(file);
   srtLoaded=true;
 }
@@ -94,7 +94,7 @@ void drawFileList() {
 
   fill(255);
   text("Audio Clips:             Active:", width-190, 200);
-  for(int i = 0; i < sounds.size(); i++){
+  for (int i = 0; i < sounds.size (); i++) {
     fill((50*soundPicked+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
     rect(width-70, 204, 50, 14);
   }
