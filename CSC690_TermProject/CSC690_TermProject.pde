@@ -54,8 +54,8 @@ Vector<Movie> movies;
 Vector<String> movieNames;
 ListIterator<Movie> movItr;
 ListIterator<String> movNamesItr;
+ListIterator<TimelineClip> vidClipItr;
 int videoPicked = 0;
-int currentSelected=0;
 int movFrameRate;
 float currentFrame;
 float maxFrames;
@@ -73,6 +73,7 @@ Vector<AudioPlayer> sounds;
 Vector<String> soundNames;
 ListIterator<AudioPlayer> soundItr;
 ListIterator<String> soundNamesItr;
+ListIterator<TimelineClip> audClipItr;
 int soundPicked = 0;
 
 //For Buttons
@@ -132,8 +133,9 @@ void setup() {
     .setPosition(width-190, 70)
       .setColorActive(255)
         .setBarHeight(15)
-          .setCaptionLabel("No video files loaded")
-            ;
+          .setHeight(45)
+            .setCaptionLabel("No video files loaded")
+              ;
   vidList.captionLabel().style().marginTop = 3;
   vidList.captionLabel().style().marginLeft = 3;        
 
@@ -157,8 +159,9 @@ void setup() {
     .setPosition(width-190, 220)
       .setColorActive(255)
         .setBarHeight(15)
-          .setCaptionLabel("Audio List")
-            ;
+          .setHeight(105)
+            .setCaptionLabel("Audio List")
+              ;
   audList.captionLabel().style().marginTop = 3;
   audList.captionLabel().style().marginLeft = 3; 
 

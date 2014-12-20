@@ -7,19 +7,18 @@ void loadProj(File file) {
 
     while ( (line = br.readLine ()) != null) {
       if (line.endsWith("mp4") || //Can play audio from mp4
-      line.endsWith("mov") ||
-        line.endsWith("avi") || //Unable to play audio from avi
-      line.endsWith("ogg")) {
+          line.endsWith("mov") ||
+          line.endsWith("avi") || //Unable to play audio from avi
+          line.endsWith("ogg")) {
         loadVid(new File(line));
 
         //Loading Audio
-      } else if (line.endsWith("mp3") ||
-        line.endsWith("wav") ||
-        line.endsWith("wma") ||
-        line.endsWith("flac")) {
-        //          String temp= line.substring(0, line.length()-1);
+      } else if (line.endsWith("mp3") || 
+                 line.endsWith("wav") || 
+                 line.endsWith("wma") || 
+                 line.endsWith("flac")) {
         loadAud(new File(line));
-
+        
         //Loading SubRip text
       } else if (line.endsWith("srt")) {
         loadSub(new File(line));
@@ -44,24 +43,24 @@ void savePVEFile() {
     }
     output = createWriter(outputName);
     println("Saving project to "+outputName);
-    String temp="";
+    String out="";
     movNamesItr=movieNames.listIterator();
-    while (movNamesItr.hasNext ()) {
-      temp += movNamesItr.next() + "\r\n";
-//            println(movNamesItr.previousIndex()+" "+temp);
+    while (movNamesItr.hasNext ()) {      
+      out += movNamesItr.next () + "\r\n";
+//            println(movNamesItr.previousIndex()+" "+output);
     }
     soundNamesItr=soundNames.listIterator();
     while (soundNamesItr.hasNext ()) {
-      temp += soundNamesItr.next() + "\r\n";
-//            println(soundNamesItr.previousIndex()+" "+temp);
+      out += soundNamesItr.next() + "\r\n";
+//            println(soundNamesItr.previousIndex()+" "+output);
     }
     subNamesItr=subNames.listIterator();
     while (subNamesItr.hasNext ()) {
-      temp += subNamesItr.next() + "\r\n";
-//            println(subNamesItr.previousIndex()+" "+temp);
+      out += subNamesItr.next() + "\r\n";
+//            println(subNamesItr.previousIndex()+" "+output);
     }
     //    println();
-    output.print(temp);
+    output.print(out);
 
     output.flush(); // Writes the remaining data to the file
     output.close(); // Finishes the file

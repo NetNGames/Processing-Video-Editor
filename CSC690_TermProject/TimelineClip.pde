@@ -1,15 +1,13 @@
 //Handles clips on various timelines
 class TimelineClip {
   float start;
+  float end;
   color c;
   int index;
   
-  TimelineClip(float s, int ind, color col) {
-//    start = floor(s);
+  TimelineClip(float s, float e, int ind, color col) {
     start = s;
-//    println("s="+s);
-//    println("floor s="+floor(s));
-//    println("round s by 2="+round(s,2));
+    end = e;
     index = ind;
     c = col;
   }
@@ -24,6 +22,10 @@ class TimelineClip {
   
   float getStart() {
     return start;
+  }
+  
+  float getEnd() {
+    return end;
   }
 
   int getIndex(){

@@ -127,7 +127,7 @@ void updateLocations() {
     stopButton.setPosition(playbackWidth/2+(iconWidth*3)/4, height-40).setVisible(true);
     prevButton.setPosition(playbackWidth/2-iconWidth*2, height-40).setVisible(true);
     nextButton.setPosition(playbackWidth/2+iconWidth*2, height-40).setVisible(true);
-    subCfg.popup.setPosition(width-220, height-64).setVisible(true);
+    subCfg.addSubtitlePopup.setPosition(width-220, height-64).setVisible(true);
   } else {
     playbackWidth=width;
     timelineWidth=width;
@@ -145,7 +145,7 @@ void updateLocations() {
     stopButton.setVisible(false);
     prevButton.setVisible(false);
     nextButton.setVisible(false);
-    subCfg.popup.setVisible(false);
+    subCfg.addSubtitlePopup.setVisible(false);
     cp5.getController("clearClipsButton").setVisible(false);
   }
 }

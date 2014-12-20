@@ -43,7 +43,6 @@ void loadFile() {
   }
 }
 void loadVid(File file) {
-  vidLoaded=true;
   mov = new Movie(this, file.getPath());
   vidList.addItem(file.getName(), movies.size());
   movieNames.addElement(file.getAbsolutePath());
@@ -53,15 +52,15 @@ void loadVid(File file) {
   mov.jump(0);
   mov.pause();
   //mov.loop();
-  mov=movies.get(currentSelected);//Resets to what vid was playing
+  mov=movies.get(videoPicked);//Resets to what vid was playing
   mov.jump(0);
   mov.pause();
   movFrameRate=(int)mov.frameRate;
-  vidList.setIndex(currentSelected);
+  vidList.setIndex(videoPicked);
+  vidLoaded=true;
   //      maxFrames = getLength() - 1;
 }
 void loadAud(File file) {
-  audLoaded=true;
   minim = new Minim(this);
   sound = minim.loadFile(file.getPath());
   audList.addItem(file.getName(), sounds.size());
@@ -69,11 +68,12 @@ void loadAud(File file) {
   sounds.addElement(sound);
   //sound=sounds.get(0); //Resets to 1st sound loaded
   soundNames.addElement(file.getAbsolutePath());
+  audLoaded=true;
 }
 void loadSub(File file) {
-  srtLoaded=true;
   subNames.addElement(file.getAbsolutePath());
   parseSubFile(file);
+  srtLoaded=true;
 }
 
 void drawFileList() {
@@ -83,7 +83,7 @@ void drawFileList() {
   textAlign(LEFT);
   text("Video Clips: ", width-190, 50);
   //  if (vidLoaded) {
-  //      vidList.setIndex(currentSelected);
+  //      vidList.setIndex(videoPicked);
   //    fill(0, 102, 153);
   //    for (int i = 0; i < movieNames.size (); i++) {
   //      String name = movieNames.get(i);

@@ -1,14 +1,14 @@
 class SubtitleConfig {
   Group subPopup;
-  Button popup, submitButton, cancelButton;
+  Button addSubtitlePopup, submitButton, cancelButton;
   Textfield startTimeInput, endTimeInput, subtitleInput;
   String startTime="", endTime="", subtitle="";
   SubtitleConfig() {
-    popup = cp5.addButton("popup")
+    addSubtitlePopup = cp5.addButton("addSubtitlePopup")
       .setPosition(620, 456)
         .setSize(70, 20)
           .setCaptionLabel("Add Subtitles");
-    cp5.getTooltip().register("popup", "Click to add subtitle at current time");
+    cp5.getTooltip().register("addSubtitlePopup", "Click to add subtitle at current time");
 
     subPopup = cp5.addGroup("subPopup")
       .setPosition(width/2-100, 100)

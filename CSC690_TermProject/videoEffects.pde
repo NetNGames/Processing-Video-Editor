@@ -4,6 +4,7 @@ boolean isInverted = false;
 boolean isGreyscale = false;
 boolean isPosterize = false;
 boolean isPixelate = false;
+int effectPicked;
 
 //For Pixelate effect
 int numPixelsWide, numPixelsHigh;
@@ -11,8 +12,8 @@ int blockSize; //Should be a number that divides evenly into the height and widt
 color movColors[][];
 //color movColors[];
 void pixelate() {
-//  blockSize = 10;
-blockSize = (int)(((float)playbackWidth/(float)mov.width)*10.0);
+  //  blockSize = 10;
+  blockSize = (int)(((float)playbackWidth/(float)mov.width)*10.0);
   movColors = new color[playbackWidth/blockSize][playbackHeight/blockSize];
   mov.loadPixels();
   for (int i = 0; i < playbackWidth/blockSize; i++) {
@@ -28,38 +29,82 @@ blockSize = (int)(((float)playbackWidth/(float)mov.width)*10.0);
     }
   }
 
-//Old Pixelate using 1D array
-//  numPixelsWide = playbackWidth / blockSize;
-//  numPixelsHigh = playbackHeight / blockSize;
-//  movColors = new color[numPixelsWide * numPixelsHigh];
-//  mov.loadPixels();
-//    int count = 0;
-//    for (int j = 0; j < numPixelsHigh; j++) {
-//      for (int i = 0; i < numPixelsWide; i++) {
-//        movColors[count] = mov.get(i*blockSize, j*blockSize);
-//        count++;
-//      }
-//    }
-//    
-////      background(0);
-//   for (int j = 0; j < numPixelsHigh; j++) {
-//    for (int i = 0; i < numPixelsWide; i++) {
-//      noStroke();
-//      fill(movColors[j*numPixelsWide + i]);
-//      rect(i*blockSize, j*blockSize, blockSize, blockSize);
-//    }
-//  } 
+  //Old Pixelate using 1D array
+  //  numPixelsWide = playbackWidth / blockSize;
+  //  numPixelsHigh = playbackHeight / blockSize;
+  //  movColors = new color[numPixelsWide * numPixelsHigh];
+  //  mov.loadPixels();
+  //    int count = 0;
+  //    for (int j = 0; j < numPixelsHigh; j++) {
+  //      for (int i = 0; i < numPixelsWide; i++) {
+  //        movColors[count] = mov.get(i*blockSize, j*blockSize);
+  //        count++;
+  //      }
+  //    }
+  //    
+  ////      background(0);
+  //   for (int j = 0; j < numPixelsHigh; j++) {
+  //    for (int i = 0; i < numPixelsWide; i++) {
+  //      noStroke();
+  //      fill(movColors[j*numPixelsWide + i]);
+  //      rect(i*blockSize, j*blockSize, blockSize, blockSize);
+  //    }
+  //  }
 }
 
-void greyscale(){
+void greyscale() {
   filter(GRAY);
 }
 
-void invert(){
+void invert() {
   filter(INVERT);
 }
 
-void posterize(){
+void posterize() {
   filter(POSTERIZE, 4);
 }
 
+void toggleGrey() {
+  if (isGreyscale) {
+    isGreyscale=false;
+  } else if (!isGreyscale) {
+    isGreyscale=true;
+  }
+}
+
+void toggleInvert() {
+  if (isInverted) {
+    isInverted=false;
+  } else if (!isInverted) {
+    isInverted=true;
+  }
+}
+void togglePosterize() {
+  if (isPosterize) {
+    isPosterize=false;
+  } else if (!isPosterize) {
+    isPosterize=true;
+  }
+}
+
+void togglePixelate() {
+  if (isPixelate) {
+    isPixelate=false;
+  } else if (!isPixelate) {
+    isPixelate=true;
+  }
+}
+
+void effectsOff() {
+  isInverted = false;
+  isGreyscale = false;
+  isPosterize = false;
+  isPixelate = false;
+}
+
+void addVideoEffect(){
+  Group effectPopup;
+  Button addEffectPopup, submitButton, cancelButton;
+  Textfield startTimeInput, endTimeInput;
+  ListBox vidEffectListPopup;
+}
