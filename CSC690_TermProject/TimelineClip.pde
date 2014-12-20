@@ -45,3 +45,6 @@ color genDarkColor(){
 color genLightColor(){
   return color((int) random(128, 255), (int) random(128, 255), (int) random(128, 255));
 }
+color genGronertColor(int offset){
+  return color(((50*offset)+100)%250, (10*offset)%250, (200*offset)%250);
+}

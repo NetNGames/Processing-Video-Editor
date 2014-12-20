@@ -64,6 +64,7 @@ void loadAud(File file) {
   minim = new Minim(this);
   sound = minim.loadFile(file.getPath());
   audList.addItem(file.getName(), sounds.size());
+  audList.getItem(sounds.size()).setColorBackground(genGronertColor(sounds.size()));
   audList.setValue(soundPicked);
   sounds.addElement(sound);
   //sound=sounds.get(0); //Resets to 1st sound loaded
@@ -92,7 +93,7 @@ void drawFileList() {
   //  }
 
   fill(255);
-  text("Audio Clips:             Color:", width-190, 200);
+  text("Audio Clips:             Active:", width-190, 200);
   for(int i = 0; i < sounds.size(); i++){
     fill((50*soundPicked+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
     rect(width-70, 204, 50, 14);

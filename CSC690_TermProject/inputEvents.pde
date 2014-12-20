@@ -1,27 +1,22 @@
 void mousePressed() {
-  //  if ((mouseY > height-160) && (mouseY < height-130) && 
-  //    mouseX > 60 && mouseX < timelineWidth) {
-  //    isJump=true;
-  //  }
+  float clipPlaced=(((float)(mouseX-60)/(float)timelineWidth)*(float)cp5.getController("timeline").getMax());
   //For audio clips
   if (mouseY > height-90 && mouseY < height-80 && mouseX > 60 && mouseX < 60+timelineWidth) {
-    float clipPlaced=(((float)(mouseX-60)/(float)timelineWidth)*(float)cp5.getController("timeline").getMax());
     println("adding at " + clipPlaced);
     //    println(cp5.getController("timeline").getMax());
     timeline.addAudioClip(clipPlaced);
   }
   //For video clips
   if (mouseY > height-120 && mouseY < height-110 && mouseX > 60 && mouseX < 60+timelineWidth) {
-    //println("video clip pasted");
-    float clipPlaced=(((float)(mouseX-60)/(float)timelineWidth)*(float)cp5.getController("timeline").getMax());
 //    timeline.addVideoClip(clipPlaced);
+    effectCfg.startEffectTimeInput.setText(formatTime(clipPlaced));
+    effectCfg.endEffectTimeInput.setText(formatTime(clipPlaced+3));
+    effectCfg.effectPopup.setVisible(true);
   }
   //For subtitles
   if (mouseY > height-60 && mouseY < height-50 && mouseX > 60 && mouseX < timelineWidth) {
-    float clipPlaced=(((float)(mouseX-60)/(float)timelineWidth)*(float)cp5.getController("timeline").getMax());
-
-    subCfg.startTimeInput.setText(formatTime(clipPlaced));
-    subCfg.endTimeInput.setText(formatTime(clipPlaced+3));
+    subCfg.startSubTimeInput.setText(formatTime(clipPlaced));
+    subCfg.endSubTimeInput.setText(formatTime(clipPlaced+3));
     subCfg.subtitleInput.setFocus(true);
     subCfg.subPopup.setVisible(true);
 
@@ -285,11 +280,11 @@ void controlEvent(ControlEvent theEvent) {
   } else if (theEvent.controller().name()=="addSubtitlePopup") {
     if (!subCfg.subPopup.isVisible()) {
       if (vidLoaded) {
-        subCfg.startTimeInput.setText(formatTime(mov.time()));
-        subCfg.endTimeInput.setText(formatTime(mov.time()+3));
+        subCfg.startSubTimeInput.setText(formatTime(mov.time()));
+        subCfg.endSubTimeInput.setText(formatTime(mov.time()+3));
       } else if (!vidLoaded && audLoaded) {
-        subCfg.startTimeInput.setText(formatTime(sound.position()/1000.0));
-        subCfg.endTimeInput.setText(formatTime(sound.position()/1000.0+1.5));
+        subCfg.startSubTimeInput.setText(formatTime(sound.position()/1000.0));
+        subCfg.endSubTimeInput.setText(formatTime(sound.position()/1000.0+1.5));
       }
       subCfg.subtitleInput.setText("");
       subCfg.subtitleInput.setFocus(true);
@@ -298,19 +293,40 @@ void controlEvent(ControlEvent theEvent) {
       subCfg.subtitleInput.setText("");
       subCfg.subPopup.setVisible(false);
     }
-  } else if (theEvent.controller().name()=="cancelButton") {
+  } else if (theEvent.controller().name()=="cancelSubButton") {
     subCfg.subtitleInput.setText("");
     subCfg.subPopup.setVisible(false);
-  } else if (theEvent.controller().name()=="submitButton") {
-    addSubtitle(subCfg.startTimeInput.getText(), 
-    subCfg.endTimeInput.getText(), 
+  } else if (theEvent.controller().name()=="submitSubButton") {
+    addSubtitle(subCfg.startSubTimeInput.getText(), 
+    subCfg.endSubTimeInput.getText(), 
     subCfg.subtitleInput.getText());
     subCfg.subtitleInput.setText("");
     subCfg.subPopup.setVisible(false);
+    
+    //Video Effects
+  }else if (theEvent.controller().name()=="addEffectPopup") {
+    if (!effectCfg.effectPopup.isVisible()) {
+      if (vidLoaded) {
+        effectCfg.startEffectTimeInput.setText(formatTime(mov.time()));
+        effectCfg.endEffectTimeInput.setText(formatTime(mov.time()+3));
+      }
+      effectCfg.effectPopup.setVisible(true);
+    } else {
+      effectCfg.effectPopup.setVisible(false);
+    }
+  } else if (theEvent.controller().name()=="cancelEffectButton") {
+    effectCfg.effectPopup.setVisible(false);
+  } else if (theEvent.controller().name()=="submitEffectButton") {
+//    timeline.addVideoClip(clipPlaced);
+//    addSubtitle(effectCfg.startEffectTimeInput.getText(), 
+//    effectCfg.endEffectTimeInput.getText(), 
+//    effectCfg.subtitleInput.getText());
+//    effectCfg.subtitleInput.setText("");
+    effectCfg.effectPopup.setVisible(false);
   }
 }
 void keyPressed() {
-  if (!subCfg.subPopup.isVisible()) { //Do not activate when typing subtitles
+  if (!subCfg.subPopup.isVisible() && !effectCfg.effectPopup.isVisible()) { //Do not activate when adding subtitles or video effects
     if ((key == 'p') || (key == 'P')) {
         togglePixelate();
     }

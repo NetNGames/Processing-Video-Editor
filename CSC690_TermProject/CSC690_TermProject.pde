@@ -150,15 +150,18 @@ void setup() {
           .setCaptionLabel("Video Effects")
 //         .setColorActive(color(0))
             ;
-            
-  ListBoxItem lbi0 = vidEffectList .addItem("Invert", 0);
-  ListBoxItem lbi1 = vidEffectList.addItem("Greyscale",1);
-  ListBoxItem lbi2 = vidEffectList.addItem("Posterize", 2);
-  ListBoxItem lbi3 = vidEffectList.addItem("Pixelate", 3);
-  ListBoxItem lbi4 = vidEffectList.addItem("Reset", 4);
+  for (int i=0;i<effectsList.length;i++) {
+    ListBoxItem lbi = vidEffectList.addItem(effectsList[i], i);
+//    lbi.setColorBackground(0xffff0000);
+  }          
+//  ListBoxItem lbi0 = vidEffectList .addItem("Invert", 0);
+//  ListBoxItem lbi1 = vidEffectList.addItem("Greyscale",1);
+//  ListBoxItem lbi2 = vidEffectList.addItem("Posterize", 2);
+//  ListBoxItem lbi3 = vidEffectList.addItem("Pixelate", 3);
+//  ListBoxItem lbi4 = vidEffectList.addItem("Reset", 4);
   vidEffectList.captionLabel().style().marginTop = 3;
   vidEffectList.captionLabel().style().marginLeft = 3;   
-  vidEffectList.setHeight(45).close() ;
+  vidEffectList.setHeight(45); //.close()
   audList = cp5.addListBox("audList")
     .setPosition(width-190, 220)
       .setColorActive(255)
@@ -212,6 +215,7 @@ void setup() {
   timeline = new Timeline();
   subs = new TimedTextObject();
   subCfg= new SubtitleConfig();
+  effectCfg = new VideoEffectsConfig();
   movies = new Vector<Movie>(0, 1);
   movItr=movies.listIterator();
   currentFrame=0.0;

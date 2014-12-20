@@ -22,6 +22,10 @@ void loadProj(File file) {
         //Loading SubRip text
       } else if (line.endsWith("srt")) {
         loadSub(new File(line));
+      } else if (line.endsWith(")-a")) {
+        parseAudClip(line);
+      }else if (line.endsWith(")-v")) {
+        parseVidClip(line);
       }
     }
   }
@@ -47,16 +51,23 @@ void savePVEFile() {
     movNamesItr=movieNames.listIterator();
     while (movNamesItr.hasNext ()) {      
       out += movNamesItr.next () + "\r\n";
-//            println(movNamesItr.previousIndex()+" "+output);
     }
     soundNamesItr=soundNames.listIterator();
     while (soundNamesItr.hasNext ()) {
       out += soundNamesItr.next() + "\r\n";
-//            println(soundNamesItr.previousIndex()+" "+output);
     }
     subNamesItr=subNames.listIterator();
     while (subNamesItr.hasNext ()) {
       out += subNamesItr.next() + "\r\n";
+    }
+    
+    audClipItr=timeline.audioClips.listIterator();
+//    if(audClipItr.hasNext ()){ //Checks to see if any audio placed
+//      out +="[Audio]\r\n";
+//    }
+    while (audClipItr.hasNext ()) {
+      TimelineClip temp= audClipItr.next();
+      out += "("+temp.getStart()+","+temp.getEnd()+"," + temp.getIndex()+","+temp.getColor()+")-a\r\n";
 //            println(subNamesItr.previousIndex()+" "+output);
     }
     //    println();
@@ -70,3 +81,20 @@ void savePVEFile() {
   }
 }
 
+void parseAudClip(String line){
+  String[] parseLine = line.split(",|\\(|\\)");
+  float x=Float.parseFloat(parseLine[1]);
+  float dx=Float.parseFloat(parseLine[2]);
+  int index=Integer.parseInt(parseLine[3]);
+  color c=Integer.parseInt(parseLine[4]);
+  timeline.audioClips.addElement(new TimelineClip(x, x+dx, index, c));
+}
+
+void parseVidClip(String line){
+  String[] parseLine = line.split(",|\\(|\\)");
+  float x=Float.parseFloat(parseLine[1]);
+  float dx=Float.parseFloat(parseLine[2]);
+  int index=Integer.parseInt(parseLine[3]);
+  color c=Integer.parseInt(parseLine[4]);
+  timeline.videoEffectClips.addElement(new TimelineClip(x, dx, index, c));
+}

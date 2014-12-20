@@ -5,6 +5,8 @@ boolean isGreyscale = false;
 boolean isPosterize = false;
 boolean isPixelate = false;
 int effectPicked;
+VideoEffectsConfig effectCfg;
+String[] effectsList = {"Invert","Greyscale","Posterize", "Pixelate", "Reset"}; 
 
 //For Pixelate effect
 int numPixelsWide, numPixelsHigh;
@@ -62,49 +64,4 @@ void invert() {
 
 void posterize() {
   filter(POSTERIZE, 4);
-}
-
-void toggleGrey() {
-  if (isGreyscale) {
-    isGreyscale=false;
-  } else if (!isGreyscale) {
-    isGreyscale=true;
-  }
-}
-
-void toggleInvert() {
-  if (isInverted) {
-    isInverted=false;
-  } else if (!isInverted) {
-    isInverted=true;
-  }
-}
-void togglePosterize() {
-  if (isPosterize) {
-    isPosterize=false;
-  } else if (!isPosterize) {
-    isPosterize=true;
-  }
-}
-
-void togglePixelate() {
-  if (isPixelate) {
-    isPixelate=false;
-  } else if (!isPixelate) {
-    isPixelate=true;
-  }
-}
-
-void effectsOff() {
-  isInverted = false;
-  isGreyscale = false;
-  isPosterize = false;
-  isPixelate = false;
-}
-
-void addVideoEffect(){
-  Group effectPopup;
-  Button addEffectPopup, submitButton, cancelButton;
-  Textfield startTimeInput, endTimeInput;
-  ListBox vidEffectListPopup;
 }

@@ -1,8 +1,8 @@
 class SubtitleConfig {
   Group subPopup;
-  Button addSubtitlePopup, submitButton, cancelButton;
-  Textfield startTimeInput, endTimeInput, subtitleInput;
-  String startTime="", endTime="", subtitle="";
+  Button addSubtitlePopup, submitSubButton, cancelSubButton;
+  Textfield startSubTimeInput, endSubTimeInput, subtitleInput;
+  String startSubTime="", endSubTime="", subtitle="";
   SubtitleConfig() {
     addSubtitlePopup = cp5.addButton("addSubtitlePopup")
       .setPosition(620, 456)
@@ -21,23 +21,23 @@ class SubtitleConfig {
                     .setVisible(false)
                       ;
 
-    startTimeInput=cp5.addTextfield("startTime")
+    startSubTimeInput=cp5.addTextfield("startSubTime")
       .setPosition(60, 10)
         .setSize(100, 20)
           .setGroup(subPopup)
             .setCaptionLabel("Start Time:")
               ;
-    cp5.getController("startTime").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-15);
-    cp5.getTooltip().register("startTime", "Set Subtitle Start time in hh:mm:ss,ms format");
+    cp5.getController("startSubTime").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-15);
+    cp5.getTooltip().register("startSubTime", "Set Subtitle Start time in hh:mm:ss,ms format");
 
-    endTimeInput=cp5.addTextfield("endTime")
+    endSubTimeInput=cp5.addTextfield("endSubTime")
       .setPosition(60, 35)
         .setSize(100, 20)
           .setCaptionLabel("End Time:")
             .setGroup(subPopup)
               ;
-    cp5.getController("endTime").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-15);
-    cp5.getTooltip().register("endTime", "Set Subtitle End Time in hh:mm:ss,ms format");
+    cp5.getController("endSubTime").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-15);
+    cp5.getTooltip().register("endSubTime", "Set Subtitle End Time in hh:mm:ss,ms format");
 
     subtitleInput=cp5.addTextfield("subtitle")
       .setPosition(60, 60)
@@ -46,20 +46,20 @@ class SubtitleConfig {
             .setGroup(subPopup)
               ;
     cp5.getController("subtitle").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-50).setPaddingY(-15);
-    cp5.getTooltip().register("subtitle", "Set Subtitles to display. Add \"\\n\" for lines");
+    cp5.getTooltip().register("subtitle", "Set Subtitles to display.");
 
-    submitButton = cp5.addButton("submitButton")
+    submitSubButton = cp5.addButton("submitSubButton")
       .setPosition(10, 90)
         .setSize(50, 20)
           .setCaptionLabel("Submit")
             .setGroup(subPopup);
-    cp5.getTooltip().register("submitButton", "Add Subtitle to current project");
-    cancelButton = cp5.addButton("cancelButton")
+    cp5.getTooltip().register("submitSubButton", "Add Subtitle to current project");
+    cancelSubButton = cp5.addButton("cancelSubButton")
       .setPosition(80, 90)
         .setSize(50, 20)
           .setCaptionLabel("Cancel")
             .setGroup(subPopup);
-    cp5.getTooltip().register("cancelButton", "Exit editing subtitle");
+    cp5.getTooltip().register("cancelSubButton", "Exit editing subtitle");
   }
 }
 
