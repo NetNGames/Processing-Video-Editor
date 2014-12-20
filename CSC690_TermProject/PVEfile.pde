@@ -62,15 +62,17 @@ void savePVEFile() {
     }
     
     audClipItr=timeline.audioClips.listIterator();
-//    if(audClipItr.hasNext ()){ //Checks to see if any audio placed
-//      out +="[Audio]\r\n";
-//    }
     while (audClipItr.hasNext ()) {
       TimelineClip temp= audClipItr.next();
       out += "("+temp.getStart()+","+temp.getEnd()+"," + temp.getIndex()+","+temp.getColor()+")-a\r\n";
-//            println(subNamesItr.previousIndex()+" "+output);
     }
-    //    println();
+    
+    vidClipItr=timeline.videoEffectClips.listIterator();
+    while (vidClipItr.hasNext ()) {
+      TimelineClip temp= vidClipItr.next();
+      out += "("+temp.getStart()+","+temp.getEnd()+"," + temp.getIndex()+","+temp.getColor()+")-v\r\n";
+    }
+    
     output.print(out);
 
     output.flush(); // Writes the remaining data to the file

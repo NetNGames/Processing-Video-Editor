@@ -152,13 +152,8 @@ void setup() {
             ;
   for (int i=0;i<effectsList.length;i++) {
     ListBoxItem lbi = vidEffectList.addItem(effectsList[i], i);
-//    lbi.setColorBackground(0xffff0000);
+    lbi.setColorBackground(genGronertColor(i));
   }          
-//  ListBoxItem lbi0 = vidEffectList .addItem("Invert", 0);
-//  ListBoxItem lbi1 = vidEffectList.addItem("Greyscale",1);
-//  ListBoxItem lbi2 = vidEffectList.addItem("Posterize", 2);
-//  ListBoxItem lbi3 = vidEffectList.addItem("Pixelate", 3);
-//  ListBoxItem lbi4 = vidEffectList.addItem("Reset", 4);
   vidEffectList.captionLabel().style().marginTop = 3;
   vidEffectList.captionLabel().style().marginLeft = 3;   
   vidEffectList.setHeight(45); //.close()

@@ -71,7 +71,6 @@ void controlEvent(ControlEvent theEvent) {
       //Video Effects
     } else if (theEvent.getGroup().getName() == "vidEffectList") {
       int effect = (int)theEvent.getGroup().getValue();
-      effectPicked=effect;
       if (effect==0) {//Invert 
         toggleInvert();
       } else if (effect==1) {//"Greyscale") {
@@ -83,6 +82,9 @@ void controlEvent(ControlEvent theEvent) {
       } else if (effect==4) {//Reset
         effectsOff();
       }
+    } else if (theEvent.getGroup().getName() == "vidEffectListPopup") {
+      int effect = (int)theEvent.getGroup().getValue();
+      effectPicked=effect;
     }
   }
   if (theEvent.controller().name()=="fullscreenButton") {
@@ -317,9 +319,12 @@ void controlEvent(ControlEvent theEvent) {
   } else if (theEvent.controller().name()=="cancelEffectButton") {
     effectCfg.effectPopup.setVisible(false);
   } else if (theEvent.controller().name()=="submitEffectButton") {
+    timeline.addVideoClip(effectCfg.startEffectTimeInput.getText(),
+                          effectCfg.endEffectTimeInput.getText(),
+                          effectPicked);
 //    timeline.addVideoClip(clipPlaced);
-//    addSubtitle(effectCfg.startEffectTimeInput.getText(), 
-//    effectCfg.endEffectTimeInput.getText(), 
+//    addSubtitle( 
+//    
 //    effectCfg.subtitleInput.getText());
 //    effectCfg.subtitleInput.setText("");
     effectCfg.effectPopup.setVisible(false);

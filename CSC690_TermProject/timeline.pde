@@ -53,33 +53,52 @@ class Timeline {
       for (int i=0; i<videoPicked; i++) {
         leftOffset+=movies.get(i).duration();
       }
-
-      //        if (videoPicked==0 && movies.size()==1) {
-      //  println("videoPicked: "+videoPicked);
-      //  println("leftOffset: "+leftOffset);
       cp5.getController("timeline").setValue(((leftOffset+mov.time())/maxDuration)*maxDuration);
-      //          println( formatTime(cp5.getController("timeline").getValue()));
-
-      //      cp5.getController("timeline").getValueLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(-30).setPaddingY(-9);
-
-      //            time = floor(cp5.getController("timeline").getValue());
-      //time = cp5.getController("timeline").getValue();
-      //            println("time: "+time);
-      //            println("maxTime: "+maxTime);
-      //                  println("current time: " + time);
+      for (int i = 0; i < videoEffectClips.size (); i++) {
+        TimelineClip clip = videoEffectClips.get(i);
+        int effect=clip.getIndex();
+        if (time>=clip.getStart() && time<=clip.getEnd()) {
+          if (effect==0) {//Invert 
+            isInverted=true;
+          } else if (effect==1) {//"Greyscale") {
+            isGreyscale=true;
+          } else if (effect==2) {//"Posterize"
+            isPosterize=true;
+          } else if (effect==3) {//Pixelate
+            isPixelate=true;
+          } else if (effect==4) {//Reset
+            effectsOff();
+          }
+          
+          //Allow for real-time effects as long as clip not on timeline
+        } else if ((time>clip.getStart()-0.2 && time<clip.getStart()) || //Deactivate before
+                   (time>clip.getEnd() && time<clip.getEnd()+0.2)){ //Deactivate after
+          if (effect==0) {//Invert 
+            isInverted=false;
+          } else if (effect==1) {//"Greyscale") {
+            isGreyscale=false;
+          } else if (effect==2) {//"Posterize"
+            isPosterize=false;
+          } else if (effect==3) {//Pixelate
+            isPixelate=false;
+          } else if (effect==4) {//Reset
+            effectsOff();
+          }
+        }
+      }
 
       if (audLoaded) {
 
         for (int i = 0; i < audioClips.size (); i++) {
           TimelineClip clip = audioClips.get(i);
           if (time>=clip.getStart() && time<=clip.getEnd()) {
-//                        println("sound "+i+" should play now");
+            //                        println("sound "+i+" should play now");
             if (sounds.get(clip.getIndex()).isPlaying()) {
-//              println("Continue playing");
+              //              println("Continue playing");
               sounds.get(clip.getIndex()).play();
             } else {
               println("Start playing "+i);
-//              sounds.get(clip.getIndex()).cue(floor(time*1000.0-leftOffset*1000.0));
+              //              sounds.get(clip.getIndex()).cue(floor(time*1000.0-leftOffset*1000.0));
               sounds.get(clip.getIndex()).rewind();
               sounds.get(clip.getIndex()).play();
             }
@@ -115,7 +134,7 @@ class Timeline {
         TimelineClip clip = videoEffectClips.get(i);
         fill(clip.getColor());
 
-        rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-120, 5, 10);
+        rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-120, (((clip.getEnd()-clip.getStart())/(timeline.getMax()-1))*timelineWidth), 10);
       }
       //          fill(255);
       float current = mov.time()+leftOffset;
@@ -145,7 +164,7 @@ class Timeline {
           //Draw spots where audio clips were placed
           //println("clip start: "+clip.getStart());
           //println("location: " +((clip.getStart()/(timeline.getMax()-1))*550));
-//          AudioPlayer temp=sounds.get(clip.getIndex());
+          //          AudioPlayer temp=sounds.get(clip.getIndex());
           rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-90, (((clip.getEnd()-clip.getStart())/(timeline.getMax()-1))*timelineWidth), 10);
         }
       }
@@ -170,9 +189,9 @@ class Timeline {
     //    audioClips.addElement(new TimelineClip(floor(x), soundPicked, c));
     audioClips.addElement(new TimelineClip(x, x+dx, soundPicked, c));
   }
-  void addVideoClip(float x, float dx) {
-    color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);
-    videoEffectClips.addElement(new TimelineClip(x, dx, soundPicked, c));
+  void addVideoClip(String sTime, String eTime, int effect) {
+    color c=genGronertColor(effect);
+    videoEffectClips.addElement(new TimelineClip(timeToSec(sTime), timeToSec(eTime), effect, c));
   }
   void clearClips() {
     audioClips.clear();
