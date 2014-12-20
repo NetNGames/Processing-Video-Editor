@@ -73,14 +73,14 @@ class Timeline {
         for (int i = 0; i < audioClips.size (); i++) {
           TimelineClip clip = audioClips.get(i);
           if (time>=clip.getStart() && time<=clip.getEnd()) {
-            //            println("sound should play now");
+//                        println("sound "+i+" should play now");
             if (sounds.get(clip.getIndex()).isPlaying()) {
-              println("Continue playing");
+//              println("Continue playing");
               sounds.get(clip.getIndex()).play();
             } else {
-              println("Start playing");
-              sounds.get(clip.getIndex()).cue(floor(time*1000.0-leftOffset*1000.0));
-//              sounds.get(clip.getIndex()).rewind();
+              println("Start playing "+i);
+//              sounds.get(clip.getIndex()).cue(floor(time*1000.0-leftOffset*1000.0));
+              sounds.get(clip.getIndex()).rewind();
               sounds.get(clip.getIndex()).play();
             }
           } else {//If not in play range
@@ -146,7 +146,7 @@ class Timeline {
           //println("clip start: "+clip.getStart());
           //println("location: " +((clip.getStart()/(timeline.getMax()-1))*550));
 //          AudioPlayer temp=sounds.get(clip.getIndex());
-          rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-90, ((clip.getEnd()/(timeline.getMax()-1))*timelineWidth), 10);
+          rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-90, (((clip.getEnd()-clip.getStart())/(timeline.getMax()-1))*timelineWidth), 10);
         }
       }
     }
@@ -168,7 +168,7 @@ class Timeline {
     AudioPlayer temp=sounds.get(soundPicked);
     float dx=temp.length()/1000.0;
     //    audioClips.addElement(new TimelineClip(floor(x), soundPicked, c));
-    audioClips.addElement(new TimelineClip(x, dx, soundPicked, c));
+    audioClips.addElement(new TimelineClip(x, x+dx, soundPicked, c));
   }
   void addVideoClip(float x, float dx) {
     color c = color(((50*soundPicked)+100)%250, (10*soundPicked)%250, (200*soundPicked)%250);

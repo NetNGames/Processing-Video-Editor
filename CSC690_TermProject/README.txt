@@ -2,18 +2,18 @@
  
  File: CSC690_TermProject
  By: Elbert Dang and Jacob Gronert
- Last Update: 12/16/2014
+ Last Update: 12/20/2014
  
  Usage: Run CSC690_TermProject.pde using Processing 2.x with Minim, and ControlP5 libraries
  
- System: JVM 
+ System: Java Virtual Machine
  
  Description: Processing Video Editor
   +Load video, audio, or srt subtitle files with Load Files button
     -For video: avi, mp4, mov, and ogg files supported
     -For audio: mp3, wav, and flac files
     -For subtitles: SubRipText (srt) files
-  +Clear all loaded files with Clear Files button
+  +Clear all loaded files with Clear Project button
   +Video to play can be selected using DropdownList
   +Audio clips can be selected using ListBox
     +Clips can be placed on timeline to play when timeline is ran
@@ -34,6 +34,10 @@
     -Add to current timeline time by pressing the Add Subtitle button
     -Add to custom time by typing into start/end time text fields or by clicked subtitle timeline
     -Currently loaded subtitles will display on timeline.
+    -Save subtitles by pressing Save Subtitles button.
+  +Press Save Project to save all loaded files and timeline settings
+    -If subtitles were loaded or saved, they will be included in the output PVE file
+    -Make sure you save any edited subtitles before you save your project or subtitle changes will not be saved
 
  Website: http://mirix5.github.io/processingvideoeditor/
  
