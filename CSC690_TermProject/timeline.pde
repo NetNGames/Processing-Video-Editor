@@ -132,7 +132,7 @@ class Timeline {
 
       for (int i = 0; i < videoEffectClips.size (); i++) {
         TimelineClip clip = videoEffectClips.get(i);
-        fill(clip.getColor());
+        fill(clip.getColor(),200);
 
         rect(60+((clip.getStart()/(timeline.getMax()-1))*timelineWidth), height-120, (((clip.getEnd()-clip.getStart())/(timeline.getMax()-1))*timelineWidth), 10);
       }
@@ -160,7 +160,7 @@ class Timeline {
 
         for (int i = 0; i < audioClips.size (); i++) {
           TimelineClip clip = audioClips.get(i);
-          fill(clip.getColor());
+          fill(clip.getColor(),200);
           //Draw spots where audio clips were placed
           //println("clip start: "+clip.getStart());
           //println("location: " +((clip.getStart()/(timeline.getMax()-1))*550));

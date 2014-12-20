@@ -89,7 +89,7 @@ void parseAudClip(String line){
   float dx=Float.parseFloat(parseLine[2]);
   int index=Integer.parseInt(parseLine[3]);
   color c=Integer.parseInt(parseLine[4]);
-  timeline.audioClips.addElement(new TimelineClip(x, x+dx, index, c));
+  timeline.audioClips.addElement(new TimelineClip(x, dx, index, c));
 }
 
 void parseVidClip(String line){
