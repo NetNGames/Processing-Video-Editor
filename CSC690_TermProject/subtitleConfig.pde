@@ -1,6 +1,7 @@
+boolean subEdited=false;
 class SubtitleConfig {
   Group subPopup;
-  Button addSubtitlePopup, submitSubButton, cancelSubButton;
+  Button addSubtitlePopup, submitSubButton, cancelSubButton, subErrorButton;
   Textfield startSubTimeInput, endSubTimeInput, subtitleInput;
   String startSubTime="", endSubTime="", subtitle="";
   SubtitleConfig() {
@@ -60,6 +61,12 @@ class SubtitleConfig {
           .setCaptionLabel("Cancel")
             .setGroup(subPopup);
     cp5.getTooltip().register("cancelSubButton", "Exit editing subtitle");
+   subErrorButton = cp5.addButton("subError")
+      .setPosition(playbackWidth/2-100, playbackHeight/2-50)
+        .setSize(200, 100)
+          .setCaptionLabel("Subtitles have been modified.\nTo keep changes, Cancel the next screen.\nThen Save Subtitles before Save Project.")
+            .setVisible(false);
+    cp5.getTooltip().register("subError", "Click to continue");
   }
 }
 
@@ -71,7 +78,7 @@ void addSubtitle(String sTime, String eTime, String text) {
   newSub.end=time;
   newSub.content=text;
   subs.captions.add(newSub);
-
+  subEdited=true;
   //Sort Subtitle Vector
   Collections.sort(subs.captions, Caption.COMPARE_BY_START);
 }
@@ -107,8 +114,8 @@ void saveSubFile() {
     println("Save Complete!");
     subNames.clear(); //Overrides all subfile names with new one
     subNames.addElement(outputName);
+    subEdited=false;
   } else {
     println("Save Cancelled");
   }
 }
-
