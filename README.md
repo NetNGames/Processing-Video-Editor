@@ -30,10 +30,10 @@ Processing-Video-Editor
  * To activate using Listbox, simply select video effect when video is played
  * To activate by timeline, click to choose duration and video effect to display when timeline is ran
  * To activate by Keyboard:
-   * 'I' for Inverted colors
-   * 'G' for Greyscale
-   * 'O' for Posterize
-   * 'P' Pixelate
+    * 'I' for Inverted colors
+    * 'G' for Greyscale
+    * 'O' for Posterize
+    * 'P' Pixelate
  * Note that Pixelate will do so based on video's original width/height and may display incorrectly on scaled/stretched playback windows.
 * Once video and/or audio files are loaded, you may start adding subtitles 
  * Add to current timeline time by pressing the Add Subtitle button
