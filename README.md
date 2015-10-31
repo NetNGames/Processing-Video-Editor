@@ -13,9 +13,10 @@ Processing-Video-Editor
  
 #### Using Processing Video Editor:
 * Load video, audio, or srt subtitle files with Load Files button
- * For video: avi, mp4, mov, and ogg files supported
- * For audio: mp3, wav, and flac files
- * For subtitles: SubRipText (srt) files
+ * For video: avi, mp4, mov, and ogg files supported.
+   * mp4 file can have embedded audio, but audio stream cannot be edited.
+ * For audio: mp3, wav, and flac files.
+ * For subtitles: SubRipText (srt) files.
 * Clear all loaded files with Clear Project button
 * Video to play can be selected using DropdownList
 * Audio clips can be selected using ListBox
